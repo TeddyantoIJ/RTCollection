@@ -590,6 +590,11 @@ public class CRUDBarang extends javax.swing.JFrame {
         jLayeredPane1.add(btnPerbarui, new org.netbeans.lib.awtextra.AbsoluteConstraints(383, 600, 140, -1));
 
         btnKembali.setText("Kembali");
+        btnKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKembaliActionPerformed(evt);
+            }
+        });
         jLayeredPane1.add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 600, 120, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -610,6 +615,7 @@ public class CRUDBarang extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     
@@ -892,6 +898,11 @@ public class CRUDBarang extends javax.swing.JFrame {
         // TODO add your handling code here:
         FilterAngka(evt);
     }//GEN-LAST:event_txtHargaJualKodianKeyTyped
+
+    private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnKembaliActionPerformed
 
     /**
      * @param args the command line arguments

@@ -209,6 +209,11 @@ public class CRUDPelanggan extends javax.swing.JFrame {
         jLabel1.setText("Pelanggan");
 
         btnKembali.setText("Kembali");
+        btnKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKembaliActionPerformed(evt);
+            }
+        });
 
         tablePelanggan.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -450,6 +455,11 @@ public class CRUDPelanggan extends javax.swing.JFrame {
         txtPasar.setText(pelanggan.getPgn_nama_pasar());
         txtToko.setText(pelanggan.getPgn_nama_toko());
     }//GEN-LAST:event_tablePelangganMouseClicked
+
+    private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnKembaliActionPerformed
 
     /**
      * @param args the command line arguments

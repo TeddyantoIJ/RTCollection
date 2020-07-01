@@ -141,6 +141,11 @@ public class CRUDPemasok extends javax.swing.JFrame {
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(36, 16, 140, 34));
 
         btnKembali.setText("Kembali");
+        btnKembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKembaliActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 460, -1, -1));
 
         tablePemasok.setModel(new javax.swing.table.DefaultTableModel(
@@ -285,6 +290,11 @@ public class CRUDPemasok extends javax.swing.JFrame {
         clear();
         addData();
     }//GEN-LAST:event_btnPerbaruiActionPerformed
+
+    private void btnKembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKembaliActionPerformed
+        // TODO add your handling code here:
+        this.setVisible(false);
+    }//GEN-LAST:event_btnKembaliActionPerformed
     private void addData() {
         model.getDataVector().removeAllElements();
 
