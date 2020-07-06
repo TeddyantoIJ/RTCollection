@@ -40,6 +40,26 @@ public class CTableJenisBarang {
         }
         return model;
     }
+    public String getJenis(String id){
+        String output = "";
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "SELECT * FROM JenisBarang where jb_id = '"+id+"'";
+            connection.result = connection.stat.executeQuery(query);
+            
+            while (connection.result.next()) {
+                
+                
+                output = connection.result.getString("jb_nama");
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di CTable JenisBarang!\n" + e.toString());
+        }
+        return output;
+    }
     public JenisBarang getSelectedRowJenisBarang(JTable in){
         JenisBarang JB = new JenisBarang();
         if(in.getSelectedRow() == -1){
@@ -56,4 +76,5 @@ public class CTableJenisBarang {
         }
         return JB;
     }
+    
 }

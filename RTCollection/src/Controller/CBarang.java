@@ -14,6 +14,8 @@ import connection.DBConnect;
  */
 public class CBarang {
     DBConnect connection = new DBConnect();
+    
+    
     public String getLastID(){
     
         try{
@@ -111,4 +113,5 @@ public class CBarang {
                 System.out.println("Terjadi error pada saat hapus data barang: " + e);
             }
     }
+    
 }

@@ -112,48 +112,33 @@ public class CKaryawan {
         }
         return null;
     }
-//    public String getKry_id(String id) {
-//        return kry_id;
-//    }
-//
-//    public String getKry_nama(String id) {
-//        return kry_nama;
-//    }
-//
-//    public String getKry_no_hp(String id) {
-//        return kry_no_hp;
-//    }
-//
-//    public String getKry_email(String id) {
-//        return kry_email;
-//    }
-//
-//    public String getKry_tgl_lahir(String id) {
-//        return kry_tgl_lahir;
-//    }
-//
-//    public String getAlamat(String id) {
-//        return alamat;
-//    }
-//
-//    public String getKry_total_transaksi(String id) {
-//        return kry_total_transaksi;
-//    }
-//
-//    public String getKry_username(String id) {
-//        return kry_username;
-//    }
-//
-//    public String getKry_password(String id) {
-//        return kry_password;
-//    }
-//
-//    public String getKry_jabatan(String id) {
-//        return kry_jabatan;
-//    }
-//    
-//    public Karyawan getAllData(String id){
-//        Karyawan n = new Karyawan();
-//        return n;
-//    }
+    public Karyawan getDatabyNama(String nama){
+        Karyawan B = new Karyawan();
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "SELECT * FROM Karyawan where kry_nama = '"+nama+"'";
+            System.out.println(query);
+            connection.result = connection.stat.executeQuery(query);
+            int i = 1;
+            while (connection.result.next()) {
+                
+            B.setKry_id(connection.result.getString("kry_id"));
+            B.setKry_nama(connection.result.getString("kry_nama"));
+            B.setAlamat(connection.result.getString("alamat"));
+            B.setKry_email(connection.result.getString("kry_email"));
+            B.setKry_jabatan(connection.result.getString("kry_jabatan"));
+            B.setKry_no_hp(connection.result.getString("kry_no_hp"));
+            B.setKry_password(connection.result.getString("kry_password"));
+            B.setKry_tgl_lahir(connection.result.getDate("kry_tgl_lahir"));
+            B.setKry_total_transaksi(connection.result.getString("kry_total_transaksi"));
+            B.setKry_username(connection.result.getString("kry_username"));
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di getDatabyNamaUkuran !\n" + e.toString());
+        }
+        return B;
+    }
 }

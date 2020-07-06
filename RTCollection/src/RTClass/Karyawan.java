@@ -107,8 +107,7 @@ public class Karyawan {
         return kry_jabatan;
     }
     
-    public Karyawan getAllData(){
-        Karyawan n = new Karyawan();
-        return n;
+    public String getAllData(){
+        return getKry_id() + " , " + getAlamat()+ " , " +getKry_email()+ " , " +getKry_jabatan()+ " , " +getKry_nama()+ " , " +getKry_no_hp()+ " , " +getKry_password()+ " , " +getKry_total_transaksi()+ " , " +getKry_username();
     }
 }

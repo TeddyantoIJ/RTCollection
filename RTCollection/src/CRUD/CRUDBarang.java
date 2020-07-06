@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -38,6 +39,7 @@ public class CRUDBarang extends javax.swing.JFrame {
         tblBarang.setModel(model);
         pnlUbah.show(false);
         enableFalse();
+        lebarKolom();
     }
     
     public void enableFalse(){
@@ -52,6 +54,8 @@ public class CRUDBarang extends javax.swing.JFrame {
         txtHargaJualKodian1.setEnabled(false);
         cmbJenisBarang1.setEnabled(false);
         cmbPemasok1.setEnabled(false);
+        btnUbah.setEnabled(false);
+        btnHapus.setEnabled(false);
     }
     
     public void enableTrue(){
@@ -65,6 +69,8 @@ public class CRUDBarang extends javax.swing.JFrame {
         txtHargaJualKodian1.setEnabled(true);
         cmbJenisBarang1.setEnabled(true);
         cmbPemasok1.setEnabled(true);
+        btnUbah.setEnabled(true);
+        btnHapus.setEnabled(true);
     }
     
     public void FilterHuruf(KeyEvent a) {
@@ -92,7 +98,7 @@ public class CRUDBarang extends javax.swing.JFrame {
         model = controllerTable.addDataBarang(model);
     }
     private void addColumn(){
-        model.addColumn("ID Barang");
+        model.addColumn("No");
         model.addColumn("Jenis Barang");
         model.addColumn("Deskripsi");
         model.addColumn("Bahan");
@@ -102,7 +108,7 @@ public class CRUDBarang extends javax.swing.JFrame {
         model.addColumn("Harga Kodian");
         model.addColumn("Harga Jual Satuan");
         model.addColumn("Harga Jual Kodian");
-        model.addColumn("ID Pemasok");
+        model.addColumn("Pemasok");
     }
 
     /**
@@ -248,9 +254,26 @@ public class CRUDBarang extends javax.swing.JFrame {
 
         cmbJenisBarang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "== Pilih Jenis Barang ==" }));
 
+        txtNamaBarang.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNamaBarangKeyTyped(evt);
+            }
+        });
+
+        txtBahan.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBahanKeyTyped(evt);
+            }
+        });
+
         txtUkuran.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUkuranActionPerformed(evt);
+            }
+        });
+        txtUkuran.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUkuranKeyTyped(evt);
             }
         });
 
@@ -409,9 +432,26 @@ public class CRUDBarang extends javax.swing.JFrame {
 
         pnlUbah.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
+        txtNamaBarang1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNamaBarang1KeyTyped(evt);
+            }
+        });
+
+        txtBahan1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtBahan1KeyTyped(evt);
+            }
+        });
+
         txtUkuran1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUkuran1ActionPerformed(evt);
+            }
+        });
+        txtUkuran1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUkuran1KeyTyped(evt);
             }
         });
 
@@ -743,6 +783,34 @@ public class CRUDBarang extends javax.swing.JFrame {
         cmbPemasok1.setSelectedIndex(0);
     }
     
+    public void lebarKolom(){ 
+        TableColumn column;
+        tblBarang.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF); 
+        column = tblBarang.getColumnModel().getColumn(0); 
+        column.setPreferredWidth(100);
+        column = tblBarang.getColumnModel().getColumn(1); 
+        column.setPreferredWidth(100); 
+        column = tblBarang.getColumnModel().getColumn(2); 
+        column.setPreferredWidth(100); 
+        column = tblBarang.getColumnModel().getColumn(3); 
+        column.setPreferredWidth(50);
+        column = tblBarang.getColumnModel().getColumn(4); 
+        column.setPreferredWidth(50);
+        column = tblBarang.getColumnModel().getColumn(5); 
+        column.setPreferredWidth(50);
+        column = tblBarang.getColumnModel().getColumn(6); 
+        column.setPreferredWidth(150);
+        column = tblBarang.getColumnModel().getColumn(7); 
+        column.setPreferredWidth(150);
+        column = tblBarang.getColumnModel().getColumn(8); 
+        column.setPreferredWidth(150);
+        column = tblBarang.getColumnModel().getColumn(9); 
+        column.setPreferredWidth(150);
+        column = tblBarang.getColumnModel().getColumn(10); 
+        column.setPreferredWidth(100);
+        
+    }
+    
     private void btnTambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahActionPerformed
         // TODO add your handling code here:
         String IDJB = (String) cmbJenisBarang.getSelectedItem();
@@ -784,7 +852,7 @@ public class CRUDBarang extends javax.swing.JFrame {
                     controllerB.simpanBarang(brg);
                     JOptionPane.showMessageDialog(this, "Data Tersimpan");
                     addData();
-                    clearUbah();
+                    clear();
                 }
             } 
         catch (SQLException ex){
@@ -801,11 +869,7 @@ public class CRUDBarang extends javax.swing.JFrame {
         String IDJB2 = (String) cmbJenisBarang.getSelectedItem();
         String IDPMS2 = (String) cmbPemasok.getSelectedItem();
             try{
-                if (txtIDBarang.getText().equals("")){
-                    JOptionPane.showMessageDialog(this, "Data Belum Dipilih!");
-                }
-
-                else if (txtNamaBarang1.getText().equals("") || txtBahan1.getText().equals("") || txtUkuran1.getText().equals("") || txtStok1.getText().equals("")
+                if (txtNamaBarang1.getText().equals("") || txtBahan1.getText().equals("") || txtUkuran1.getText().equals("") || txtStok1.getText().equals("")
                             || txtHargaSatuan1.getText().equals("") || txtHargaKodian1.getText().equals("") || txtHargaJualSatuan1.getText().equals("") || txtHargaJualKodian1.getText().equals("")
                         || cmbJenisBarang.getSelectedItem().equals("== Pilih Jenis Barang ==") || cmbPemasok.getSelectedItem().equals("== Pilih Pemasok ==")){
                     JOptionPane.showMessageDialog(this, "Data tidak boleh kosong!");
@@ -813,7 +877,7 @@ public class CRUDBarang extends javax.swing.JFrame {
                 else{
                     
                 connection.stat = connection.conn.createStatement();
-                String sql = "SELECT jb_id,jb_nama FROM JenisBarang WHERE jb_id = '" + cmbJenisBarang1.getSelectedItem() + "'";
+                String sql = "SELECT jb_id,jb_nama FROM JenisBarang WHERE jb_nama = '" + cmbJenisBarang1.getSelectedItem() + "'";
                 connection.result = connection.stat.executeQuery(sql);
 
                 while (connection.result.next()){
@@ -821,7 +885,7 @@ public class CRUDBarang extends javax.swing.JFrame {
                 }
 
                 connection.stat = connection.conn.createStatement();
-                String sql1 = "SELECT pms_id,pms_nama FROM Pemasok WHERE pms_id = '" + cmbPemasok1.getSelectedItem() + "'";
+                String sql1 = "SELECT pms_id,pms_nama FROM Pemasok WHERE pms_nama = '" + cmbPemasok1.getSelectedItem() + "'";
                 connection.result = connection.stat.executeQuery(sql1);
 
                 while (connection.result.next()){
@@ -853,13 +917,7 @@ public class CRUDBarang extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_btnUbahActionPerformed
-
-    private void btnPerbaruiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiActionPerformed
-        // TODO add your handling code here:
-        pnlTambah.hide();
-        pnlUbah.show();
-    }//GEN-LAST:event_btnPerbaruiActionPerformed
-
+    private boolean ubah = false;
     private void btnHapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHapusActionPerformed
         // TODO add your handling code here:
         if (txtIDBarang.getText().equals("")){
@@ -903,6 +961,74 @@ public class CRUDBarang extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.setVisible(false);
     }//GEN-LAST:event_btnKembaliActionPerformed
+
+    private void txtNamaBarangKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamaBarangKeyTyped
+        // TODO add your handling code here:
+        if (txtNamaBarang.getText().length() == 25) {
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Maksimal 25 karakter", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtNamaBarangKeyTyped
+
+    private void txtBahanKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBahanKeyTyped
+        // TODO add your handling code here:
+        if (txtBahan.getText().length() == 25) {
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Maksimal 25 karakter", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtBahanKeyTyped
+
+    private void txtUkuranKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUkuranKeyTyped
+        // TODO add your handling code here:
+        if (txtUkuran.getText().length() == 5) {
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Maksimal 5 karakter", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtUkuranKeyTyped
+
+    private void txtNamaBarang1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNamaBarang1KeyTyped
+        // TODO add your handling code here:
+         if (txtNamaBarang1.getText().length() == 25) {
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Maksimal 25 karakter", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtNamaBarang1KeyTyped
+
+    private void txtBahan1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBahan1KeyTyped
+        // TODO add your handling code here:
+         if (txtBahan1.getText().length() == 25) {
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Maksimal 25 karakter", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtBahan1KeyTyped
+
+    private void txtUkuran1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUkuran1KeyTyped
+        // TODO add your handling code here:
+        if (txtUkuran1.getText().length() == 5) {
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(null, "Maksimal 5 karakter", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_txtUkuran1KeyTyped
+    private boolean update = false;
+    
+    private void btnPerbaruiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiActionPerformed
+        // TODO add your handling code here:
+        if(!update){
+            pnlTambah.hide();
+            pnlUbah.show();
+            update = true;
+        }else{
+            update = false;
+            pnlTambah.show();
+            pnlUbah.hide();
+        }
+    }//GEN-LAST:event_btnPerbaruiActionPerformed
 
     /**
      * @param args the command line arguments

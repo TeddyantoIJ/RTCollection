@@ -44,7 +44,7 @@ public class CTable {
                 obj[8] = connection.result.getString("kry_jabatan");
                 obj[9] = connection.result.getString("kry_username");
                 obj[10] = connection.result.getString("kry_password");
-                
+                i++;
                 System.out.println(obj[1].toString());
                 model.addRow(obj);
             }
@@ -105,6 +105,7 @@ public class CTable {
                 obj[7] = connection.result.getInt("pgn_jumlah_transaksi");
                 obj[8] = connection.result.getInt("pgn_uang_transaksi");
                 obj[9] = connection.result.getInt("pgn_total_hutang");
+                i++;
                 model.addRow(obj);
             }
             connection.stat.close();
@@ -162,6 +163,7 @@ public class CTable {
                 obj[4] = connection.result.getInt("pms_jumlah_transaksi");
                 obj[5] = connection.result.getInt("pms_uang_transaksi");
                 obj[6] = connection.result.getInt("pms_total_hutang");
+                i++;
                 model.addRow(obj);
             }
             connection.stat.close();
@@ -170,6 +172,46 @@ public class CTable {
             System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
         }
         return model;
+    }
+    public String getPemasokNama(String id){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String output = "";
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "select * from Pemasok where pms_id = '"+id+"'";
+            connection.result = connection.stat.executeQuery(query);
+            int i =1;
+            while (connection.result.next()) {
+                
+                output = connection.result.getString("pms_nama");
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
+        }
+        return output;
+    }
+    public String getPemasokId(String nama){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String output = "";
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "select * from Pemasok where pms_nama = '"+nama+"'";
+            connection.result = connection.stat.executeQuery(query);
+            int i =1;
+            while (connection.result.next()) {
+                
+                output = connection.result.getString("pms_id");
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
+        }
+        return output;
     }
     public Pemasok getSelectedRowPemasok(JTable in){
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -194,4 +236,6 @@ public class CTable {
         }
         return output;
     }
+       
+    
 }
