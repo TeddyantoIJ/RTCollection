@@ -52,6 +52,35 @@ public class CTableBarang {
         return model;
     }
     
+    public DefaultTableModel addDataBarangPemesanan(DefaultTableModel model){
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "SELECT * FROM Barang";
+            connection.result = connection.stat.executeQuery(query);
+            int i = 1;
+            while (connection.result.next()) {
+                Object[] obj = new Object[9];
+                obj[0] = i;
+                
+                obj[1] = connection.result.getString("b_nama");
+                obj[2] = ControllerJenis.getJenis(connection.result.getString("jb_id"));
+                obj[3] = connection.result.getString("b_ukuran");
+                obj[4] = connection.result.getString("b_bahan");
+                obj[5] = connection.result.getString("b_ukuran");
+                obj[6] = connection.result.getString("b_stok");
+                obj[7] = connection.result.getString("b_harga_jual_satuan");
+                obj[8] = connection.result.getString("b_harga_jual_kodian");
+                model.addRow(obj);
+                i++;
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di CTable Barang!\n" + e.toString());
+        }
+        return model;
+    }
     public DefaultTableModel addDataBarangRestock(DefaultTableModel model, String pemasok){
         try {
             DBConnect connection = new DBConnect();

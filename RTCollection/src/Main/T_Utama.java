@@ -91,7 +91,7 @@ public class T_Utama extends javax.swing.JFrame {
         modelBarang.fireTableDataChanged();
         ControllerBarang.addDataBarangRestock(modelBarang,pemasok);
     }
-    private void addColumn() {
+    private void addColumnPemasokkan() {
         modelBarang.addColumn("No");
         modelBarang.addColumn("Barang");
         modelBarang.addColumn("Jenis");
@@ -106,7 +106,7 @@ public class T_Utama extends javax.swing.JFrame {
         modelKeranjang.addColumn("Jumlah");
         modelKeranjang.addColumn("Harga");
     }
-    private void addComboBox(){
+    private void addComboBoxPemasokkan(){
         try {
             DBConnect connection = new DBConnect();
             connection.stat = connection.conn.createStatement();
@@ -147,8 +147,8 @@ public class T_Utama extends javax.swing.JFrame {
         kursIndonesia.setDecimalFormatSymbols(formatRp);
         txtTanggalPemasokkan.setText(formatTanggal.format(new Date()));
         
-        addColumn();
-        addComboBox();
+        addColumnPemasokkan();
+        addComboBoxPemasokkan();
         
         // ================================================
         karyawan_info.setText(karyawan_login.getKry_nama());
@@ -169,8 +169,8 @@ public class T_Utama extends javax.swing.JFrame {
         formatRp.setGroupingSeparator('.');
         kursIndonesia.setDecimalFormatSymbols(formatRp);
         
-        addColumn();
-        addComboBox();
+        addColumnPemasokkan();
+        addComboBoxPemasokkan();
         
         // ================================================
         karyawan_info.setText(karyawan_login.getKry_nama());
@@ -416,18 +416,19 @@ public class T_Utama extends javax.swing.JFrame {
             .addGroup(panelKiriLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPemesananPemasok, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPemesananPemasok, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelKiriLayout.createSequentialGroup()
-                        .addGroup(panelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnMenuUtama, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                            .addComponent(btnPemesananPelanggan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnPengolahanData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(karyawan_info, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(panelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnMenuUtama, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                                .addComponent(btnPemesananPelanggan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnPengolahanData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(karyawan_info, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -522,7 +523,7 @@ public class T_Utama extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableBarang);
 
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel7.setText("TABLE PEMASOK");
+        jLabel7.setText("DATA PEMASOK");
 
         cmbPemasok.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Pemasok -" }));
         cmbPemasok.addActionListener(new java.awt.event.ActionListener() {
