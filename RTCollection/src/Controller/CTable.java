@@ -84,7 +84,35 @@ public class CTable {
     //================================= PELANGGAN ====================================
     CPelanggan controllerPelanggan = new CPelanggan();
     
-    
+    public DefaultTableModel addDataPelanggan(DefaultTableModel model, String pelanggan){
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "SELECT * FROM Pelanggan where pgn_id = '"+getPelangganId(pelanggan)+"'";
+            connection.result = connection.stat.executeQuery(query);
+            int i = 1;
+            while (connection.result.next()) {
+                Object[] obj = new Object[10];
+                obj[0] = i;
+                obj[1] = connection.result.getString("pgn_nama");
+                obj[2] = connection.result.getString("pgn_nama_toko");
+                obj[3] = connection.result.getString("pgn_no_hp");
+                obj[4] = connection.result.getString("pgn_email");
+                obj[5] = connection.result.getString("pgn_alamat");
+                obj[6] = connection.result.getString("pgn_nama_pasar");
+                obj[7] = connection.result.getInt("pgn_jumlah_transaksi");
+                obj[8] = connection.result.getInt("pgn_uang_transaksi");
+                obj[9] = connection.result.getInt("pgn_total_hutang");
+                model.addRow(obj);
+                i++;
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di addDataPelanggan Pelanggan!\n" + e.toString());
+        }
+        return model;
+    }
     public DefaultTableModel addDataPelanggan(DefaultTableModel model){
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         try {
@@ -141,7 +169,26 @@ public class CTable {
         }
         return output;
     }
-    
+    public String getPelangganId(String nama){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String output = "";
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "select * from Pelanggan where pgn_nama = '"+nama+"'";
+            connection.result = connection.stat.executeQuery(query);
+            int i =1;
+            while (connection.result.next()) {
+                
+                output = connection.result.getString("pgn_id");
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Gagal111 addDataPelanggan!\n" + e.toString());
+        }
+        return output;
+    }
     //================================= PEMASOK ====================================
     CSupplier controllerPemasok = new CSupplier();
     
@@ -236,6 +283,32 @@ public class CTable {
         }
         return output;
     }
-       
+    public DefaultTableModel addDataPemasok(DefaultTableModel model, String pemasok){
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "SELECT * FROM Pemasok where pms_id = '"+getPemasokId(pemasok)+"'";
+            connection.result = connection.stat.executeQuery(query);
+            int i = 1;
+            while (connection.result.next()) {
+                Object[] obj = new Object[7];
+                obj[0] = i;
+                
+                obj[1] = connection.result.getString("pms_nama");
+                obj[2] = connection.result.getString("pms_alamat");
+                obj[3] = connection.result.getString("pms_no_hp");
+                obj[4] = connection.result.getInt("pms_jumlah_transaksi");
+                obj[5] = connection.result.getInt("pms_uang_transaksi");
+                obj[6] = connection.result.getInt("pms_total_hutang");
+                model.addRow(obj);
+                i++;
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di CTable Pemasok!\n" + e.toString());
+        }
+        return model;
+    }
     
 }

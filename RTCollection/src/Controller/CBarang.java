@@ -51,7 +51,6 @@ public class CBarang {
            return "";
         }
     }
-    
     public void simpanBarang(Barang brg){
         DBConnect connection = new DBConnect();
         try{
@@ -77,7 +76,6 @@ public class CBarang {
             System.out.println("Error di method simpan Barang" + ex.toString());
         }
     }
-    
     public void ubahBarang(Barang brg){
         try {
             String query = "UPDATE Barang SET jb_id=?, b_nama=?, b_bahan=?, b_ukuran=?, b_stok=?, b_harga_satuan=?, b_harga_kodian=?,"
@@ -100,7 +98,6 @@ public class CBarang {
             System.out.println("Error di method ubah Barang "+e.toString());
         }
     }
-    
     public void hapusBarang(Barang brg){
         try{
                 String query = "DELETE FROM Barang WHERE b_id='" + brg.getID_Barang()+"'";
@@ -113,5 +110,16 @@ public class CBarang {
                 System.out.println("Terjadi error pada saat hapus data barang: " + e);
             }
     }
-    
+    public void updateJumlahBarang(String jumlah, String nama, String ukuran){
+        try {
+            String query = "UPDATE Barang SET b_stok=b_stok + "+Integer.parseInt(jumlah)+" WHERE b_nama='" + nama+ "' and b_ukuran = '"+ukuran+"'";
+            System.out.println(query);
+            connection.pstat = connection.conn.prepareStatement(query);
+            
+            connection.pstat.executeUpdate();
+            connection.pstat.close();
+        } catch (Exception e) {
+            System.out.println("Error di method updateJumlahBarang "+e.toString()+"\nJumlah "+jumlah+"\nnama "+nama+"\nukuran "+ukuran);
+        }
+    }
 }

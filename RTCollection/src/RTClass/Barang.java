@@ -23,6 +23,7 @@ public class Barang {
     int jb_id;
     
     
+    
     public int getID_Barang(){
         return b_id;
     }

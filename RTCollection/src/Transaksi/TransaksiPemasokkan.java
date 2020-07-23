@@ -151,6 +151,7 @@ public class TransaksiPemasokkan extends javax.swing.JFrame {
         btnProses = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(null);
         setResizable(false);
         setSize(new java.awt.Dimension(0, 0));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -610,13 +611,13 @@ public class TransaksiPemasokkan extends javax.swing.JFrame {
 
     private void tableKeranjangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableKeranjangMouseClicked
         // TODO add your handling code here:
-        barang = ControllerBarang.getSelectedRowBarangPemasokkan(tableBarang);
+        //barang = ControllerBarang.getSelectedRowBarangPemasokkan(tableKeranjang);
         
         txtBarang.setText((String) tableKeranjang.getValueAt(tableKeranjang.getSelectedRow(), 1));
         txtUkuran.setText((String) tableKeranjang.getValueAt(tableKeranjang.getSelectedRow(), 2));
         txtPemasok.setText((String) tableKeranjang.getValueAt(tableKeranjang.getSelectedRow(), 3));
-        Harga = (int) Math.round(barang.getHargaKodian_Barang());
-        txtTotalHarga.setText(kursIndonesia.format((int) Math.round(barang.getHargaKodian_Barang())));
+        Harga = ((int) tableKeranjang.getValueAt(tableKeranjang.getSelectedRow(), 5)) / ((int) tableKeranjang.getValueAt(tableKeranjang.getSelectedRow(), 4));
+        txtTotalHarga.setText(kursIndonesia.format((int) Math.round(Harga)));
     }//GEN-LAST:event_tableKeranjangMouseClicked
 
     /**

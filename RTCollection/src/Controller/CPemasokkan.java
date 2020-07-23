@@ -101,4 +101,17 @@ public class CPemasokkan {
         }
         return null;
     }
+    public void updateStatusPemasokkan(String status, String id){
+        DBConnect connection = new DBConnect();
+        try {
+            String query = "update Pemasokkan set status = '"+status+"' where pmsk_id = '"+id+"'";
+            
+            connection.pstat = connection.conn.prepareStatement(query);
+            
+            connection.pstat.executeUpdate();
+            connection.pstat.close();
+        } catch (Exception e) {
+            System.out.println("Gagal detail updateStatusPemasokkan "+e.toString());
+        }
+    }
 }

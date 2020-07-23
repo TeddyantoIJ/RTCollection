@@ -5,6 +5,7 @@
  */
 package Controller;
 
+import RTClass.DetailPemesanan;
 import RTClass.Pemesanan;
 import connection.DBConnect;
 import java.text.Format;
@@ -38,19 +39,19 @@ public class CPemesanan {
         }
     }
     
-    public void simpanDetailPemesanan(Pemesanan psn){
+    public void simpanDetailPemesanan(DetailPemesanan psn){
         Format formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String tanggal = formatter.format(psn.getPmsn_tgl_transaksi());
+        //String tanggal = formatter.format(psn.getPmsn_tgl_transaksi());
         DBConnect connection = new DBConnect();
         try {
             String query = "insert into DetailPemesanan values (?,?,?,?,?)";
             connection.pstat = connection.conn.prepareStatement(query);
             String idDetail = psn.getPmsn_id();
             connection.pstat.setString(1, idDetail);
-            connection.pstat.setInt(2, psn.getB_id());
-            connection.pstat.setInt(3, psn.getDetailJumlahBarang());
-            connection.pstat.setInt(4, psn.getDetailJumlahKodi());
-            connection.pstat.setDouble(5, psn.getDetailHarga());
+            connection.pstat.setString(2, psn.getB_id());
+            connection.pstat.setInt(3, psn.getDetail_jumlah_barang());
+            connection.pstat.setInt(4, psn.getDetail_jumlah_kodi());
+            connection.pstat.setDouble(5, psn.getDetail_total_uang());
             
             connection.pstat.executeUpdate();
             connection.pstat.close();
