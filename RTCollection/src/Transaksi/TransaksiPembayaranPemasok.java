@@ -29,26 +29,29 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
     /**
      * Creates new form TransaksiPembayaranPemasok
      */
+    //==========================DEKLARASI VARIABLE PEMBAYARAN PEMASOK =====================================
     public String kry_id = "";
-    Pemasok pemasok = new Pemasok();
-    CSupplier controllerpemasok = new CSupplier();
-    CTable controllerTable = new CTable();
-    private DefaultTableModel modelPemasok = new DefaultTableModel();
-    CPembayaran ControllerPembayaran = new CPembayaran();
+    Pemasok pemasokPembayaranPemasok = new Pemasok();
+    CSupplier ControllerPemasokPembayaranPemasok = new CSupplier();
+    CTable ControllerTablePembayaranPemasok = new CTable();
+    private DefaultTableModel modelPemasokPembayaranPemasok = new DefaultTableModel();
+    CPembayaran ControllerPembayaranPembayaranPemasok = new CPembayaran();
     CPemasokkan ControllerPemasokkan = new CPemasokkan();
     
     DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
     DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
     
-    public TransaksiPembayaranPemasok() {
-        initComponents();
-        
-        addColumn();
-        addComboBox();
-        tablePemasok.setModel(modelPemasok);
+    private void addColumnPembayaranPemasok() {
+        modelPemasokPembayaranPemasok.addColumn("No");
+        modelPemasokPembayaranPemasok.addColumn("Nama");
+        modelPemasokPembayaranPemasok.addColumn("Alamat");
+        modelPemasokPembayaranPemasok.addColumn("No HP");
+        modelPemasokPembayaranPemasok.addColumn("Transaksi");
+        modelPemasokPembayaranPemasok.addColumn("Pembayaran");
+        modelPemasokPembayaranPemasok.addColumn("Hutang");
     }
     
-    private void addComboBox(){
+    private void addComboBoxPembayaranPemasok(){
         try {
             DBConnect connection = new DBConnect();
             connection.stat = connection.conn.createStatement();
@@ -57,7 +60,7 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
             
             while (connection.result.next()) {
                 
-                cmbPemasok.addItem(connection.result.getString("pms_nama"));
+                cmbPemasokPembayaranPemasok.addItem(connection.result.getString("pms_nama"));
             }
             connection.stat.close();
             connection.result.close();
@@ -65,23 +68,47 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
             System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
         }
     }
-    
-    private void addColumn() {
-        modelPemasok.addColumn("No");
-        modelPemasok.addColumn("Nama");
-        modelPemasok.addColumn("Alamat");
-        modelPemasok.addColumn("No HP");
-        modelPemasok.addColumn("Transaksi");
-        modelPemasok.addColumn("Pembayaran");
-        modelPemasok.addColumn("Hutang");
+    private void addDataPemasok(){
+        
+        modelPemasokPembayaranPemasok.getDataVector().removeAllElements();
+
+        modelPemasokPembayaranPemasok.fireTableDataChanged();
+        ControllerTablePembayaranPemasok.addDataPemasok(modelPemasokPembayaranPemasok,(String) cmbPemasokPembayaranPemasok.getSelectedItem());
+    }
+    private void ClearPembayaranPemasok() {
+
+        txtNamaPemasokPembayaranPemasok.setText("-");
+        txtJumlahTransaksiPemasokPembayaranPemasok.setText("0");
+        txtHutangPemasokPembayaranPemasok.setText(kursIndonesia.format(0));
+
+        txtSisaHutangPembayaranPemasok.setText(kursIndonesia.format(0));
+        txtBayarPembayaranPemasok.setText(kursIndonesia.format(0));
+        txtKembalianPembayaranPemasok.setText(kursIndonesia.format(0));
+
+    }
+    public TransaksiPembayaranPemasok() {
+        initComponents();
+        
+        //==========================DEKLARASI VARIABLE PEMBAYARAN PEMASOK =====================================
+        addColumnPembayaranPemasok();
+        addComboBoxPembayaranPemasok();
+        tablePemasokPembayaranPemasok.setModel(modelPemasokPembayaranPemasok);
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
     }
     
+    
+    
+    
+    
     private void addData() {
-        modelPemasok.getDataVector().removeAllElements();
+        modelPemasokPembayaranPemasok.getDataVector().removeAllElements();
 
-        modelPemasok.fireTableDataChanged();
+        modelPemasokPembayaranPemasok.fireTableDataChanged();
 
-        modelPemasok = controllerTable.addDataPemasok(modelPemasok);
+        modelPemasokPembayaranPemasok = ControllerTablePembayaranPemasok.addDataPemasok(modelPemasokPembayaranPemasok);
 
     }
 
@@ -98,27 +125,27 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
         panelDaftarBarangMasuk = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablePemasok = new javax.swing.JTable();
-        cmbPemasok = new javax.swing.JComboBox<>();
+        tablePemasokPembayaranPemasok = new javax.swing.JTable();
+        cmbPemasokPembayaranPemasok = new javax.swing.JComboBox<>();
         panelDeskripsiBarangMasuk = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtNamaPemasok = new javax.swing.JTextField();
-        txtJumlahTransaksiPemasok = new javax.swing.JTextField();
+        txtNamaPemasokPembayaranPemasok = new javax.swing.JTextField();
+        txtJumlahTransaksiPemasokPembayaranPemasok = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        txtHutangPemasok = new javax.swing.JTextField();
+        txtHutangPemasokPembayaranPemasok = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtBayar = new javax.swing.JTextField();
+        txtBayarPembayaranPemasok = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtSisaHutang = new javax.swing.JTextField();
+        txtSisaHutangPembayaranPemasok = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        lblKeteranganPembayaran = new javax.swing.JLabel();
-        btnBatal = new javax.swing.JButton();
-        btnBayar = new javax.swing.JButton();
+        lblKeteranganPembayaranPembayaranPemasok = new javax.swing.JLabel();
+        btnBatalPembayaranPemasok = new javax.swing.JButton();
+        btnBayarPembayaranPemasok = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
-        txtKembalian = new javax.swing.JTextField();
+        txtKembalianPembayaranPemasok = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -133,7 +160,7 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel7.setText("DAFTAR PEMASOK");
 
-        tablePemasok.setModel(new javax.swing.table.DefaultTableModel(
+        tablePemasokPembayaranPemasok.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -144,17 +171,17 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        tablePemasok.addMouseListener(new java.awt.event.MouseAdapter() {
+        tablePemasokPembayaranPemasok.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tablePemasokMouseClicked(evt);
+                tablePemasokPembayaranPemasokMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tablePemasok);
+        jScrollPane1.setViewportView(tablePemasokPembayaranPemasok);
 
-        cmbPemasok.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Pemasok -" }));
-        cmbPemasok.addActionListener(new java.awt.event.ActionListener() {
+        cmbPemasokPembayaranPemasok.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Pemasok -" }));
+        cmbPemasokPembayaranPemasok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cmbPemasokActionPerformed(evt);
+                cmbPemasokPembayaranPemasokActionPerformed(evt);
             }
         });
 
@@ -169,7 +196,7 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
                     .addGroup(panelDaftarBarangMasukLayout.createSequentialGroup()
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cmbPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(cmbPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panelDaftarBarangMasukLayout.setVerticalGroup(
@@ -177,103 +204,193 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
             .addGroup(panelDaftarBarangMasukLayout.createSequentialGroup()
                 .addGroup(panelDaftarBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cmbPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmbPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(126, 126, 126))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         panelPembayaranPemasok.add(panelDaftarBarangMasuk, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 1100, 400));
 
         panelDeskripsiBarangMasuk.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelDeskripsiBarangMasuk.setPreferredSize(new java.awt.Dimension(1100, 185));
-        panelDeskripsiBarangMasuk.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel8.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel8.setText("DESKRIPSI TRANSAKSI PEMBAYARAN PEMASOKKAN");
-        panelDeskripsiBarangMasuk.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 7, 380, 33));
 
         jLabel2.setText("Nama");
-        panelDeskripsiBarangMasuk.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 50, 99, -1));
 
-        txtNamaPemasok.setText("-");
-        panelDeskripsiBarangMasuk.add(txtNamaPemasok, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 240, -1));
+        txtNamaPemasokPembayaranPemasok.setText("-");
 
-        txtJumlahTransaksiPemasok.setText("-");
-        panelDeskripsiBarangMasuk.add(txtJumlahTransaksiPemasok, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 240, -1));
+        txtJumlahTransaksiPemasokPembayaranPemasok.setText("-");
 
         jLabel3.setText("Jumlah transaksi");
-        panelDeskripsiBarangMasuk.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 86, -1, -1));
 
         jLabel5.setText("Hutang");
-        panelDeskripsiBarangMasuk.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 99, -1));
 
-        txtHutangPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtHutangPemasok.setText("Rp. 0,00");
-        panelDeskripsiBarangMasuk.add(txtHutangPemasok, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, 240, -1));
+        txtHutangPemasokPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtHutangPemasokPembayaranPemasok.setText("Rp. 0,00");
 
         jLabel6.setText("Kembali ");
-        panelDeskripsiBarangMasuk.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 150, -1, -1));
 
-        txtBayar.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtBayar.setText("0");
-        txtBayar.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtBayarPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtBayarPembayaranPemasok.setText("0");
+        txtBayarPembayaranPemasok.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtBayarKeyReleased(evt);
+                txtBayarPembayaranPemasokKeyReleased(evt);
             }
         });
-        panelDeskripsiBarangMasuk.add(txtBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 60, 179, -1));
 
         jLabel9.setText("Rp");
-        panelDeskripsiBarangMasuk.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 170, -1, -1));
 
         jLabel10.setText("Sisa hutang pada pemasok");
-        panelDeskripsiBarangMasuk.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 90, -1, -1));
 
-        txtSisaHutang.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtSisaHutang.setText("Rp. 0,00");
-        panelDeskripsiBarangMasuk.add(txtSisaHutang, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 120, 200, -1));
+        txtSisaHutangPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtSisaHutangPembayaranPemasok.setText("Rp. 0,00");
 
         jLabel12.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel12.setText("KETERANGAN PEMBAYARAN");
-        panelDeskripsiBarangMasuk.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 10, -1, -1));
 
-        lblKeteranganPembayaran.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        lblKeteranganPembayaran.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblKeteranganPembayaran.setText("[Keterangan]");
-        lblKeteranganPembayaran.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        panelDeskripsiBarangMasuk.add(lblKeteranganPembayaran, new org.netbeans.lib.awtextra.AbsoluteConstraints(665, 32, 428, 55));
+        lblKeteranganPembayaranPembayaranPemasok.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        lblKeteranganPembayaranPembayaranPemasok.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblKeteranganPembayaranPembayaranPemasok.setText("[Keterangan]");
+        lblKeteranganPembayaranPembayaranPemasok.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        btnBatal.setText("Batal");
-        btnBatal.addActionListener(new java.awt.event.ActionListener() {
+        btnBatalPembayaranPemasok.setText("Batal");
+        btnBatalPembayaranPemasok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBatalActionPerformed(evt);
+                btnBatalPembayaranPemasokActionPerformed(evt);
             }
         });
-        panelDeskripsiBarangMasuk.add(btnBatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 100, 209, -1));
 
-        btnBayar.setText("Bayar");
-        btnBayar.addActionListener(new java.awt.event.ActionListener() {
+        btnBayarPembayaranPemasok.setText("Bayar");
+        btnBayarPembayaranPemasok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnBayarActionPerformed(evt);
+                btnBayarPembayaranPemasokActionPerformed(evt);
             }
         });
-        panelDeskripsiBarangMasuk.add(btnBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 100, 200, -1));
 
         jLabel11.setText("Banyak uang dibayar");
-        panelDeskripsiBarangMasuk.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 30, -1, -1));
 
-        txtKembalian.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        txtKembalian.setText("0");
-        txtKembalian.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtKembalianPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtKembalianPembayaranPemasok.setText("0");
+        txtKembalianPembayaranPemasok.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtKembalianKeyReleased(evt);
+                txtKembalianPembayaranPemasokKeyReleased(evt);
             }
         });
-        panelDeskripsiBarangMasuk.add(txtKembalian, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 170, 179, -1));
 
         jLabel13.setText("Rp");
-        panelDeskripsiBarangMasuk.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, -1, -1));
+
+        javax.swing.GroupLayout panelDeskripsiBarangMasukLayout = new javax.swing.GroupLayout(panelDeskripsiBarangMasuk);
+        panelDeskripsiBarangMasuk.setLayout(panelDeskripsiBarangMasukLayout);
+        panelDeskripsiBarangMasukLayout.setHorizontalGroup(
+            panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtNamaPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtJumlahTransaksiPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                        .addGap(3, 3, 3)
+                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtHutangPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(7, 7, 7)))
+                        .addGap(23, 23, 23)
+                        .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel11)
+                            .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(15, 15, 15)
+                                .addComponent(txtBayarPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel6)
+                            .addComponent(txtSisaHutangPembayaranPemasok)))
+                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                        .addGap(409, 409, 409)
+                        .addComponent(jLabel9)
+                        .addGap(15, 15, 15)
+                        .addComponent(txtKembalianPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                .addGap(115, 115, 115)
+                                .addComponent(jLabel12))
+                            .addComponent(lblKeteranganPembayaranPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnBayarPembayaranPemasok, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                            .addComponent(btnBatalPembayaranPemasok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
+        );
+        panelDeskripsiBarangMasukLayout.setVerticalGroup(
+            panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                        .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtNamaPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12, 12, 12)
+                                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(txtJumlahTransaksiPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(16, 16, 16)
+                                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(txtHutangPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel11)
+                                .addGap(14, 14, 14)
+                                .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel13)
+                                    .addComponent(txtBayarPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel10)
+                                .addGap(14, 14, 14)
+                                .addComponent(txtSisaHutangPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel6)))
+                        .addGap(4, 4, 4)
+                        .addGroup(panelDeskripsiBarangMasukLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(txtKembalianPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelDeskripsiBarangMasukLayout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel12)
+                        .addGap(3, 3, 3)
+                        .addComponent(lblKeteranganPembayaranPembayaranPemasok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBayarPembayaranPemasok)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBatalPembayaranPemasok)))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
 
         panelPembayaranPemasok.add(panelDeskripsiBarangMasuk, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 1100, 210));
 
@@ -282,108 +399,91 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tablePemasokMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePemasokMouseClicked
+    private void tablePemasokPembayaranPemasokMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePemasokPembayaranPemasokMouseClicked
         // TODO add your handling code here:
-        clear();
-        pemasok = controllerTable.getSelectedRowPemasok(tablePemasok);
-        txtNamaPemasok.setText(pemasok.getPms_nama());
-        txtJumlahTransaksiPemasok.setText(Integer.toString(pemasok.getPms_jumlah_transaksi()));
-        txtHutangPemasok.setText(kursIndonesia.format(pemasok.getPms_total_hutang()));
-        int status = pemasok.getPms_uang_transaksi();
+        ClearPembayaranPemasok();
+        pemasokPembayaranPemasok = ControllerTablePembayaranPemasok.getSelectedRowPemasok(tablePemasokPembayaranPemasok);
+        txtNamaPemasokPembayaranPemasok.setText(pemasokPembayaranPemasok.getPms_nama());
+        txtJumlahTransaksiPemasokPembayaranPemasok.setText(Integer.toString(pemasokPembayaranPemasok.getPms_jumlah_transaksi()));
+        txtHutangPemasokPembayaranPemasok.setText(kursIndonesia.format(pemasokPembayaranPemasok.getPms_total_hutang()));
+        int status = pemasokPembayaranPemasok.getPms_uang_transaksi();
         
-        if ( pemasok.getPms_total_hutang() == 0){
-            lblKeteranganPembayaran.setText("LUNAS");
-            if (lblKeteranganPembayaran.getText().equals("LUNAS"))
+        if ( pemasokPembayaranPemasok.getPms_total_hutang() == 0){
+            lblKeteranganPembayaranPembayaranPemasok.setText("LUNAS");
+            if (lblKeteranganPembayaranPembayaranPemasok.getText().equals("LUNAS"))
             {
-                btnBayar.setEnabled(false);
+                btnBayarPembayaranPemasok.setEnabled(false);
             }
         }
         else{
-            lblKeteranganPembayaran.setText("BELUM LUNAS");
+            lblKeteranganPembayaranPembayaranPemasok.setText("BELUM LUNAS");
         }
 
-    }//GEN-LAST:event_tablePemasokMouseClicked
+    }//GEN-LAST:event_tablePemasokPembayaranPemasokMouseClicked
 
-    private void txtBayarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBayarKeyReleased
+    private void txtBayarPembayaranPemasokKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBayarPembayaranPemasokKeyReleased
         // TODO add your handling code here:
         
-        if (txtBayar.getText().equals("")) {
-            txtSisaHutang.setText(txtHutangPemasok.getText());
+        if (txtBayarPembayaranPemasok.getText().equals("")) {
+            txtSisaHutangPembayaranPemasok.setText(txtHutangPemasokPembayaranPemasok.getText());
             return;
         }
 
         try {
            
-            txtSisaHutang.setText(kursIndonesia.format(((long) kursIndonesia.parse(txtHutangPemasok.getText())) - Long.parseLong(txtBayar.getText())));
-            txtKembalian.setText(kursIndonesia.format((Long.parseLong(txtBayar.getText())) - (long) kursIndonesia.parse(txtHutangPemasok.getText())));
+            txtSisaHutangPembayaranPemasok.setText(kursIndonesia.format(((long) kursIndonesia.parse(txtHutangPemasokPembayaranPemasok.getText())) - Long.parseLong(txtBayarPembayaranPemasok.getText())));
+            txtKembalianPembayaranPemasok.setText(kursIndonesia.format((Long.parseLong(txtBayarPembayaranPemasok.getText())) - (long) kursIndonesia.parse(txtHutangPemasokPembayaranPemasok.getText())));
             
         } catch (Exception ex) {
 
         }
-    }//GEN-LAST:event_txtBayarKeyReleased
+    }//GEN-LAST:event_txtBayarPembayaranPemasokKeyReleased
 
-    private void btnBatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalActionPerformed
+    private void btnBatalPembayaranPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalPembayaranPemasokActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnBatalActionPerformed
+    }//GEN-LAST:event_btnBatalPembayaranPemasokActionPerformed
 
-    private void btnBayarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBayarActionPerformed
+    private void btnBayarPembayaranPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBayarPembayaranPemasokActionPerformed
         // TODO add your handling code here:
         SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy");
         
         Pembayaran pembayaran = new Pembayaran();
-        pembayaran.setBpmsk_id(ControllerPembayaran.getLastID());
-        pembayaran.setPms_id(controllerTable.getPemasokId((String)cmbPemasok.getSelectedItem()));
+        pembayaran.setBpmsk_id(ControllerPembayaranPembayaranPemasok.getLastID());
+        pembayaran.setPms_id(ControllerTablePembayaranPemasok.getPemasokId((String)cmbPemasokPembayaranPemasok.getSelectedItem()));
         pembayaran.setKry_id("202006290001");
         pembayaran.setBpmsk_tgl_transaksi(new Date());
-        pembayaran.setBpmsk_uang_dibayar(Integer.valueOf(txtBayar.getText()));
+        pembayaran.setBpmsk_uang_dibayar(Integer.valueOf(txtBayarPembayaranPemasok.getText()));
         
-        ControllerPembayaran.simpanPembayaranPemasok(pembayaran);
+        ControllerPembayaranPembayaranPemasok.simpanPembayaranPemasok(pembayaran);
         try {
-            controllerpemasok.updateTransaksiPembayaran(Long.parseLong(txtBayar.getText()), Long.parseLong((kursIndonesia.parse(txtSisaHutang.getText())).toString()), pemasok.getPms_id().toString());
+            ControllerPemasokPembayaranPemasok.updateTransaksiPembayaran(Long.parseLong(txtBayarPembayaranPemasok.getText()), Long.parseLong((kursIndonesia.parse(txtSisaHutangPembayaranPemasok.getText())).toString()), pemasokPembayaranPemasok.getPms_id().toString());
             
-            controllerTable.addDataPemasok(modelPemasok,(String) cmbPemasok.getSelectedItem());
+            ControllerTablePembayaranPemasok.addDataPemasok(modelPemasokPembayaranPemasok,(String) cmbPemasokPembayaranPemasok.getSelectedItem());
         } catch (ParseException ex) {
             JOptionPane.showMessageDialog(this, "Tidak dapat menyimpan ke pemasok!");
         }
         
         JOptionPane.showMessageDialog(this, "Pembayaran berhasil....");
         addDataPemasok();
-        clear();
-        cmbPemasok.setSelectedIndex(0);
-        lblKeteranganPembayaran.setText("[Keterangan]");
-    }//GEN-LAST:event_btnBayarActionPerformed
+        ClearPembayaranPemasok();
+        cmbPemasokPembayaranPemasok.setSelectedIndex(0);
+        lblKeteranganPembayaranPembayaranPemasok.setText("[Keterangan]");
+    }//GEN-LAST:event_btnBayarPembayaranPemasokActionPerformed
 
-    private void addDataPemasok(){
-        
-        modelPemasok.getDataVector().removeAllElements();
-
-        modelPemasok.fireTableDataChanged();
-        controllerTable.addDataPemasok(modelPemasok,(String) cmbPemasok.getSelectedItem());
-    }
-    private void clear() {
-
-        txtNamaPemasok.setText("-");
-        txtJumlahTransaksiPemasok.setText("0");
-        txtHutangPemasok.setText(kursIndonesia.format(0));
-
-        txtSisaHutang.setText(kursIndonesia.format(0));
-        txtBayar.setText(kursIndonesia.format(0));
-        txtKembalian.setText(kursIndonesia.format(0));
-
-    }
     
-    private void cmbPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPemasokActionPerformed
+    
+    private void cmbPemasokPembayaranPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPemasokPembayaranPemasokActionPerformed
         // TODO add your handling code here:
-        modelPemasok.getDataVector().removeAllElements();
+        modelPemasokPembayaranPemasok.getDataVector().removeAllElements();
 
-        modelPemasok.fireTableDataChanged();
-        clear();
-        controllerTable.addDataPemasok(modelPemasok,(String) cmbPemasok.getSelectedItem());
-    }//GEN-LAST:event_cmbPemasokActionPerformed
+        modelPemasokPembayaranPemasok.fireTableDataChanged();
+        ClearPembayaranPemasok();
+        ControllerTablePembayaranPemasok.addDataPemasok(modelPemasokPembayaranPemasok,(String) cmbPemasokPembayaranPemasok.getSelectedItem());
+    }//GEN-LAST:event_cmbPemasokPembayaranPemasokActionPerformed
 
-    private void txtKembalianKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKembalianKeyReleased
+    private void txtKembalianPembayaranPemasokKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKembalianPembayaranPemasokKeyReleased
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtKembalianKeyReleased
+    }//GEN-LAST:event_txtKembalianPembayaranPemasokKeyReleased
 
     /**
      * @param args the command line arguments
@@ -421,9 +521,9 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnBatal;
-    private javax.swing.JButton btnBayar;
-    private javax.swing.JComboBox<String> cmbPemasok;
+    private javax.swing.JButton btnBatalPembayaranPemasok;
+    private javax.swing.JButton btnBayarPembayaranPemasok;
+    private javax.swing.JComboBox<String> cmbPemasokPembayaranPemasok;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -436,16 +536,16 @@ public class TransaksiPembayaranPemasok extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblKeteranganPembayaran;
+    private javax.swing.JLabel lblKeteranganPembayaranPembayaranPemasok;
     private javax.swing.JPanel panelDaftarBarangMasuk;
     private javax.swing.JPanel panelDeskripsiBarangMasuk;
     private javax.swing.JPanel panelPembayaranPemasok;
-    private javax.swing.JTable tablePemasok;
-    private javax.swing.JTextField txtBayar;
-    private javax.swing.JTextField txtHutangPemasok;
-    private javax.swing.JTextField txtJumlahTransaksiPemasok;
-    private javax.swing.JTextField txtKembalian;
-    private javax.swing.JTextField txtNamaPemasok;
-    private javax.swing.JTextField txtSisaHutang;
+    private javax.swing.JTable tablePemasokPembayaranPemasok;
+    private javax.swing.JTextField txtBayarPembayaranPemasok;
+    private javax.swing.JTextField txtHutangPemasokPembayaranPemasok;
+    private javax.swing.JTextField txtJumlahTransaksiPemasokPembayaranPemasok;
+    private javax.swing.JTextField txtKembalianPembayaranPemasok;
+    private javax.swing.JTextField txtNamaPemasokPembayaranPemasok;
+    private javax.swing.JTextField txtSisaHutangPembayaranPemasok;
     // End of variables declaration//GEN-END:variables
 }

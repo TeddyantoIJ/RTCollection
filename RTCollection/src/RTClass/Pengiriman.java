@@ -19,7 +19,17 @@ public class Pengiriman {
     int pgrm_jumlah_karung =0;
     String kry_id = "";
     String status = "";
-    Pengiriman(){
+    String pgn_id = "";
+
+    public String getPgn_id() {
+        return pgn_id;
+    }
+
+    public void setPgn_id(String pgn_id) {
+        this.pgn_id = pgn_id;
+    }
+    
+    public Pengiriman(){
     }
 
     public void setStatus(String status) {

@@ -122,4 +122,16 @@ public class CBarang {
             System.out.println("Error di method updateJumlahBarang "+e.toString()+"\nJumlah "+jumlah+"\nnama "+nama+"\nukuran "+ukuran);
         }
     }
+    public void updateJumlahBarangDipesan(String jumlah, String nama, String ukuran){
+        try {
+            String query = "UPDATE Barang SET b_stok=b_stok - "+Integer.parseInt(jumlah)+" WHERE b_nama='" + nama+ "' and b_ukuran = '"+ukuran+"'";
+            System.out.println(query);
+            connection.pstat = connection.conn.prepareStatement(query);
+            
+            connection.pstat.executeUpdate();
+            connection.pstat.close();
+        } catch (Exception e) {
+            System.out.println("Error di method updateJumlahBarang "+e.toString()+"\nJumlah "+jumlah+"\nnama "+nama+"\nukuran "+ukuran);
+        }
+    }
 }

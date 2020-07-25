@@ -59,7 +59,38 @@ public class CPemesanan {
             System.out.println("Gagal detail pemesanan "+e.toString());
         }
     }
-    
+    public Long getPmsn_Total_Uang(String Pmsn_id){
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "SELECT pmsn_total_uang FROM Pemesanan where pmsn_id = '"+Pmsn_id+"'";
+            connection.result = connection.stat.executeQuery(query);
+
+            while (connection.result.next()) {
+               return connection.result.getLong("pmsn_total_uang"); 
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di getPmsn_Total_Uang!\n" + e.toString());
+        }
+        return 0L;
+    }
+    public void setStatus(String Pmsn_id, String status){
+        DBConnect connection = new DBConnect();
+        try {
+            String query = "update Pemesanan set pmsn_status = '"+status+"' where pmsn_id = ?";
+            connection.pstat = connection.conn.prepareStatement(query);
+            
+            connection.pstat.setString(1, Pmsn_id);
+            
+            
+            connection.pstat.executeUpdate();
+            connection.pstat.close();
+        } catch (Exception e) {
+            System.out.println("Gagal setStatus "+e.toString());
+        }
+    }
 //    public void updateKaryawan(Karyawan kar){
 //        Format formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 //        String tanggal = formatter.format(kar.getKry_tgl_lahir());

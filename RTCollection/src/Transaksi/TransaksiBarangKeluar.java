@@ -6,8 +6,16 @@
 package Transaksi;
 
 import Controller.CBarang;
+import Controller.CDetailKarung;
+import Controller.CKarung;
+import Controller.CPelanggan;
+import Controller.CPemesanan;
 import Controller.CPengiriman;
 import Controller.CTableBarang;
+import RTClass.Barang;
+import RTClass.DetailKarung;
+import RTClass.Karung;
+import RTClass.Pengiriman;
 import connection.DBConnect;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +42,14 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     private DefaultTableModel modelDetailKarungBarangKeluar = new DefaultTableModel();
 
     CPengiriman ControllerPengirimanBarangKeluar = new CPengiriman();
+    CKarung ControllerKarungBarangKeluar = new CKarung();
+    CDetailKarung ControllerDetailKarungBarangKeluar = new CDetailKarung();
+    CPemesanan ControllerPemesananBarangKeluar = new CPemesanan();
+    CPelanggan ControllerPelangganBarangKeluar = new CPelanggan();
+    
+    Pengiriman PengirimanBarangKeluar;
+    
+    
     CTableBarang ControllerTabelBarangKeluar = new CTableBarang();
 
     List<String> detailKarungIndexBarangKeluar = new ArrayList<String>();
@@ -42,11 +58,13 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     List<String> detailKarungKodiBarangKeluar = new ArrayList<String>();
 
     public TransaksiBarangKeluar() {
+        
         initComponents();
-
+        
         //======================= DEKLARASI BARANG MASUK =============================
         addColumnBarangKeluar();
-
+        
+        PengirimanBarangKeluar = new Pengiriman();
         tableBarangKeluar.setModel(modelBarangKeluar);
         tableDetailBarangKeluar.setModel(modelDetailBarangKeluar);
         tableKarungPengirimanBarangKeluar.setModel(modelKarungBarangKeluar);
@@ -56,7 +74,7 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         btnTambahkanPengirimanBarangKeluar.setEnabled(false);
 
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -66,7 +84,7 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        PanelTransaksiBarangKeluar = new javax.swing.JPanel();
         panelDaftarBarangMasuk = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         cmbStatusBarangKeluar = new javax.swing.JComboBox<>();
@@ -102,7 +120,7 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         txtBatasKeteranganBarangKeluar = new javax.swing.JLabel();
         dummy1 = new javax.swing.JLabel();
         txtBatasKeteranganBarangKeluar1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnTulisKeteranganBarangKeluar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tableDetailKarungPengirimanBarangKeluar = new javax.swing.JTable();
@@ -110,9 +128,9 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         txtNomorKarungBarangKeluar = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnBatalkanKarungBarangKeluar = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        btnKonfirmasiPemberangkatanBarangKeluar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,7 +139,7 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         jLabel7.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel7.setText("DAFTAR BARANG KELUAR");
 
-        cmbStatusBarangKeluar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disiapkan", "Selesai", "Batal" }));
+        cmbStatusBarangKeluar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disiapkan", "Dikirim", "Gagal", "Selesai" }));
         cmbStatusBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cmbStatusBarangKeluarActionPerformed(evt);
@@ -159,6 +177,7 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tableDetailBarangKeluar.setEnabled(false);
         tableDetailBarangKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableDetailBarangKeluarMouseClicked(evt);
@@ -221,10 +240,10 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                     .addGroup(panelDaftarBarangMasukLayout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtBarangBarangKeluar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtUkuranBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
+                        .addComponent(txtBarangBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
+                        .addGap(30, 30, 30)
+                        .addComponent(txtUkuranBarangKeluar)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addComponent(txtJumlahKodiBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -293,6 +312,11 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         tableKarungPengirimanBarangKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableKarungPengirimanBarangKeluarMouseClicked(evt);
+            }
+        });
+        tableKarungPengirimanBarangKeluar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tableKarungPengirimanBarangKeluarKeyTyped(evt);
             }
         });
         jScrollPane4.setViewportView(tableKarungPengirimanBarangKeluar);
@@ -417,7 +441,12 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton2.setText("TULIS KETERANGAN");
+        btnTulisKeteranganBarangKeluar.setText("TULIS KETERANGAN");
+        btnTulisKeteranganBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTulisKeteranganBarangKeluarActionPerformed(evt);
+            }
+        });
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
@@ -460,7 +489,12 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
 
         jLabel6.setText("AKSI");
 
-        jButton3.setText("BATALKAN KARUNG");
+        btnBatalkanKarungBarangKeluar.setText("BATALKAN PENGARUNGAN");
+        btnBatalkanKarungBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalkanKarungBarangKeluarActionPerformed(evt);
+            }
+        });
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("ISI KETERANGAN DI SAMPING");
@@ -477,7 +511,7 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                             .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 312, Short.MAX_VALUE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -488,10 +522,8 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                             .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                         .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14))))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                .addGap(279, 279, 279))
+                        .addGap(14, 14, 14))
+                    .addComponent(btnBatalkanKarungBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,45 +544,50 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(btnBatalkanKarungBarangKeluar)
                 .addContainerGap())
         );
 
-        jButton4.setText("KONFIRMASI PEMBERANGKATAN");
+        btnKonfirmasiPemberangkatanBarangKeluar.setText("KONFIRMASI PEMBERANGKATAN");
+        btnKonfirmasiPemberangkatanBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKonfirmasiPemberangkatanBarangKeluarActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout PanelTransaksiBarangKeluarLayout = new javax.swing.GroupLayout(PanelTransaksiBarangKeluar);
+        PanelTransaksiBarangKeluar.setLayout(PanelTransaksiBarangKeluarLayout);
+        PanelTransaksiBarangKeluarLayout.setHorizontalGroup(
+            PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
                         .addComponent(panelDataPengirimanBarangBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)))
+                            .addComponent(btnTulisKeteranganBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnKonfirmasiPemberangkatanBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)))
                     .addComponent(panelDaftarBarangMasuk, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        PanelTransaksiBarangKeluarLayout.setVerticalGroup(
+            PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panelDaftarBarangMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelDataPengirimanBarangBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(btnTulisKeteranganBarangKeluar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                        .addComponent(jButton4))
+                        .addComponent(btnKonfirmasiPemberangkatanBarangKeluar))
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -560,12 +597,12 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(PanelTransaksiBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(PanelTransaksiBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -634,27 +671,27 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
             }
         }
     }
-    private void isiJumlahDetailKarungTransaksiBarangKeluar(){
+
+    private void isiJumlahDetailKarungTransaksiBarangKeluar() {
         int nomorkarung = 1;
         int jumlah = 0;
-        for(int i = 0; i < detailKarungIndexBarangKeluar.size(); i++){
+        for (int i = 0; i < detailKarungIndexBarangKeluar.size(); i++) {
             //JOptionPane.showMessageDialog(this, "Nomor karung : "+nomorkarung+"\nIndex karung detail : "+detailKarungIndexBarangKeluar.get(i));
 //            JOptionPane.showMessageDialog(this, );
-            if(nomorkarung == Integer.parseInt(detailKarungIndexBarangKeluar.get(i))){
+            if (nomorkarung == Integer.parseInt(detailKarungIndexBarangKeluar.get(i))) {
                 jumlah++;
-            }
-            else if(nomorkarung != Integer.parseInt(detailKarungIndexBarangKeluar.get(i)))
-            {
-                tableKarungPengirimanBarangKeluar.setValueAt(jumlah, nomorkarung-1, 4);
+            } else if (nomorkarung != Integer.parseInt(detailKarungIndexBarangKeluar.get(i))) {
+                tableKarungPengirimanBarangKeluar.setValueAt(jumlah, nomorkarung - 1, 4);
                 jumlah = 1;
                 nomorkarung++;
             }
-            
-            if(i+1==detailKarungIndexBarangKeluar.size()){
-                tableKarungPengirimanBarangKeluar.setValueAt(jumlah, nomorkarung-1, 4);
+
+            if (i + 1 == detailKarungIndexBarangKeluar.size()) {
+                tableKarungPengirimanBarangKeluar.setValueAt(jumlah, nomorkarung - 1, 4);
             }
         }
     }
+
     private void addDataBarangKeluar() {
 
         modelBarangKeluar.getDataVector().removeAllElements();
@@ -664,13 +701,19 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     }
     private void cmbStatusBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStatusBarangKeluarActionPerformed
         // TODO add your handling code here:
+        clearBarangKeluar();
         modelBarangKeluar.getDataVector().removeAllElements();
 
         modelBarangKeluar.fireTableDataChanged();
+        
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
         ControllerTabelBarangKeluar.addDataBarangKeluar(modelBarangKeluar, (String) cmbStatusBarangKeluar.getSelectedItem(), (String) cmbNamaPelangganBarangKeluar.getSelectedItem());
     }//GEN-LAST:event_cmbStatusBarangKeluarActionPerformed
     private void tableBarangKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBarangKeluarMouseClicked
         // TODO add your handling code here:
+        
         perbaruiDetailBarangKeluar();
     }//GEN-LAST:event_tableBarangKeluarMouseClicked
     private void perbaruiDetailBarangKeluar() {
@@ -681,19 +724,14 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     }
     private void tableDetailBarangKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDetailBarangKeluarMouseClicked
         // TODO add your handling code here:
-        try {
-            txtBarangBarangKeluar.setText(tableDetailBarangKeluar.getValueAt(tableDetailBarangKeluar.getSelectedRow(), 1).toString());
-            txtUkuranBarangKeluar.setText(tableDetailBarangKeluar.getValueAt(tableDetailBarangKeluar.getSelectedRow(), 2).toString());
-            txtJumlahKodiBarangKeluar.setValue(Integer.parseInt((String) tableDetailBarangKeluar.getValueAt(tableDetailBarangKeluar.getSelectedRow(), 3)));
-        } catch (Exception ex) {
-
-        }
+        
 
     }//GEN-LAST:event_tableDetailBarangKeluarMouseClicked
     private void tableKarungPengirimanBarangKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableKarungPengirimanBarangKeluarMouseClicked
         // TODO add your handling code here:
-        txtNomorKarungBarangKeluar.setText(Integer.toString(tableKarungPengirimanBarangKeluar.getSelectedRow() + 1));
+        txtNomorKarungBarangKeluar.setText(tableKarungPengirimanBarangKeluar.getValueAt(tableKarungPengirimanBarangKeluar.getSelectedRow(), 0).toString());
         showDetailKarungBarangKeluar(txtNomorKarungBarangKeluar.getText());
+        txtKeteranganKarungBarangKeluar.setText(tableKarungPengirimanBarangKeluar.getValueAt(tableKarungPengirimanBarangKeluar.getSelectedRow(), 2).toString());
     }//GEN-LAST:event_tableKarungPengirimanBarangKeluarMouseClicked
     private void txtKeteranganKarungBarangKeluarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKeteranganKarungBarangKeluarKeyReleased
         // TODO add your handling code here:
@@ -715,9 +753,14 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     }//GEN-LAST:event_tableDetailKarungPengirimanBarangKeluarMouseClicked
     private void cmbNamaPelangganBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNamaPelangganBarangKeluarActionPerformed
         // TODO add your handling code here:
+        clearBarangKeluar();
         modelBarangKeluar.getDataVector().removeAllElements();
 
         modelBarangKeluar.fireTableDataChanged();
+        
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
         ControllerTabelBarangKeluar.addDataBarangKeluar(modelBarangKeluar, (String) cmbStatusBarangKeluar.getSelectedItem(), (String) cmbNamaPelangganBarangKeluar.getSelectedItem());
     }//GEN-LAST:event_cmbNamaPelangganBarangKeluarActionPerformed
     private void cbPengirimanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPengirimanActionPerformed
@@ -731,15 +774,29 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
             txtIDPengirimanBarangKeluar.setText("[ ID PENGIRIMAN ]");
         }
     }//GEN-LAST:event_cbPengirimanActionPerformed
+    private void hitungKodiKarungBarangKeluar() {
+        int karung = tableKarungPengirimanBarangKeluar.getRowCount();
+        int kodi = 0;
+        for (int i = 0; i < tableKarungPengirimanBarangKeluar.getRowCount(); i++) {
 
+            kodi = kodi + Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt(i, 3).toString());
+
+        }
+        txtJumlahKarungPengirimanBarang.setText(Integer.toString(karung));
+        txtJumlahKodiPengirimanBarang.setText(Integer.toString(kodi));
+    }
     private void btnTambahkanPengirimanBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahkanPengirimanBarangKeluarActionPerformed
         // TODO add your handling code here:
-        if (tableDetailBarangKeluar.getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(this, "Tidak ada data terpilih! ");
+//        if (tableDetailBarangKeluar.getSelectedRow() == -1) {
+//            JOptionPane.showMessageDialog(this, "Tidak ada data terpilih! ");
+//            return;
+//        }
+        if(tableBarangKeluar.getValueAt(tableBarangKeluar.getSelectedRow(), 6).toString().equals("0")){
+            JOptionPane.showMessageDialog(this, "Data sudah dimasukkan!");
             return;
         }
         int kode = 64;
-        
+
         // jika kosong
         //       masukkan data semua
         //             jika semua data lebih dari 40
@@ -747,56 +804,19 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         //                  sisanya masukkan ke karung berikutnya
         Object[] dataRowKarung = {"", "", "", "", ""};
         Object[] dataRowDetailKarung = {"", "", "", ""};
-        if (tableKarungPengirimanBarangKeluar.getRowCount() == 0) {
-            while ((int) txtJumlahKodiBarangKeluar.getValue() > 0) {
-                if ((int) txtJumlahKodiBarangKeluar.getValue() >= 40) {
-                    Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText()+(char)(kode+(tableKarungPengirimanBarangKeluar.getRowCount() + 1)), "ISI DI SAMPING", "40", ""};
+        for(int i = 0; i < tableDetailBarangKeluar.getRowCount(); i ++){
+//            tableDetailBarangKeluar.setRowSelectionInterval(kode, kode);
+            try {
+            txtBarangBarangKeluar.setText(tableDetailBarangKeluar.getValueAt(i, 1).toString());
+            txtUkuranBarangKeluar.setText(tableDetailBarangKeluar.getValueAt(i, 2).toString());
+            txtJumlahKodiBarangKeluar.setValue(Integer.parseInt((String) tableDetailBarangKeluar.getValueAt(i, 3)));
+            } catch (Exception ex) {
 
-                    //System.out.println(i);
-                    Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), "40"};
-
-                    detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
-                    detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
-                    detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
-                    detailKarungKodiBarangKeluar.add("40");
-
-                    JOptionPane.showMessageDialog(this, Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
-                    dataRowDetailKarung = dataDetail;
-                    dataRowKarung = data;
-
-                    txtJumlahKodiBarangKeluar.setValue((int) txtJumlahKodiBarangKeluar.getValue() - 40);
-                } else {
-                    Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText()+(char)(kode+tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", txtJumlahKodiBarangKeluar.getValue(), ""};
-                    Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), txtJumlahKodiBarangKeluar.getValue()};
-
-                    JOptionPane.showMessageDialog(this, "Masuk else");
-                    detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
-                    detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
-                    detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
-                    detailKarungKodiBarangKeluar.add(txtJumlahKodiBarangKeluar.getValue().toString());
-
-                    dataRowDetailKarung = dataDetail;
-                    dataRowKarung = data;
-
-                    txtJumlahKodiBarangKeluar.setValue(0);
-
-                }
-                modelKarungBarangKeluar.addRow(dataRowKarung);
-                //modelDetailKarungBarangKeluar.addRow(dataRowDetailKarung);
             }
-            isiJumlahDetailKarungTransaksiBarangKeluar();
-        } else {
-            // ELSE UNTUK ROW LEBIH DARI 1
-            //  jikasudah ada 1 karung
-            // periksa apakah sudah 40 isinya
-            // jika sudah, buat karung baru
-            //
-            // jika belum , masukkan ke detil karung dan ubah jumlahnya
-            // ubah tulisan jumlah kodi nya, dan masukkan detitlnya sesuai row paling bawah
-            while ((int) txtJumlahKodiBarangKeluar.getValue() > 0) {
-                if (Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt((tableKarungPengirimanBarangKeluar.getRowCount() - 1), 3).toString()) == 40) {
+            if (tableKarungPengirimanBarangKeluar.getRowCount() == 0) {
+                while ((int) txtJumlahKodiBarangKeluar.getValue() > 0) {
                     if ((int) txtJumlahKodiBarangKeluar.getValue() >= 40) {
-                        Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText()+(char)(kode+tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", "40", ""};
+                        Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + (tableKarungPengirimanBarangKeluar.getRowCount() + 1)), "ISI DI SAMPING", "40", ""};
 
                         //System.out.println(i);
                         Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), "40"};
@@ -806,16 +826,16 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                         detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
                         detailKarungKodiBarangKeluar.add("40");
 
-                        JOptionPane.showMessageDialog(this, Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                        //JOptionPane.showMessageDialog(this, Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
                         dataRowDetailKarung = dataDetail;
                         dataRowKarung = data;
 
                         txtJumlahKodiBarangKeluar.setValue((int) txtJumlahKodiBarangKeluar.getValue() - 40);
                     } else {
-                        Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText()+(char)(kode+tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", txtJumlahKodiBarangKeluar.getValue(), ""};
+                        Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", txtJumlahKodiBarangKeluar.getValue(), ""};
                         Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), txtJumlahKodiBarangKeluar.getValue()};
 
-                        JOptionPane.showMessageDialog(this, "Masuk else");
+                        //JOptionPane.showMessageDialog(this, "Masuk else");
                         detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
                         detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
                         detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
@@ -829,52 +849,101 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
                     }
                     modelKarungBarangKeluar.addRow(dataRowKarung);
                     //modelDetailKarungBarangKeluar.addRow(dataRowDetailKarung);
-
-                } else {
-                    // jika blm 40
-                    // periksa jumlah kodi nya
-                    // jika lebih dari 40, masukkan hingga karung itu 40 -> tambahkan ke detil
-                    // jika tidak lebih dari 40, masukkan hingga total 40 ->
-                    // jika kurang ya masukkan saja semua ->
-                    int disana = 0;
-                    int jumlahsaya = Integer.parseInt(txtJumlahKodiBarangKeluar.getValue().toString());
-                    int jumlahygada = Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt(tableKarungPengirimanBarangKeluar.getRowCount() - 1, 3).toString());
-                    int jumlahketerima = 0;
-                    int daya = 40;
-                    
-                    int kebutuhan = daya - jumlahygada;
-                    if(kebutuhan > jumlahsaya){
-                        disana = jumlahygada + jumlahsaya;
-                        jumlahketerima = jumlahsaya; 
-                        jumlahsaya = 0;
-                    }else if(jumlahsaya > kebutuhan){
-                        disana = daya;
-                        jumlahketerima = kebutuhan;
-                        jumlahsaya = jumlahsaya - kebutuhan;
-                    }
-                    
-
-                    tableKarungPengirimanBarangKeluar.setValueAt(Integer.toString(disana), tableKarungPengirimanBarangKeluar.getRowCount() - 1, 3);
-
-                    JOptionPane.showMessageDialog(this, "Masuk sisa itu loh");
-                    detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount()));
-                    detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
-                    detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
-                    detailKarungKodiBarangKeluar.add(Integer.toString(jumlahketerima));
-
-                    txtJumlahKodiBarangKeluar.setValue(jumlahsaya);
-
                 }
-            }
-            isiJumlahDetailKarungTransaksiBarangKeluar();
-        }
-        if (Integer.parseInt(tableDetailBarangKeluar.getValueAt(tableDetailBarangKeluar.getRowCount() - 1, 3).toString()) <= 40) {
-            JOptionPane.showMessageDialog(this, "Bawah 40! ");
+                isiJumlahDetailKarungTransaksiBarangKeluar();
+            } else {
+                // ELSE UNTUK ROW LEBIH DARI 1
+                //  jikasudah ada 1 karung
+                // periksa apakah sudah 40 isinya
+                // jika sudah, buat karung baru
+                //
+                // jika belum , masukkan ke detil karung dan ubah jumlahnya
+                // ubah tulisan jumlah kodi nya, dan masukkan detitlnya sesuai row paling bawah
+                while ((int) txtJumlahKodiBarangKeluar.getValue() > 0) {
+                    if (Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt((tableKarungPengirimanBarangKeluar.getRowCount() - 1), 3).toString()) == 40) {
+                        if ((int) txtJumlahKodiBarangKeluar.getValue() >= 40) {
+                            Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", "40", ""};
+
+                            //System.out.println(i);
+                            Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), "40"};
+
+                            detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                            detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                            detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                            detailKarungKodiBarangKeluar.add("40");
+
+                            //JOptionPane.showMessageDialog(this, Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                            dataRowDetailKarung = dataDetail;
+                            dataRowKarung = data;
+
+                            txtJumlahKodiBarangKeluar.setValue((int) txtJumlahKodiBarangKeluar.getValue() - 40);
+                        } else {
+                            Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", txtJumlahKodiBarangKeluar.getValue(), ""};
+                            Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), txtJumlahKodiBarangKeluar.getValue()};
+
+                            //    JOptionPane.showMessageDialog(this, "Masuk else");
+                            detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                            detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                            detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                            detailKarungKodiBarangKeluar.add(txtJumlahKodiBarangKeluar.getValue().toString());
+
+                            dataRowDetailKarung = dataDetail;
+                            dataRowKarung = data;
+
+                            txtJumlahKodiBarangKeluar.setValue(0);
+
+                        }
+                        modelKarungBarangKeluar.addRow(dataRowKarung);
+                        //modelDetailKarungBarangKeluar.addRow(dataRowDetailKarung);
+
+                    } else {
+                        // jika blm 40
+                        // periksa jumlah kodi nya
+                        // jika lebih dari 40, masukkan hingga karung itu 40 -> tambahkan ke detil
+                        // jika tidak lebih dari 40, masukkan hingga total 40 ->
+                        // jika kurang ya masukkan saja semua ->
+                        int disana = 0;
+                        int jumlahsaya = Integer.parseInt(txtJumlahKodiBarangKeluar.getValue().toString());
+                        int jumlahygada = Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt(tableKarungPengirimanBarangKeluar.getRowCount() - 1, 3).toString());
+                        int jumlahketerima = 0;
+                        int daya = 40;
+
+                        int kebutuhan = daya - jumlahygada;
+                        if (kebutuhan > jumlahsaya) {
+                            disana = jumlahygada + jumlahsaya;
+                            jumlahketerima = jumlahsaya;
+                            jumlahsaya = 0;
+                        } else if (jumlahsaya > kebutuhan) {
+                            disana = daya;
+                            jumlahketerima = kebutuhan;
+                            jumlahsaya = jumlahsaya - kebutuhan;
+                        }
+
+                        tableKarungPengirimanBarangKeluar.setValueAt(Integer.toString(disana), tableKarungPengirimanBarangKeluar.getRowCount() - 1, 3);
+
+                        //JOptionPane.showMessageDialog(this, "Masuk sisa itu loh");
+                        detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount()));
+                        detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                        detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                        detailKarungKodiBarangKeluar.add(Integer.toString(jumlahketerima));
+
+                        txtJumlahKodiBarangKeluar.setValue(jumlahsaya);
+
+                    }
+                }
+                isiJumlahDetailKarungTransaksiBarangKeluar();
+            }    
         }
         
+//        if (Integer.parseInt(tableDetailBarangKeluar.getValueAt(tableDetailBarangKeluar.getRowCount() - 1, 3).toString()) <= 40) {
+//            JOptionPane.showMessageDialog(this, "Bawah 40! ");
+//        }
+        tableBarangKeluar.setValueAt(0, tableBarangKeluar.getSelectedRow(), 6);
+        //tableDetailBarangKeluar.setValueAt(0, tableDetailBarangKeluar.getSelectedRow(), 3);
+        hitungKodiKarungBarangKeluar();
         //modelDetailBarangKeluar
     }//GEN-LAST:event_btnTambahkanPengirimanBarangKeluarActionPerformed
-    
+
     private void txtNomorKarungBarangKeluarPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtNomorKarungBarangKeluarPropertyChange
         // TODO add your handling code here:
 
@@ -884,6 +953,116 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_txtNomorKarungBarangKeluarActionPerformed
+
+    private void btnTulisKeteranganBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTulisKeteranganBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        try {
+            tableKarungPengirimanBarangKeluar.setValueAt(txtKeteranganKarungBarangKeluar.getText(), tableKarungPengirimanBarangKeluar.getSelectedRow(), 2);
+        } catch (Exception ex) {
+
+        }
+
+    }//GEN-LAST:event_btnTulisKeteranganBarangKeluarActionPerformed
+
+    private void tableKarungPengirimanBarangKeluarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKarungPengirimanBarangKeluarKeyTyped
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tableKarungPengirimanBarangKeluarKeyTyped
+
+    private void btnBatalkanKarungBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalkanKarungBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        clearBarangKeluar();
+        modelBarangKeluar.getDataVector().removeAllElements();
+
+        modelBarangKeluar.fireTableDataChanged();
+        
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
+        ControllerTabelBarangKeluar.addDataBarangKeluar(modelBarangKeluar, (String) cmbStatusBarangKeluar.getSelectedItem(), (String) cmbNamaPelangganBarangKeluar.getSelectedItem());
+    }//GEN-LAST:event_btnBatalkanKarungBarangKeluarActionPerformed
+
+    private void btnKonfirmasiPemberangkatanBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKonfirmasiPemberangkatanBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        PengirimanBarangKeluar.setPgrm_id(txtIDPengirimanBarangKeluar.getText());
+        int kodi = Integer.parseInt(txtJumlahKodiPengirimanBarang.getText());
+        PengirimanBarangKeluar.setPgrm_jumlah_barang(kodi*20);
+        PengirimanBarangKeluar.setPgrm_jumlah_karung(Integer.parseInt(txtJumlahKarungPengirimanBarang.getText()));
+        PengirimanBarangKeluar.setPgrm_jumlah_kodi(Integer.parseInt(txtJumlahKodiPengirimanBarang.getText()));
+        PengirimanBarangKeluar.setPgrm_tgl_transaksi(new Date());
+        PengirimanBarangKeluar.setStatus("Dikirim");
+        //PengirimanBarangKeluar.setKry_id(kry_id);
+        PengirimanBarangKeluar.setKry_id("202007010002");
+        PengirimanBarangKeluar.setPgn_id(ControllerPelangganBarangKeluar.getIDPelanggan(cmbNamaPelangganBarangKeluar.getSelectedItem().toString()));
+        simpanDataPengirimanBarangKeluar(PengirimanBarangKeluar);
+    }//GEN-LAST:event_btnKonfirmasiPemberangkatanBarangKeluarActionPerformed
+    private void simpanDataPengirimanBarangKeluar(Pengiriman png){
+        ControllerPengirimanBarangKeluar.simpanPengiriman(png);
+        Karung krg = new Karung();
+        for(int i = 0 ; i < tableKarungPengirimanBarangKeluar.getRowCount(); i++){
+            krg.setKrg_id(tableKarungPengirimanBarangKeluar.getValueAt(i, 1).toString());
+            krg.setKrg_jumlah_jenis_barang(Integer.valueOf(tableKarungPengirimanBarangKeluar.getValueAt(i, 4).toString()));
+            krg.setKrg_jumlah_kodi(Integer.valueOf(tableKarungPengirimanBarangKeluar.getValueAt(i, 3).toString()));
+            krg.setKeterangan(tableKarungPengirimanBarangKeluar.getValueAt(i, 2).toString());
+            krg.setPgrm_id(PengirimanBarangKeluar.getPgrm_id());
+            ControllerKarungBarangKeluar.simpanKarung(krg);
+            simpanKarungBarangKeluar(i,krg.getKrg_id());
+        }
+        //updateStatusPemesananBarangKeluar();
+        JOptionPane.showMessageDialog(this, "Pendataan pengiriman barang telah selasi");
+    }
+    private void simpanKarungBarangKeluar(int index, String krg_id){
+        DetailKarung DetailKarung = new DetailKarung();
+        Barang barang = new Barang();
+        for(int i = 0 ; i < detailKarungIndexBarangKeluar.size();i++){
+            if(detailKarungIndexBarangKeluar.get(i).equals(Integer.toString(index+1))){
+                 barang = ControllerTabelBarangKeluar.getDatabyNamaUkuran(detailKarungBarangBarangKeluar.get(i), detailKarungUkuranBarangKeluar.get(i));
+                 DetailKarung.setB_id(barang.getID_Barang());
+                 DetailKarung.setDetail_jumlah_kodi(Integer.valueOf(detailKarungKodiBarangKeluar.get(i)));
+                 DetailKarung.setDetail_jumlah_barang(DetailKarung.getDetail_jumlah_kodi()*20);
+                 DetailKarung.setKrg_id(krg_id);
+                 ControllerDetailKarungBarangKeluar.simpanDetailKarung(DetailKarung);
+            }
+        }
+        updateStatusPemesananBarangKeluar();
+    }
+    private void updateStatusPemesananBarangKeluar(){
+        for(int i = 0; i < tableBarangKeluar.getRowCount(); i++){
+            if(tableBarangKeluar.getValueAt(i, 6).toString().equals("0")){
+                ControllerPemesananBarangKeluar.setStatus(tableBarangKeluar.getValueAt(i, 1).toString(), "Dikirim");
+            }
+        }
+    }
+    
+    private void clearBarangKeluar(){
+        modelKarungBarangKeluar.setRowCount(0);
+        modelDetailKarungBarangKeluar.setRowCount(0);
+        
+        modelKarungBarangKeluar.fireTableDataChanged();
+        modelDetailKarungBarangKeluar.fireTableDataChanged();
+        
+        detailKarungBarangBarangKeluar.clear();
+        detailKarungIndexBarangKeluar.clear();
+        detailKarungKodiBarangKeluar.clear();
+        detailKarungUkuranBarangKeluar.clear();
+        txtNomorKarungBarangKeluar.setText("[NO KARUNG]");
+        txtJumlahKodiPengirimanBarang.setText("[JUMLAH KODI]");
+        txtJumlahKarungPengirimanBarang.setText("[JUMLAH KARUNG]");
+        
+        txtBarangBarangKeluar.setText("[NAMA BARANG]");
+        txtJumlahKodiBarangKeluar.setValue(1);
+        txtUkuranBarangKeluar.setText("[UKURAN]");
+    }
+    private void hapusKarungBarangKeluar() {
+        for (int i = 0; i < detailKarungIndexBarangKeluar.size(); i++) {
+            if (detailKarungIndexBarangKeluar.get(i).equals(Integer.toString(tableKarungPengirimanBarangKeluar.getSelectedRow() + 1))) {
+                detailKarungIndexBarangKeluar.remove(i);
+                detailKarungBarangBarangKeluar.remove(i);
+                detailKarungKodiBarangKeluar.remove(i);
+                detailKarungUkuranBarangKeluar.remove(i);
+            }
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -921,14 +1100,15 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel PanelTransaksiBarangKeluar;
+    private javax.swing.JButton btnBatalkanKarungBarangKeluar;
+    private javax.swing.JButton btnKonfirmasiPemberangkatanBarangKeluar;
     private javax.swing.JButton btnTambahkanPengirimanBarangKeluar;
+    private javax.swing.JButton btnTulisKeteranganBarangKeluar;
     private javax.swing.JCheckBox cbPengiriman;
     private javax.swing.JComboBox<String> cmbNamaPelangganBarangKeluar;
     private javax.swing.JComboBox<String> cmbStatusBarangKeluar;
     private javax.swing.JLabel dummy1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -944,7 +1124,6 @@ public class TransaksiBarangKeluar extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

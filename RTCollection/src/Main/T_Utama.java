@@ -11,31 +11,42 @@ import CRUD.CRUDKaryawan;
 import CRUD.CRUDPelanggan;
 import CRUD.CRUDPemasok;
 import Controller.CBarang;
+import Controller.CDetailKarung;
+import Controller.CKarung;
 import Controller.CKaryawan;
 import Controller.CPelanggan;
 import Controller.CPemasokkan;
 import Controller.CPembayaran;
 import Controller.CPemesanan;   
+import Controller.CPengiriman;
 import Controller.CSupplier;
 import Controller.CTable;
 import Controller.CTableBarang;
 import RTClass.Barang;
+import RTClass.DetailKarung;
 import RTClass.DetailPemasokkan;
 import RTClass.DetailPemesanan;
+import RTClass.DetailPengiriman;
+import RTClass.Karung;
 import RTClass.Karyawan;
 import RTClass.Pelanggan;
 import RTClass.Pemasok;
 import RTClass.Pemasokkan;
 import RTClass.Pembayaran;
 import RTClass.Pemesanan;
+import RTClass.Pengiriman;
 import connection.DBConnect;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -55,8 +66,414 @@ public class T_Utama extends javax.swing.JFrame {
         panelPemesanan.setVisible(false);
         panelBarangMasuk.setVisible(false);
         panelPembayaranPelanggan.setVisible(false);
+        PanelTransaksiBarangKeluar.setVisible(false);
+        panelPembayaranPemasok.setVisible(false);
+        panelKonfirmasiKeluar.setVisible(false);
+        
         
         panel.setVisible(true);
+        
+        //spesifikinstatiasi(panel.getName());
+    }
+    
+    private void spesifikinstatiasi(String panel){
+        switch(panel){
+            case "panelDashboard":{
+                break;
+            }
+            case "panelPengolahanData":{
+                break;
+            }
+            case "panelPemasokkan":{
+                
+                break;
+            }
+            case "panelPemesanan":{
+                
+                break;
+            }
+            case "panelBarangMasuk":{
+                
+                break;
+            }
+            case "panelPembayaranPelanggan":{
+                
+                break;
+            }
+            case "PanelTransaksiBarangKeluar":{
+                
+                break;
+            }
+            case "panelPembayaranPemasok":{
+                
+                break;
+            }
+            case "panelKonfirmasiKeluar":{
+                
+                break;
+            }
+        }
+    }
+    //==========================DEKLARASI VARIABLE KONFIRMASI BARANG KELUAR =====================================
+    private DefaultTableModel modelPengirimanKonfirmasiKeluar = new DefaultTableModel();
+    private DefaultTableModel modelDetailKarungKonfirmasiKeluar = new DefaultTableModel();
+
+    CTableBarang ControllerKonfirmasiKeluar = new CTableBarang();
+    CPengiriman ControllerPengirimanKonfirmasiKeluar = new CPengiriman();
+    CPemesanan ControllerPemesananKonfirmasiKeluar = new CPemesanan();
+    CPelanggan ControllerPelangganKonfirmasiBarang = new CPelanggan();
+
+    
+
+    private void instantiasiKonfirmasiBarangKeluar() {
+        addColumnKonfirmasiKeluar();
+        tableKarungKonfirmasiKeluar.setModel(modelDetailKarungKonfirmasiKeluar);
+        tablePengirimanKonfirmasiKeluar.setModel(modelPengirimanKonfirmasiKeluar);
+        ButtonGroup a = new ButtonGroup();
+        a.add(rbGagalKonfirmasiKeluar);
+        a.add(rbDiterimaKonfirmasiKeluar);
+
+        addDataKonfirmasiKeluar(0);
+        addComboBoxKonfirmasiBarangKeluar();
+    }
+
+    private void addComboBoxKonfirmasiBarangKeluar() {
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "select * from Pelanggan";
+            connection.result = connection.stat.executeQuery(query);
+
+            while (connection.result.next()) {
+
+                cmbNamaPelangganKonfirmasiKeluar.addItem(connection.result.getString("pgn_nama"));
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
+        }
+    }
+
+    private void addDataKonfirmasiKeluar(int i) {
+        modelPengirimanKonfirmasiKeluar.getDataVector().clear();
+        modelDetailKarungKonfirmasiKeluar.getDataVector().clear();
+        modelDetailKarungKonfirmasiKeluar.fireTableDataChanged();
+        if (i == 0) {
+            ControllerKonfirmasiKeluar.addkonfirmasiBarangKeluar(modelPengirimanKonfirmasiKeluar, "Semua");
+        } else {
+            ControllerKonfirmasiKeluar.addkonfirmasiBarangKeluar(modelPengirimanKonfirmasiKeluar, cmbNamaPelangganKonfirmasiKeluar.getSelectedItem().toString());
+        }
+        modelPengirimanKonfirmasiKeluar.fireTableDataChanged();
+        txtNamaPelangganKonfirmasiKeluar.setText("-");
+        txtKodeTransaksiKonfirmasiKeluar.setText("-");
+    }
+
+    private void addColumnKonfirmasiKeluar() {
+        modelPengirimanKonfirmasiKeluar.addColumn("No");
+        modelPengirimanKonfirmasiKeluar.addColumn("Kode");
+        modelPengirimanKonfirmasiKeluar.addColumn("Pelanggan");
+        modelPengirimanKonfirmasiKeluar.addColumn("Jumlah Barang");
+        modelPengirimanKonfirmasiKeluar.addColumn("Jumlah Kodi");
+        modelPengirimanKonfirmasiKeluar.addColumn("Jumlah Karung");
+        modelPengirimanKonfirmasiKeluar.addColumn("Tanggal");
+        modelPengirimanKonfirmasiKeluar.addColumn("Pengemudi");
+        modelPengirimanKonfirmasiKeluar.addColumn("Status");
+
+        modelDetailKarungKonfirmasiKeluar.addColumn("No");
+        modelDetailKarungKonfirmasiKeluar.addColumn("Kode Karung");
+        modelDetailKarungKonfirmasiKeluar.addColumn("Barang");
+        modelDetailKarungKonfirmasiKeluar.addColumn("Ukuran");
+        modelDetailKarungKonfirmasiKeluar.addColumn("Jumlah Barang");
+        modelDetailKarungKonfirmasiKeluar.addColumn("Jumlah Kodi");
+        modelDetailKarungKonfirmasiKeluar.addColumn("Keterangan");
+    }
+    //==========================DEKLARASI VARIABLE PEMBAYARAN PEMASOK =====================================
+    public String kry_id = "";
+    Pemasok pemasokPembayaranPemasok = new Pemasok();
+    CSupplier ControllerPemasokPembayaranPemasok = new CSupplier();
+    CTable ControllerTablePembayaranPemasok = new CTable();
+    private DefaultTableModel modelPemasokPembayaranPemasok = new DefaultTableModel();
+    CPembayaran ControllerPembayaranPembayaranPemasok = new CPembayaran();
+    CPemasokkan ControllerPemasokkan = new CPemasokkan();
+    
+    DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+    DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+    
+    private void instantiasiPembayaranPemasok(){
+            addColumnPembayaranPemasok();
+            addComboBoxPembayaranPemasok();
+            tablePemasokPembayaranPemasok.setModel(modelPemasokPembayaranPemasok);
+            formatRp.setCurrencySymbol("Rp. ");
+            formatRp.setMonetaryDecimalSeparator(',');
+            formatRp.setGroupingSeparator('.');
+            kursIndonesia.setDecimalFormatSymbols(formatRp);
+        }
+    private void addColumnPembayaranPemasok() {
+        modelPemasokPembayaranPemasok.addColumn("No");
+        modelPemasokPembayaranPemasok.addColumn("Nama");
+        modelPemasokPembayaranPemasok.addColumn("Alamat");
+        modelPemasokPembayaranPemasok.addColumn("No HP");
+        modelPemasokPembayaranPemasok.addColumn("Transaksi");
+        modelPemasokPembayaranPemasok.addColumn("Pembayaran");
+        modelPemasokPembayaranPemasok.addColumn("Hutang");
+    }
+    
+    private void addComboBoxPembayaranPemasok(){
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "select * from Pemasok";
+            connection.result = connection.stat.executeQuery(query);
+            
+            while (connection.result.next()) {
+                
+                cmbPemasokPembayaranPemasok.addItem(connection.result.getString("pms_nama"));
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
+        }
+    }
+    private void addDataPemasok(){
+        
+        modelPemasokPembayaranPemasok.getDataVector().removeAllElements();
+
+        modelPemasokPembayaranPemasok.fireTableDataChanged();
+        ControllerTablePembayaranPemasok.addDataPemasok(modelPemasokPembayaranPemasok,(String) cmbPemasokPembayaranPemasok.getSelectedItem());
+    }
+    private void ClearPembayaranPemasok() {
+
+        txtNamaPemasokPembayaranPemasok.setText("-");
+        txtJumlahTransaksiPemasokPembayaranPemasok.setText("0");
+        txtHutangPemasokPembayaranPemasok.setText(kursIndonesia.format(0));
+
+        txtSisaHutangPembayaranPemasok.setText(kursIndonesia.format(0));
+        txtBayarPembayaranPemasok.setText(kursIndonesia.format(0));
+        txtKembalianPembayaranPemasok.setText(kursIndonesia.format(0));
+
+    }
+    //==========================DEKLARASI VARIABLE BARANG KELUAR =====================================
+    private DefaultTableModel modelBarangKeluar = new DefaultTableModel();
+    private DefaultTableModel modelDetailBarangKeluar = new DefaultTableModel();
+    private DefaultTableModel modelKarungBarangKeluar = new DefaultTableModel();
+    private DefaultTableModel modelDetailKarungBarangKeluar = new DefaultTableModel();
+
+    CPengiriman ControllerPengirimanBarangKeluar = new CPengiriman();
+    CKarung ControllerKarungBarangKeluar = new CKarung();
+    CDetailKarung ControllerDetailKarungBarangKeluar = new CDetailKarung();
+    CPemesanan ControllerPemesananBarangKeluar = new CPemesanan();
+    CPelanggan ControllerPelangganBarangKeluar = new CPelanggan();
+    
+    Pengiriman PengirimanBarangKeluar;
+    
+    
+    CTableBarang ControllerTabelBarangKeluar = new CTableBarang();
+
+    List<String> detailKarungIndexBarangKeluar = new ArrayList<String>();
+    List<String> detailKarungBarangBarangKeluar = new ArrayList<String>();
+    List<String> detailKarungUkuranBarangKeluar = new ArrayList<String>();
+    List<String> detailKarungKodiBarangKeluar = new ArrayList<String>();
+    
+    private void instantiasiBarangKeluar(){
+            addColumnBarangKeluar();
+        
+            PengirimanBarangKeluar = new Pengiriman();
+            tableBarangKeluar.setModel(modelBarangKeluar);
+            tableDetailBarangKeluar.setModel(modelDetailBarangKeluar);
+            tableKarungPengirimanBarangKeluar.setModel(modelKarungBarangKeluar);
+            tableDetailKarungPengirimanBarangKeluar.setModel(modelDetailKarungBarangKeluar);
+            addComboBoxBarangKeluar();
+            addDataBarangKeluar();
+            addComboBoxPengemudiBarangKeluar();
+            btnTambahkanPengirimanBarangKeluar.setEnabled(false);
+        }
+    private void addComboBoxPengemudiBarangKeluar(){
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "select kry_nama from Karyawan where kry_jabatan ='Pengemudi'";
+            connection.result = connection.stat.executeQuery(query);
+
+            while (connection.result.next()) {
+
+                cmbPengemudiBarangKeluar.addItem(connection.result.getString("kry_nama"));
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
+        }
+    }
+    private void updateStatusPemesananBarangKeluar(){
+        DetailPengiriman dit = new DetailPengiriman();
+        for(int i = 0; i < tableBarangKeluar.getRowCount(); i++){
+            if(tableBarangKeluar.getValueAt(i, 6).toString().equals("0")){
+                ControllerPemesananBarangKeluar.setStatus(tableBarangKeluar.getValueAt(i, 1).toString(), "Dikirim");
+                dit.setPmsn_id(tableBarangKeluar.getValueAt(i, 1).toString());
+                dit.setPgrm_id(txtIDPengirimanBarangKeluar.getText());
+                ControllerPengirimanBarangKeluar.simpanDetailPengiriman(dit);
+            }
+        }
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
+        addDataBarangKeluar();
+    }
+    private void addDataBarangKeluar() {
+
+        modelBarangKeluar.getDataVector().removeAllElements();
+        modelBarangKeluar.fireTableDataChanged();
+        
+        ControllerTabelBarangKeluar.addDataBarangKeluar(modelBarangKeluar, (String) cmbStatusBarangKeluar.getSelectedItem(), (String) cmbNamaPelangganBarangKeluar.getSelectedItem());
+    }
+    private void addComboBoxBarangKeluar() {
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "select * from Pelanggan";
+            connection.result = connection.stat.executeQuery(query);
+
+            while (connection.result.next()) {
+
+                cmbNamaPelangganBarangKeluar.addItem(connection.result.getString("pgn_nama"));
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Gagal111 addDataPemasok!\n" + e.toString());
+        }
+    }
+
+    private void addColumnBarangKeluar() {
+        modelBarangKeluar.addColumn("No");
+        modelBarangKeluar.addColumn("Kode");
+        modelBarangKeluar.addColumn("Pelanggan nama");
+        modelBarangKeluar.addColumn("Pelanggan toko");
+        modelBarangKeluar.addColumn("Pasar");
+        modelBarangKeluar.addColumn("Tanggal transaksi");
+        modelBarangKeluar.addColumn("Jumlah kodi");
+        modelBarangKeluar.addColumn("Harga");
+        modelBarangKeluar.addColumn("Status");
+
+        modelDetailBarangKeluar.addColumn("No");
+        modelDetailBarangKeluar.addColumn("Barang");
+        modelDetailBarangKeluar.addColumn("Ukuran");
+        modelDetailBarangKeluar.addColumn("Jumlah kodi");
+        modelDetailBarangKeluar.addColumn("Harga");
+
+        modelKarungBarangKeluar.addColumn("No");
+        modelKarungBarangKeluar.addColumn("Kode");
+        modelKarungBarangKeluar.addColumn("Keterangan");
+        modelKarungBarangKeluar.addColumn("Kodi");
+        modelKarungBarangKeluar.addColumn("Jenis");
+
+        modelDetailKarungBarangKeluar.addColumn("No");
+        modelDetailKarungBarangKeluar.addColumn("Barang");
+        modelDetailKarungBarangKeluar.addColumn("Ukuran");
+        modelDetailKarungBarangKeluar.addColumn("Kodi");
+    }
+    private void showDetailKarungBarangKeluar(String index) {
+
+        modelDetailKarungBarangKeluar.getDataVector().removeAllElements();
+        modelDetailKarungBarangKeluar.fireTableDataChanged();
+        //JOptionPane.showMessageDialog(this, detailKarungIndexBarangKeluar.size());
+        int baris = 1;
+        for (int i = 0; i < detailKarungIndexBarangKeluar.size(); i++) {
+            //JOptionPane.showMessageDialog(this, "ukuran index : " + detailKarungIndexBarangKeluar.size());
+            if (detailKarungIndexBarangKeluar.get(i).toString().equals((index))) {
+                Object[] dataRow = {baris, detailKarungBarangBarangKeluar.get(i), detailKarungUkuranBarangKeluar.get(i), detailKarungKodiBarangKeluar.get(i)};
+
+                modelDetailKarungBarangKeluar.addRow(dataRow);
+                baris++;
+            }
+        }
+    }
+    private void hitungKodiKarungBarangKeluar() {
+        int karung = tableKarungPengirimanBarangKeluar.getRowCount();
+        int kodi = 0;
+        for (int i = 0; i < tableKarungPengirimanBarangKeluar.getRowCount(); i++) {
+
+            kodi = kodi + Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt(i, 3).toString());
+
+        }
+        txtJumlahKarungPengirimanBarang.setText(Integer.toString(karung));
+        txtJumlahKodiPengirimanBarang.setText(Integer.toString(kodi));
+    }
+    private void isiJumlahDetailKarungTransaksiBarangKeluar() {
+        int nomorkarung = 1;
+        int jumlah = 0;
+        for (int i = 0; i < detailKarungIndexBarangKeluar.size(); i++) {
+            //JOptionPane.showMessageDialog(this, "Nomor karung : "+nomorkarung+"\nIndex karung detail : "+detailKarungIndexBarangKeluar.get(i));
+//            JOptionPane.showMessageDialog(this, );
+            if (nomorkarung == Integer.parseInt(detailKarungIndexBarangKeluar.get(i))) {
+                jumlah++;
+            } else if (nomorkarung != Integer.parseInt(detailKarungIndexBarangKeluar.get(i))) {
+                tableKarungPengirimanBarangKeluar.setValueAt(jumlah, nomorkarung - 1, 4);
+                jumlah = 1;
+                nomorkarung++;
+            }
+
+            if (i + 1 == detailKarungIndexBarangKeluar.size()) {
+                tableKarungPengirimanBarangKeluar.setValueAt(jumlah, nomorkarung - 1, 4);
+            }
+        }
+    }
+    private void perbaruiDetailBarangKeluar() {
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
+        ControllerTabelBarangKeluar.addDataDetailBarangKeluar(modelDetailBarangKeluar, (String) tableBarangKeluar.getValueAt(tableBarangKeluar.getSelectedRow(), 1));
+    }
+    private void clearBarangKeluar(){
+        modelKarungBarangKeluar.setRowCount(0);
+        modelDetailKarungBarangKeluar.setRowCount(0);
+        
+        modelKarungBarangKeluar.fireTableDataChanged();
+        modelDetailKarungBarangKeluar.fireTableDataChanged();
+        
+        detailKarungBarangBarangKeluar.clear();
+        detailKarungIndexBarangKeluar.clear();
+        detailKarungKodiBarangKeluar.clear();
+        detailKarungUkuranBarangKeluar.clear();
+        txtNomorKarungBarangKeluar.setText("[NO KARUNG]");
+        txtJumlahKodiPengirimanBarang.setText("[JUMLAH KODI]");
+        txtJumlahKarungPengirimanBarang.setText("[JUMLAH KARUNG]");
+        
+        txtBarangBarangKeluar.setText("[NAMA BARANG]");
+        txtJumlahKodiBarangKeluar.setValue(1);
+        txtUkuranBarangKeluar.setText("[UKURAN]");
+    }
+    private void simpanDataPengirimanBarangKeluar(Pengiriman png){
+        ControllerPengirimanBarangKeluar.simpanPengiriman(png);
+        Karung krg = new Karung();
+        for(int i = 0 ; i < tableKarungPengirimanBarangKeluar.getRowCount(); i++){
+            krg.setKrg_id(tableKarungPengirimanBarangKeluar.getValueAt(i, 1).toString());
+            krg.setKrg_jumlah_jenis_barang(Integer.valueOf(tableKarungPengirimanBarangKeluar.getValueAt(i, 4).toString()));
+            krg.setKrg_jumlah_kodi(Integer.valueOf(tableKarungPengirimanBarangKeluar.getValueAt(i, 3).toString()));
+            krg.setKeterangan(tableKarungPengirimanBarangKeluar.getValueAt(i, 2).toString());
+            krg.setPgrm_id(PengirimanBarangKeluar.getPgrm_id());
+            ControllerKarungBarangKeluar.simpanKarung(krg);
+            simpanKarungBarangKeluar(i,krg.getKrg_id());
+        }
+        //updateStatusPemesananBarangKeluar();
+        
+    }
+    private void simpanKarungBarangKeluar(int index, String krg_id){
+        DetailKarung DetailKarung = new DetailKarung();
+        Barang barang = new Barang();
+        for(int i = 0 ; i < detailKarungIndexBarangKeluar.size();i++){
+            if(detailKarungIndexBarangKeluar.get(i).equals(Integer.toString(index+1))){
+                 barang = ControllerTabelBarangKeluar.getDatabyNamaUkuran(detailKarungBarangBarangKeluar.get(i), detailKarungUkuranBarangKeluar.get(i));
+                 DetailKarung.setB_id(barang.getID_Barang());
+                 DetailKarung.setDetail_jumlah_kodi(Integer.valueOf(detailKarungKodiBarangKeluar.get(i)));
+                 DetailKarung.setDetail_jumlah_barang(DetailKarung.getDetail_jumlah_kodi()*20);
+                 DetailKarung.setKrg_id(krg_id);
+                 ControllerDetailKarungBarangKeluar.simpanDetailKarung(DetailKarung);
+            }
+        }
+        updateStatusPemesananBarangKeluar();
     }
     // =================================== DEKLARASI VARIABLE DAN PROSEDUR PEMBAYARAN PELANGGAN ===========================
     
@@ -68,9 +485,13 @@ public class T_Utama extends javax.swing.JFrame {
     CPembayaran ControllerPembayaranPembayaranPelanggan = new CPembayaran();
     CPemesanan ControllerPemesananPembayaranPelanggan = new CPemesanan();
     
-    DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
-    DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
-    
+   // DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+   // DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+    private void instantiasiPembayaranPelanggan(){
+        addColumnPembayaranPelanggan();
+        addComboBoxPembayaranPelanggan();
+        tablePelanggan.setModel(modelPelangganPembayaranPelanggan);
+    }
     private void addColumnPembayaranPelanggan() {
         modelPelangganPembayaranPelanggan.addColumn("No");
         modelPelangganPembayaranPelanggan.addColumn("Nama");
@@ -136,6 +557,18 @@ public class T_Utama extends javax.swing.JFrame {
     long sisaHutangBarangMasuk = 0;
     long calonSisaHutangBarangMasuk = 0;
     
+    private void instantiasiBarangMasuk(){
+        addColumnBarangMasuk();
+        addDataBarangMasuk();
+        tableBarangMasuk.setModel(modelBarangMasuk);
+        tableDetailBarangMasuk.setModel(modelDetailBarangMasuk);
+        //resizeColumnWidth(tableBarangMasuk);
+
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
+    }
     private void addColumnBarangMasuk() {
         modelBarangMasuk.addColumn("No");
         modelBarangMasuk.addColumn("Kode Transaksi");
@@ -179,9 +612,28 @@ public class T_Utama extends javax.swing.JFrame {
     //DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
     //DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
     int TotalBiayaPemesanan = 0;
+    CBarang controllerBarangPemesanan = new CBarang();
     
-    
-    
+    private void instantiasiPemesanan(){
+        addColumnPemesanan();
+        addDataPemesanan();
+        
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
+        
+        
+        tblBarangPemesanan.setModel(modelBarangPemesanan);
+        tblKeranjangPemesanan.setModel(modelKeranjangPemesanan);
+        
+        
+        //lebarKolomBarangPemesanan();
+        tampilPelangganPemesanan();
+        txtNamaPelanggan.setEnabled(false);
+        txtJumlahKodiPemesanan.setEnabled(false);
+        txtTotalPemesanan.setEnabled(false);
+    }
     private void clearPemesanan(){
         txtBarangPemesanan.setText("");
         txtJumlahPemesanan.setValue(1);
@@ -235,8 +687,7 @@ public class T_Utama extends javax.swing.JFrame {
         
         modelBarangPemesanan = controllerTable.addDataBarangPemesanan(modelBarangPemesanan);
     }
-    private void tampilPelangganPemesanan()
-    {
+    private void tampilPelangganPemesanan(){
          try{
            connection.stat = connection.conn.createStatement();
            String sql = "SELECT pgn_nama_toko,pgn_id FROM Pelanggan";
@@ -257,18 +708,34 @@ public class T_Utama extends javax.swing.JFrame {
     int TotalHarga = 0;
     int Harga = 0;
     int TotalBiaya = 0;
-    public String kry_id = "";
+//    public String kry_id = "";
     private DefaultTableModel modelBarang = new DefaultTableModel();
     private DefaultTableModel modelKeranjang = new DefaultTableModel();    
     //CTableBarang ControllerBarang = new CTableBarang();
     CTable ControllerPemasok = new CTable();
-    CPemasokkan ControllerPemasokkan = new CPemasokkan();
+    //CPemasokkan ControllerPemasokkan = new CPemasokkan();
     Barang barang = new Barang();
     SimpleDateFormat formatTanggal = new SimpleDateFormat("dd-MM-yyyy");
     //DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
     //DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
     
-    
+    private void instantiasiPemasokkan(){
+        karyawan_login = ControllerKaryawan.getDatabyNama("Kiky Rahmawati Sitombingg");
+        System.out.println(karyawan_login.getAllData());
+        tableBarang.setModel(modelBarang);
+        tableKeranjang.setModel(modelKeranjang);
+        txtinfoTanggal.setText(formatTanggal.format(new Date()));
+        
+        
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
+        txtTanggalPemasokkan.setText(formatTanggal.format(new Date()));
+        
+        addColumnPemasokkan();
+        addComboBoxPemasokkan();
+    }
     private void clearBarangMasuk(){
         txtBarang.setText("");
         txtJumlah.setValue(1);
@@ -344,63 +811,25 @@ public class T_Utama extends javax.swing.JFrame {
         initComponents();
         //====================== PENGATURAN TAMPILAN AWAL =======================
         show(panelDashboard);
+        
+        instantiasiKonfirmasiBarangKeluar();
+        instantiasiPembayaranPemasok();
+        instantiasiBarangKeluar();
+        instantiasiPembayaranPelanggan();
+        instantiasiBarangMasuk();
+        instantiasiPemesanan();
+        instantiasiPemasokkan();
+        //==========================DEKLARASI VARIABLE PEMBAYARAN PEMASOK =====================================
+        
+        //======================= DEKLARASI BARANG KELUAR =============================
+        
         //======================= DEKLARASI PEMBAYARAN PELANGGAN =============================
-        addColumnPembayaranPelanggan();
-        addComboBoxPembayaranPelanggan();
-        tablePelanggan.setModel(modelPelangganPembayaranPelanggan);
+        
         //======================= DEKLARASI BARANG MASUK =============================
-        addColumnBarangMasuk();
-        addDataBarangMasuk();
-        tableBarangMasuk.setModel(modelBarangMasuk);
-        tableDetailBarangMasuk.setModel(modelDetailBarangMasuk);
-        //resizeColumnWidth(tableBarangMasuk);
-
-        formatRp.setCurrencySymbol("Rp. ");
-        formatRp.setMonetaryDecimalSeparator(',');
-        formatRp.setGroupingSeparator('.');
-        kursIndonesia.setDecimalFormatSymbols(formatRp);
+        
         //================= DEKLARASI PEMESANAN =======================
             
-        
-        //lblnama.setText(nama);
-        //lbljabatan.setText(posisi);
-        
-        addColumnPemesanan();
-        addDataPemesanan();
-        
-        formatRp.setCurrencySymbol("Rp. ");
-        formatRp.setMonetaryDecimalSeparator(',');
-        formatRp.setGroupingSeparator('.');
-        kursIndonesia.setDecimalFormatSymbols(formatRp);
-        
-        
-        tblBarangPemesanan.setModel(modelBarangPemesanan);
-        tblKeranjangPemesanan.setModel(modelKeranjangPemesanan);
-        
-        
-        //lebarKolomBarangPemesanan();
-        tampilPelangganPemesanan();
-        txtNamaPelanggan.setEnabled(false);
-        txtJumlahKodiPemesanan.setEnabled(false);
-        txtTotalPemesanan.setEnabled(false);
-        
-        
         //========== DEKLARASI TRANSAKSI PEMASOKKAN =======
-        karyawan_login = ControllerKaryawan.getDatabyNama("Kiky Rahmawati Sitombingg");
-        System.out.println(karyawan_login.getAllData());
-        tableBarang.setModel(modelBarang);
-        tableKeranjang.setModel(modelKeranjang);
-        txtinfoTanggal.setText(formatTanggal.format(new Date()));
-        
-        
-        formatRp.setCurrencySymbol("Rp. ");
-        formatRp.setMonetaryDecimalSeparator(',');
-        formatRp.setGroupingSeparator('.');
-        kursIndonesia.setDecimalFormatSymbols(formatRp);
-        txtTanggalPemasokkan.setText(formatTanggal.format(new Date()));
-        
-        addColumnPemasokkan();
-        addComboBoxPemasokkan();
         
         // ================================================
         karyawan_info.setText(karyawan_login.getKry_nama());
@@ -413,62 +842,27 @@ public class T_Utama extends javax.swing.JFrame {
         initComponents();
         //====================== PENGATURAN TAMPILAN AWAL =======================
         show(panelDashboard);
+        
+        instantiasiKonfirmasiBarangKeluar();
+        instantiasiPembayaranPemasok();
+        instantiasiBarangKeluar();
+        instantiasiPembayaranPelanggan();
+        instantiasiBarangMasuk();
+        instantiasiPemesanan();
+        instantiasiPemasokkan();
+        //==========================DEKLARASI VARIABLE PEMBAYARAN PEMASOK =====================================
+        
+        //======================= DEKLARASI BARANG KELUAR =============================
+        
         //======================= DEKLARASI PEMBAYARAN PELANGGAN =============================
-        addColumnPembayaranPelanggan();
-        addComboBoxPembayaranPelanggan();
-        tablePelanggan.setModel(modelPelangganPembayaranPelanggan);
+         
         //======================= DEKLARASI BARANG MASUK =============================
-        addColumnBarangMasuk();
-        addDataBarangMasuk();
-        tableBarangMasuk.setModel(modelBarangMasuk);
-        tableDetailBarangMasuk.setModel(modelDetailBarangMasuk);
-        //resizeColumnWidth(tableBarangMasuk);
-
-        formatRp.setCurrencySymbol("Rp. ");
-        formatRp.setMonetaryDecimalSeparator(',');
-        formatRp.setGroupingSeparator('.');
-        kursIndonesia.setDecimalFormatSymbols(formatRp);
+          
         //================= DEKLARASI PEMESANAN =======================
-            
-        
-        //lblnama.setText(nama);
-        //lbljabatan.setText(posisi);
-        
-        addColumnPemesanan();
-        addDataPemesanan();
-        
-        formatRp.setCurrencySymbol("Rp. ");
-        formatRp.setMonetaryDecimalSeparator(',');
-        formatRp.setGroupingSeparator('.');
-        kursIndonesia.setDecimalFormatSymbols(formatRp);
-        
-        
-        tblBarangPemesanan.setModel(modelBarangPemesanan);
-        tblKeranjangPemesanan.setModel(modelKeranjangPemesanan);
-        
-        
-        //lebarKolomBarangPemesanan();
-        tampilPelangganPemesanan();
-        txtNamaPelanggan.setEnabled(false);
-        txtJumlahKodiPemesanan.setEnabled(false);
-        txtTotalPemesanan.setEnabled(false);
-        
+         
         
         //========== DEKLARASI TRANSAKSI PEMASOKKAN =======
-        karyawan_login = ControllerKaryawan.getDatabyNama(pengguna);
-        tableBarang.setModel(modelBarang);
-        tableKeranjang.setModel(modelKeranjang);
-        txtinfoTanggal.setText(formatTanggal.format(new Date()));
-        
-        
-        formatRp.setCurrencySymbol("Rp. ");
-        formatRp.setMonetaryDecimalSeparator(',');
-        formatRp.setGroupingSeparator('.');
-        kursIndonesia.setDecimalFormatSymbols(formatRp);
-        
-        addColumnPemasokkan();
-        addComboBoxPemasokkan();
-        
+         
         // ================================================
         karyawan_info.setText(karyawan_login.getKry_nama());
         txtinfoTanggal.setText(settingTanggal.format(new Date()));
@@ -492,6 +886,7 @@ public class T_Utama extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         tblBarangPemesanan = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
+        btnRefreshPemesanan = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
@@ -531,7 +926,7 @@ public class T_Utama extends javax.swing.JFrame {
         btnPemesananPelanggan = new javax.swing.JButton();
         btnPembayaranPelanggan = new javax.swing.JButton();
         btnPengolahanData = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnKonfirmasiKeluar = new javax.swing.JButton();
         btnKeluar = new javax.swing.JButton();
         btnBarangKeluar = new javax.swing.JButton();
         btnBarangMasuk = new javax.swing.JButton();
@@ -632,6 +1027,102 @@ public class T_Utama extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jLabel29 = new javax.swing.JLabel();
         txtNamaPelanggan1 = new javax.swing.JTextField();
+        PanelTransaksiBarangKeluar = new javax.swing.JPanel();
+        panelDaftarBarangMasuk2 = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        cmbStatusBarangKeluar = new javax.swing.JComboBox<>();
+        jLabel44 = new javax.swing.JLabel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tableBarangKeluar = new javax.swing.JTable();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        tableDetailBarangKeluar = new javax.swing.JTable();
+        jLabel45 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
+        txtJumlahKodiBarangKeluar = new javax.swing.JSpinner();
+        btnTambahkanPengirimanBarangKeluar = new javax.swing.JButton();
+        jLabel47 = new javax.swing.JLabel();
+        txtBarangBarangKeluar = new javax.swing.JTextField();
+        txtUkuranBarangKeluar = new javax.swing.JTextField();
+        jLabel48 = new javax.swing.JLabel();
+        cmbNamaPelangganBarangKeluar = new javax.swing.JComboBox<>();
+        cbPengiriman = new javax.swing.JCheckBox();
+        panelDataPengirimanBarangBarangKeluar = new javax.swing.JPanel();
+        jLabel49 = new javax.swing.JLabel();
+        txtIDPengirimanBarangKeluar = new javax.swing.JTextField();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        tableKarungPengirimanBarangKeluar = new javax.swing.JTable();
+        jLabel50 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
+        txtJumlahKodiPengirimanBarang = new javax.swing.JTextField();
+        txtJumlahKarungPengirimanBarang = new javax.swing.JTextField();
+        jLabel52 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jLabel53 = new javax.swing.JLabel();
+        jScrollPane11 = new javax.swing.JScrollPane();
+        txtKeteranganKarungBarangKeluar = new javax.swing.JTextArea();
+        txtBatasKeteranganBarangKeluar = new javax.swing.JLabel();
+        dummy1 = new javax.swing.JLabel();
+        txtBatasKeteranganBarangKeluar1 = new javax.swing.JLabel();
+        btnTulisKeteranganBarangKeluar = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane12 = new javax.swing.JScrollPane();
+        tableDetailKarungPengirimanBarangKeluar = new javax.swing.JTable();
+        jLabel54 = new javax.swing.JLabel();
+        txtNomorKarungBarangKeluar = new javax.swing.JTextField();
+        jLabel55 = new javax.swing.JLabel();
+        jLabel56 = new javax.swing.JLabel();
+        btnBatalkanKarungBarangKeluar = new javax.swing.JButton();
+        jLabel57 = new javax.swing.JLabel();
+        btnKonfirmasiPemberangkatanBarangKeluar = new javax.swing.JButton();
+        jLabel69 = new javax.swing.JLabel();
+        cmbPengemudiBarangKeluar = new javax.swing.JComboBox<>();
+        panelPembayaranPemasok = new javax.swing.JPanel();
+        panelDaftarBarangMasuk3 = new javax.swing.JPanel();
+        jLabel58 = new javax.swing.JLabel();
+        jScrollPane13 = new javax.swing.JScrollPane();
+        tablePemasokPembayaranPemasok = new javax.swing.JTable();
+        cmbPemasokPembayaranPemasok = new javax.swing.JComboBox<>();
+        panelDeskripsiBarangMasuk2 = new javax.swing.JPanel();
+        jLabel59 = new javax.swing.JLabel();
+        jLabel60 = new javax.swing.JLabel();
+        txtNamaPemasokPembayaranPemasok = new javax.swing.JTextField();
+        txtJumlahTransaksiPemasokPembayaranPemasok = new javax.swing.JTextField();
+        jLabel61 = new javax.swing.JLabel();
+        jLabel62 = new javax.swing.JLabel();
+        txtHutangPemasokPembayaranPemasok = new javax.swing.JTextField();
+        jLabel63 = new javax.swing.JLabel();
+        txtBayarPembayaranPemasok = new javax.swing.JTextField();
+        jLabel64 = new javax.swing.JLabel();
+        jLabel65 = new javax.swing.JLabel();
+        txtSisaHutangPembayaranPemasok = new javax.swing.JTextField();
+        jLabel66 = new javax.swing.JLabel();
+        lblKeteranganPembayaranPembayaranPemasok = new javax.swing.JLabel();
+        btnBatalPembayaranPemasok = new javax.swing.JButton();
+        btnBayarPembayaranPemasok = new javax.swing.JButton();
+        jLabel67 = new javax.swing.JLabel();
+        txtKembalianPembayaranPemasok = new javax.swing.JTextField();
+        jLabel68 = new javax.swing.JLabel();
+        panelKonfirmasiKeluar = new javax.swing.JPanel();
+        jLabel70 = new javax.swing.JLabel();
+        jScrollPane14 = new javax.swing.JScrollPane();
+        tablePengirimanKonfirmasiKeluar = new javax.swing.JTable();
+        jScrollPane15 = new javax.swing.JScrollPane();
+        tableKarungKonfirmasiKeluar = new javax.swing.JTable();
+        jLabel71 = new javax.swing.JLabel();
+        jLabel72 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel73 = new javax.swing.JLabel();
+        rbDiterimaKonfirmasiKeluar = new javax.swing.JRadioButton();
+        rbGagalKonfirmasiKeluar = new javax.swing.JRadioButton();
+        jLabel74 = new javax.swing.JLabel();
+        txtNamaPelangganKonfirmasiKeluar = new javax.swing.JTextField();
+        jLabel75 = new javax.swing.JLabel();
+        txtKodeTransaksiKonfirmasiKeluar = new javax.swing.JTextField();
+        btnKonfirmasiKonfirmasiKeluar = new javax.swing.JButton();
+        txtStatusPengirimanKonfirmasiKeluar = new javax.swing.JTextField();
+        jLabel76 = new javax.swing.JLabel();
+        cmbNamaPelangganKonfirmasiKeluar = new javax.swing.JComboBox<>();
+        btnSemuaKonfirmasiKeluar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(null);
@@ -698,6 +1189,13 @@ public class T_Utama extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel10.setText("DATA BARANG");
 
+        btnRefreshPemesanan.setText("Refresh");
+        btnRefreshPemesanan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshPemesananActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout pnlDataBarangLayout = new javax.swing.GroupLayout(pnlDataBarang);
         pnlDataBarang.setLayout(pnlDataBarangLayout);
         pnlDataBarangLayout.setHorizontalGroup(
@@ -708,15 +1206,20 @@ public class T_Utama extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 486, Short.MAX_VALUE)
                     .addGroup(pnlDataBarangLayout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(140, 140, 140)
+                        .addComponent(btnRefreshPemesanan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         pnlDataBarangLayout.setVerticalGroup(
             pnlDataBarangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDataBarangLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                .addGroup(pnlDataBarangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlDataBarangLayout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(btnRefreshPemesanan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(17, 17, 17)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1121,8 +1624,12 @@ public class T_Utama extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setBackground(new java.awt.Color(255, 51, 51));
-        jButton5.setText("jButton5");
+        btnKonfirmasiKeluar.setText("Konfirmasi Pengiriman");
+        btnKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
 
         btnKeluar.setText("KELUAR");
         btnKeluar.addActionListener(new java.awt.event.ActionListener() {
@@ -1131,8 +1638,12 @@ public class T_Utama extends javax.swing.JFrame {
             }
         });
 
-        btnBarangKeluar.setBackground(new java.awt.Color(255, 51, 51));
         btnBarangKeluar.setText("Barang Keluar");
+        btnBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBarangKeluarActionPerformed(evt);
+            }
+        });
 
         btnBarangMasuk.setText("Barang Masuk");
         btnBarangMasuk.addActionListener(new java.awt.event.ActionListener() {
@@ -1148,8 +1659,12 @@ public class T_Utama extends javax.swing.JFrame {
             }
         });
 
-        btnPembayaranPemasok.setBackground(new java.awt.Color(255, 0, 51));
         btnPembayaranPemasok.setText("Pembayaran Pemasok");
+        btnPembayaranPemasok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPembayaranPemasokActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelKiriLayout = new javax.swing.GroupLayout(panelKiri);
         panelKiri.setLayout(panelKiriLayout);
@@ -1171,7 +1686,7 @@ public class T_Utama extends javax.swing.JFrame {
                         .addGroup(panelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnPemesananPemasok, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelKiriLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(btnBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(btnBarangMasuk, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(btnPengolahanData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -1200,20 +1715,21 @@ public class T_Utama extends javax.swing.JFrame {
                 .addComponent(btnBarangKeluar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnBarangMasuk)
-                .addGap(40, 40, 40)
-                .addComponent(btnPengolahanData)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addGap(18, 18, 18)
+                .addComponent(btnKonfirmasiKeluar)
+                .addGap(27, 27, 27)
+                .addComponent(btnPengolahanData)
+                .addGap(31, 31, 31)
                 .addComponent(btnKeluar)
                 .addContainerGap())
         );
 
-        panelKiriLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnKeluar, btnMenuUtama, btnPembayaranPelanggan, btnPemesananPelanggan, btnPengolahanData, jButton5});
+        panelKiriLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnKeluar, btnKonfirmasiKeluar, btnMenuUtama, btnPembayaranPelanggan, btnPemesananPelanggan, btnPengolahanData});
 
         getContentPane().add(panelKiri, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 29, 240, 680));
 
         panelDashboard.setBackground(new java.awt.Color(255, 255, 255));
+        panelDashboard.setName("panelDashboard"); // NOI18N
 
         Logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/Logo.PNG"))); // NOI18N
 
@@ -1247,7 +1763,7 @@ public class T_Utama extends javax.swing.JFrame {
 
         panelPemasokkan.setBackground(new java.awt.Color(187, 187, 187));
         panelPemasokkan.setMaximumSize(new java.awt.Dimension(1100, 652));
-        panelPemasokkan.setName(""); // NOI18N
+        panelPemasokkan.setName("panelPemasokkan"); // NOI18N
         panelPemasokkan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -1569,6 +2085,7 @@ public class T_Utama extends javax.swing.JFrame {
 
         panelBarangMasuk.setBackground(new java.awt.Color(187, 187, 187));
         panelBarangMasuk.setMinimumSize(new java.awt.Dimension(1100, 652));
+        panelBarangMasuk.setName("panelBarangMasuk"); // NOI18N
         panelBarangMasuk.setPreferredSize(new java.awt.Dimension(1100, 652));
         panelBarangMasuk.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -1769,6 +2286,9 @@ public class T_Utama extends javax.swing.JFrame {
 
         getContentPane().add(panelBarangMasuk, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, 1110, 660));
 
+        panelPembayaranPelanggan.setName("panelPembayaranPelanggan"); // NOI18N
+        panelPembayaranPelanggan.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
         panelDaftarBarangMasuk1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel18.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
@@ -1806,7 +2326,7 @@ public class T_Utama extends javax.swing.JFrame {
             .addGroup(panelDaftarBarangMasuk1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelDaftarBarangMasuk1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 1068, Short.MAX_VALUE)
+                    .addComponent(jScrollPane5)
                     .addGroup(panelDaftarBarangMasuk1Layout.createSequentialGroup()
                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1823,6 +2343,8 @@ public class T_Utama extends javax.swing.JFrame {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(126, 126, 126))
         );
+
+        panelPembayaranPelanggan.add(panelDaftarBarangMasuk1, new org.netbeans.lib.awtextra.AbsoluteConstraints(7, 0, 1104, 400));
 
         panelDeskripsiBarangMasuk1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         panelDeskripsiBarangMasuk1.setPreferredSize(new java.awt.Dimension(1100, 185));
@@ -1925,34 +2447,949 @@ public class T_Utama extends javax.swing.JFrame {
         txtNamaPelanggan1.setText("-");
         panelDeskripsiBarangMasuk1.add(txtNamaPelanggan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 240, -1));
 
-        javax.swing.GroupLayout panelPembayaranPelangganLayout = new javax.swing.GroupLayout(panelPembayaranPelanggan);
-        panelPembayaranPelanggan.setLayout(panelPembayaranPelangganLayout);
-        panelPembayaranPelangganLayout.setHorizontalGroup(
-            panelPembayaranPelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1119, Short.MAX_VALUE)
-            .addGroup(panelPembayaranPelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelPembayaranPelangganLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(panelPembayaranPelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(panelPembayaranPelangganLayout.createSequentialGroup()
-                            .addGap(4, 4, 4)
-                            .addComponent(panelDeskripsiBarangMasuk1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(panelDaftarBarangMasuk1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        panelPembayaranPelangganLayout.setVerticalGroup(
-            panelPembayaranPelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 635, Short.MAX_VALUE)
-            .addGroup(panelPembayaranPelangganLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelPembayaranPelangganLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(panelDaftarBarangMasuk1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(14, 14, 14)
-                    .addComponent(panelDeskripsiBarangMasuk1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        panelPembayaranPelanggan.add(panelDeskripsiBarangMasuk1, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 414, -1, 221));
 
         getContentPane().add(panelPembayaranPelanggan, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, -1, -1));
+
+        PanelTransaksiBarangKeluar.setName("PanelTransaksiBarangKeluar"); // NOI18N
+
+        panelDaftarBarangMasuk2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel30.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel30.setText("DAFTAR BARANG KELUAR");
+
+        cmbStatusBarangKeluar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disiapkan", "Dikirim", "Diterima", "Gagal" }));
+        cmbStatusBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbStatusBarangKeluarActionPerformed(evt);
+            }
+        });
+
+        jLabel44.setText("Status");
+
+        tableBarangKeluar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableBarangKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableBarangKeluarMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tableBarangKeluar);
+
+        tableDetailBarangKeluar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableDetailBarangKeluar.setEnabled(false);
+        tableDetailBarangKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableDetailBarangKeluarMouseClicked(evt);
+            }
+        });
+        jScrollPane9.setViewportView(tableDetailBarangKeluar);
+
+        jLabel45.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel45.setText("DAFTAR DETAIL BARANG KELUAR");
+
+        jLabel46.setText("JUMLAH KODI");
+
+        txtJumlahKodiBarangKeluar.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        txtJumlahKodiBarangKeluar.setEditor(new javax.swing.JSpinner.NumberEditor(txtJumlahKodiBarangKeluar, ""));
+        txtJumlahKodiBarangKeluar.setEnabled(false);
+
+        btnTambahkanPengirimanBarangKeluar.setText("TAMBAHKAN KE PENGIRIMAN");
+        btnTambahkanPengirimanBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTambahkanPengirimanBarangKeluarActionPerformed(evt);
+            }
+        });
+
+        jLabel47.setText("BARANG");
+
+        txtBarangBarangKeluar.setText("[ NAMA BARANG ] ");
+        txtBarangBarangKeluar.setEnabled(false);
+
+        txtUkuranBarangKeluar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtUkuranBarangKeluar.setText("[ UKURAN ]");
+        txtUkuranBarangKeluar.setEnabled(false);
+
+        jLabel48.setText("Pelanggan");
+
+        cmbNamaPelangganBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNamaPelangganBarangKeluarActionPerformed(evt);
+            }
+        });
+
+        cbPengiriman.setText("Lakukan Pengiriman");
+        cbPengiriman.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbPengirimanActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelDaftarBarangMasuk2Layout = new javax.swing.GroupLayout(panelDaftarBarangMasuk2);
+        panelDaftarBarangMasuk2.setLayout(panelDaftarBarangMasuk2Layout);
+        panelDaftarBarangMasuk2Layout.setHorizontalGroup(
+            panelDaftarBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDaftarBarangMasuk2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelDaftarBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDaftarBarangMasuk2Layout.createSequentialGroup()
+                        .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 1078, Short.MAX_VALUE)
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(panelDaftarBarangMasuk2Layout.createSequentialGroup()
+                        .addComponent(jLabel47)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtBarangBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                        .addGap(30, 30, 30)
+                        .addComponent(txtUkuranBarangKeluar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel46)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtJumlahKodiBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTambahkanPengirimanBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelDaftarBarangMasuk2Layout.createSequentialGroup()
+                        .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cbPengiriman)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel44)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmbStatusBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel48, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbNamaPelangganBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelDaftarBarangMasuk2Layout.setVerticalGroup(
+            panelDaftarBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDaftarBarangMasuk2Layout.createSequentialGroup()
+                .addGroup(panelDaftarBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbStatusBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel44)
+                    .addComponent(jLabel48)
+                    .addComponent(cmbNamaPelangganBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbPengiriman))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel45, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelDaftarBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel46)
+                    .addComponent(txtJumlahKodiBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTambahkanPengirimanBarangKeluar)
+                    .addComponent(jLabel47)
+                    .addComponent(txtBarangBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtUkuranBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(149, 149, 149))
+        );
+
+        panelDataPengirimanBarangBarangKeluar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel49.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel49.setText("DATA PENGIRIMAN BARANG");
+
+        txtIDPengirimanBarangKeluar.setText("[ ID PENGIRIMAN ]");
+        txtIDPengirimanBarangKeluar.setEnabled(false);
+
+        tableKarungPengirimanBarangKeluar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableKarungPengirimanBarangKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableKarungPengirimanBarangKeluarMouseClicked(evt);
+            }
+        });
+        tableKarungPengirimanBarangKeluar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tableKarungPengirimanBarangKeluarKeyTyped(evt);
+            }
+        });
+        jScrollPane10.setViewportView(tableKarungPengirimanBarangKeluar);
+
+        jLabel50.setText("JUMLAH KODI");
+
+        jLabel51.setText("JUMLAH KARUNG");
+
+        txtJumlahKodiPengirimanBarang.setText("[ JUMLAH KODI ]");
+
+        txtJumlahKarungPengirimanBarang.setText("[ JUMLAH KARUNG ]");
+
+        jLabel52.setText("KARUNG PENGIRIMAN  ");
+
+        javax.swing.GroupLayout panelDataPengirimanBarangBarangKeluarLayout = new javax.swing.GroupLayout(panelDataPengirimanBarangBarangKeluar);
+        panelDataPengirimanBarangBarangKeluar.setLayout(panelDataPengirimanBarangBarangKeluarLayout);
+        panelDataPengirimanBarangBarangKeluarLayout.setHorizontalGroup(
+            panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createSequentialGroup()
+                        .addComponent(jLabel49)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtIDPengirimanBarangKeluar))
+                    .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createSequentialGroup()
+                        .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createSequentialGroup()
+                                .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel50)
+                                    .addComponent(txtJumlahKodiPengirimanBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel51)
+                                    .addComponent(txtJumlahKarungPengirimanBarang, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel52, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        panelDataPengirimanBarangBarangKeluarLayout.setVerticalGroup(
+            panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel49)
+                    .addComponent(txtIDPengirimanBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel52)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel50)
+                    .addComponent(jLabel51))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelDataPengirimanBarangBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtJumlahKodiPengirimanBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtJumlahKarungPengirimanBarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel53.setText("KETERANGAN KARUNG");
+
+        txtKeteranganKarungBarangKeluar.setColumns(20);
+        txtKeteranganKarungBarangKeluar.setLineWrap(true);
+        txtKeteranganKarungBarangKeluar.setRows(5);
+        txtKeteranganKarungBarangKeluar.setText("TULIS KETERANGAN KARUNG DI SINI");
+        txtKeteranganKarungBarangKeluar.setAutoscrolls(false);
+        txtKeteranganKarungBarangKeluar.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtKeteranganKarungBarangKeluar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtKeteranganKarungBarangKeluarKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtKeteranganKarungBarangKeluarKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtKeteranganKarungBarangKeluarKeyTyped(evt);
+            }
+        });
+        jScrollPane11.setViewportView(txtKeteranganKarungBarangKeluar);
+
+        txtBatasKeteranganBarangKeluar.setText("0");
+
+        dummy1.setText("/");
+
+        txtBatasKeteranganBarangKeluar1.setText("50");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel53)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtBatasKeteranganBarangKeluar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(dummy1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtBatasKeteranganBarangKeluar1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel53)
+                    .addComponent(txtBatasKeteranganBarangKeluar)
+                    .addComponent(dummy1)
+                    .addComponent(txtBatasKeteranganBarangKeluar1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        btnTulisKeteranganBarangKeluar.setText("TULIS KETERANGAN");
+        btnTulisKeteranganBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTulisKeteranganBarangKeluarActionPerformed(evt);
+            }
+        });
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        tableDetailKarungPengirimanBarangKeluar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableDetailKarungPengirimanBarangKeluar.setEnabled(false);
+        tableDetailKarungPengirimanBarangKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableDetailKarungPengirimanBarangKeluarMouseClicked(evt);
+            }
+        });
+        jScrollPane12.setViewportView(tableDetailKarungPengirimanBarangKeluar);
+
+        jLabel54.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel54.setText("DETAIL KARUNG");
+
+        txtNomorKarungBarangKeluar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtNomorKarungBarangKeluar.setText("[ NO KARUNG ]");
+        txtNomorKarungBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNomorKarungBarangKeluarActionPerformed(evt);
+            }
+        });
+        txtNomorKarungBarangKeluar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtNomorKarungBarangKeluarPropertyChange(evt);
+            }
+        });
+
+        jLabel55.setText("Nomor Karung");
+
+        jLabel56.setText("AKSI");
+
+        btnBatalkanKarungBarangKeluar.setText("BATALKAN PENGARUNGAN");
+        btnBatalkanKarungBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalkanKarungBarangKeluarActionPerformed(evt);
+            }
+        });
+
+        jLabel57.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel57.setText("ISI KETERANGAN DI SAMPING");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel56, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(jLabel55)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtNomorKarungBarangKeluar))
+                            .addComponent(jLabel54))
+                        .addGap(45, 45, 45)
+                        .addComponent(jLabel57, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(14, 14, 14))
+                    .addComponent(btnBatalkanKarungBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel54)
+                        .addGap(3, 3, 3)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtNomorKarungBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel55)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel57, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane12, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel56)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBatalkanKarungBarangKeluar)
+                .addContainerGap())
+        );
+
+        btnKonfirmasiPemberangkatanBarangKeluar.setText("KONFIRMASI PEMBERANGKATAN");
+        btnKonfirmasiPemberangkatanBarangKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKonfirmasiPemberangkatanBarangKeluarActionPerformed(evt);
+            }
+        });
+
+        jLabel69.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel69.setText("PENGEMUDI");
+
+        cmbPengemudiBarangKeluar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Pengemudi -" }));
+
+        javax.swing.GroupLayout PanelTransaksiBarangKeluarLayout = new javax.swing.GroupLayout(PanelTransaksiBarangKeluar);
+        PanelTransaksiBarangKeluar.setLayout(PanelTransaksiBarangKeluarLayout);
+        PanelTransaksiBarangKeluarLayout.setHorizontalGroup(
+            PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
+                        .addComponent(panelDataPengirimanBarangBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnTulisKeteranganBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnKonfirmasiPemberangkatanBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                            .addComponent(jLabel69, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cmbPengemudiBarangKeluar, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(panelDaftarBarangMasuk2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        PanelTransaksiBarangKeluarLayout.setVerticalGroup(
+            PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(panelDaftarBarangMasuk2, javax.swing.GroupLayout.PREFERRED_SIZE, 376, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(PanelTransaksiBarangKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelDataPengirimanBarangBarangKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(PanelTransaksiBarangKeluarLayout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnTulisKeteranganBarangKeluar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel69)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbPengemudiBarangKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnKonfirmasiPemberangkatanBarangKeluar))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        getContentPane().add(PanelTransaksiBarangKeluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, -1, -1));
+
+        panelPembayaranPemasok.setMinimumSize(new java.awt.Dimension(1100, 652));
+        panelPembayaranPemasok.setName("panelPembayaranPemasok"); // NOI18N
+        panelPembayaranPemasok.setPreferredSize(new java.awt.Dimension(1100, 652));
+        panelPembayaranPemasok.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelDaftarBarangMasuk3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel58.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel58.setText("DAFTAR PEMASOK");
+
+        tablePemasokPembayaranPemasok.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tablePemasokPembayaranPemasok.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablePemasokPembayaranPemasokMouseClicked(evt);
+            }
+        });
+        jScrollPane13.setViewportView(tablePemasokPembayaranPemasok);
+
+        cmbPemasokPembayaranPemasok.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Pemasok -" }));
+        cmbPemasokPembayaranPemasok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbPemasokPembayaranPemasokActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelDaftarBarangMasuk3Layout = new javax.swing.GroupLayout(panelDaftarBarangMasuk3);
+        panelDaftarBarangMasuk3.setLayout(panelDaftarBarangMasuk3Layout);
+        panelDaftarBarangMasuk3Layout.setHorizontalGroup(
+            panelDaftarBarangMasuk3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDaftarBarangMasuk3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelDaftarBarangMasuk3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 1086, Short.MAX_VALUE)
+                    .addGroup(panelDaftarBarangMasuk3Layout.createSequentialGroup()
+                        .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cmbPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panelDaftarBarangMasuk3Layout.setVerticalGroup(
+            panelDaftarBarangMasuk3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDaftarBarangMasuk3Layout.createSequentialGroup()
+                .addGroup(panelDaftarBarangMasuk3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel58, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.PREFERRED_SIZE, 341, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+
+        panelPembayaranPemasok.add(panelDaftarBarangMasuk3, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, 1100, 400));
+
+        panelDeskripsiBarangMasuk2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelDeskripsiBarangMasuk2.setPreferredSize(new java.awt.Dimension(1100, 185));
+
+        jLabel59.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel59.setText("DESKRIPSI TRANSAKSI PEMBAYARAN PEMASOKKAN");
+
+        jLabel60.setText("Nama");
+
+        txtNamaPemasokPembayaranPemasok.setText("-");
+
+        txtJumlahTransaksiPemasokPembayaranPemasok.setText("-");
+
+        jLabel61.setText("Jumlah transaksi");
+
+        jLabel62.setText("Hutang");
+
+        txtHutangPemasokPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtHutangPemasokPembayaranPemasok.setText("Rp. 0,00");
+
+        jLabel63.setText("Kembali ");
+
+        txtBayarPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtBayarPembayaranPemasok.setText("0");
+        txtBayarPembayaranPemasok.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBayarPembayaranPemasokKeyReleased(evt);
+            }
+        });
+
+        jLabel64.setText("Rp");
+
+        jLabel65.setText("Sisa hutang pada pemasok");
+
+        txtSisaHutangPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtSisaHutangPembayaranPemasok.setText("Rp. 0,00");
+
+        jLabel66.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel66.setText("KETERANGAN PEMBAYARAN");
+
+        lblKeteranganPembayaranPembayaranPemasok.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        lblKeteranganPembayaranPembayaranPemasok.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblKeteranganPembayaranPembayaranPemasok.setText("[Keterangan]");
+        lblKeteranganPembayaranPembayaranPemasok.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        btnBatalPembayaranPemasok.setText("Batal");
+        btnBatalPembayaranPemasok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBatalPembayaranPemasokActionPerformed(evt);
+            }
+        });
+
+        btnBayarPembayaranPemasok.setText("Bayar");
+        btnBayarPembayaranPemasok.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBayarPembayaranPemasokActionPerformed(evt);
+            }
+        });
+
+        jLabel67.setText("Banyak uang dibayar");
+
+        txtKembalianPembayaranPemasok.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtKembalianPembayaranPemasok.setText("0");
+        txtKembalianPembayaranPemasok.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtKembalianPembayaranPemasokKeyReleased(evt);
+            }
+        });
+
+        jLabel68.setText("Rp");
+
+        javax.swing.GroupLayout panelDeskripsiBarangMasuk2Layout = new javax.swing.GroupLayout(panelDeskripsiBarangMasuk2);
+        panelDeskripsiBarangMasuk2.setLayout(panelDeskripsiBarangMasuk2Layout);
+        panelDeskripsiBarangMasuk2Layout.setHorizontalGroup(
+            panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel59, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                        .addComponent(jLabel60, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtNamaPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                        .addComponent(jLabel61)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtJumlahTransaksiPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                        .addGap(3, 3, 3)
+                                        .addComponent(jLabel62, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtHutangPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(7, 7, 7)))
+                        .addGap(23, 23, 23)
+                        .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel67)
+                            .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                .addComponent(jLabel68)
+                                .addGap(15, 15, 15)
+                                .addComponent(txtBayarPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel65)
+                            .addComponent(jLabel63)
+                            .addComponent(txtSisaHutangPembayaranPemasok)))
+                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                        .addGap(409, 409, 409)
+                        .addComponent(jLabel64)
+                        .addGap(15, 15, 15)
+                        .addComponent(txtKembalianPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                .addGap(115, 115, 115)
+                                .addComponent(jLabel66))
+                            .addComponent(lblKeteranganPembayaranPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(6, 6, 6))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnBayarPembayaranPemasok, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                            .addComponent(btnBatalPembayaranPemasok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
+        );
+        panelDeskripsiBarangMasuk2Layout.setVerticalGroup(
+            panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                        .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                .addComponent(jLabel59, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel60)
+                                    .addComponent(txtNamaPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(12, 12, 12)
+                                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel61)
+                                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(txtJumlahTransaksiPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(16, 16, 16)
+                                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel62)
+                                    .addComponent(txtHutangPemasokPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel67)
+                                .addGap(14, 14, 14)
+                                .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel68)
+                                    .addComponent(txtBayarPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel65)
+                                .addGap(14, 14, 14)
+                                .addComponent(txtSisaHutangPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel63)))
+                        .addGap(4, 4, 4)
+                        .addGroup(panelDeskripsiBarangMasuk2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel64)
+                            .addComponent(txtKembalianPembayaranPemasok, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelDeskripsiBarangMasuk2Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel66)
+                        .addGap(3, 3, 3)
+                        .addComponent(lblKeteranganPembayaranPembayaranPemasok, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBayarPembayaranPemasok)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBatalPembayaranPemasok)))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+
+        panelPembayaranPemasok.add(panelDeskripsiBarangMasuk2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, 1100, 210));
+
+        getContentPane().add(panelPembayaranPemasok, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, 1110, 630));
+
+        panelKonfirmasiKeluar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        panelKonfirmasiKeluar.setName("panelKonfirmasiKeluar"); // NOI18N
+
+        jLabel70.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel70.setText("KONFIRMASI PENGIRIMAN BARANG");
+
+        tablePengirimanKonfirmasiKeluar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tablePengirimanKonfirmasiKeluar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablePengirimanKonfirmasiKeluarMouseClicked(evt);
+            }
+        });
+        jScrollPane14.setViewportView(tablePengirimanKonfirmasiKeluar);
+
+        tableKarungKonfirmasiKeluar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tableKarungKonfirmasiKeluar.setEnabled(false);
+        jScrollPane15.setViewportView(tableKarungKonfirmasiKeluar);
+
+        jLabel71.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel71.setText("DATA PENGIRIMAN");
+
+        jLabel72.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel72.setText("DATA DETAIL PENGIRIMAN");
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel73.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel73.setText("AKSI");
+
+        rbDiterimaKonfirmasiKeluar.setSelected(true);
+        rbDiterimaKonfirmasiKeluar.setText("Diterima");
+        rbDiterimaKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbDiterimaKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
+
+        rbGagalKonfirmasiKeluar.setText("Gagal");
+        rbGagalKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbGagalKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
+
+        jLabel74.setText("Nama Pelanggan");
+
+        txtNamaPelangganKonfirmasiKeluar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtNamaPelangganKonfirmasiKeluar.setText("-");
+        txtNamaPelangganKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamaPelangganKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
+        txtNamaPelangganKonfirmasiKeluar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtNamaPelangganKonfirmasiKeluarPropertyChange(evt);
+            }
+        });
+
+        jLabel75.setText("Kode Transaksi");
+
+        txtKodeTransaksiKonfirmasiKeluar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtKodeTransaksiKonfirmasiKeluar.setText("-");
+        txtKodeTransaksiKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtKodeTransaksiKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
+        txtKodeTransaksiKonfirmasiKeluar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                txtKodeTransaksiKonfirmasiKeluarPropertyChange(evt);
+            }
+        });
+
+        btnKonfirmasiKonfirmasiKeluar.setText("KONFIRMASI");
+        btnKonfirmasiKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnKonfirmasiKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
+
+        txtStatusPengirimanKonfirmasiKeluar.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        txtStatusPengirimanKonfirmasiKeluar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtStatusPengirimanKonfirmasiKeluar.setText("Diterima");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel73)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(rbGagalKonfirmasiKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(rbDiterimaKonfirmasiKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtKodeTransaksiKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel75))
+                .addGap(34, 34, 34)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtNamaPelangganKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel74))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnKonfirmasiKonfirmasiKeluar, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
+                    .addComponent(txtStatusPengirimanKonfirmasiKeluar))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel73, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(rbDiterimaKonfirmasiKeluar)
+                            .addComponent(jLabel74)
+                            .addComponent(jLabel75))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(rbGagalKonfirmasiKeluar)
+                            .addComponent(txtNamaPelangganKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtKodeTransaksiKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addComponent(txtStatusPengirimanKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnKonfirmasiKonfirmasiKeluar)))
+                .addContainerGap())
+        );
+
+        jLabel76.setText("Pelanggan");
+
+        cmbNamaPelangganKonfirmasiKeluar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "- Pilih Pelanggan -" }));
+        cmbNamaPelangganKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbNamaPelangganKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
+
+        btnSemuaKonfirmasiKeluar.setText("Semua");
+        btnSemuaKonfirmasiKeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSemuaKonfirmasiKeluarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelKonfirmasiKeluarLayout = new javax.swing.GroupLayout(panelKonfirmasiKeluar);
+        panelKonfirmasiKeluar.setLayout(panelKonfirmasiKeluarLayout);
+        panelKonfirmasiKeluarLayout.setHorizontalGroup(
+            panelKonfirmasiKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelKonfirmasiKeluarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelKonfirmasiKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelKonfirmasiKeluarLayout.createSequentialGroup()
+                        .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(216, 216, 216)
+                        .addComponent(jLabel71)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnSemuaKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel76, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbNamaPelangganKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane14)
+                    .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 1084, Short.MAX_VALUE)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+            .addGroup(panelKonfirmasiKeluarLayout.createSequentialGroup()
+                .addGap(458, 458, 458)
+                .addComponent(jLabel72)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelKonfirmasiKeluarLayout.setVerticalGroup(
+            panelKonfirmasiKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelKonfirmasiKeluarLayout.createSequentialGroup()
+                .addGroup(panelKonfirmasiKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel70, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelKonfirmasiKeluarLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(panelKonfirmasiKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelKonfirmasiKeluarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel76)
+                                .addComponent(cmbNamaPelangganKonfirmasiKeluar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSemuaKonfirmasiKeluar))
+                            .addComponent(jLabel71, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel72, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        getContentPane().add(panelKonfirmasiKeluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 40, -1, -1));
 
         pack();
         setLocationRelativeTo(null);
@@ -2135,7 +3572,10 @@ public class T_Utama extends javax.swing.JFrame {
     private void tblBarangPemesananMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBarangPemesananMouseClicked
         // TODO add your handling code here:
         barangPemesanan = ControllerBarang.getSelectedRowBarangPemasokkan(tblBarangPemesanan);
-
+        // from 0 to 9, in 1.0 steps start value 5  
+        SpinnerNumberModel model1 = new SpinnerNumberModel(1, 0, Integer.parseInt(tblBarangPemesanan.getValueAt(tblBarangPemesanan.getSelectedRow(), 5).toString()), 1);  
+        
+        txtJumlahPemesanan.setModel(model1);
         txtBarangPemesanan.setText(barangPemesanan.getNama_Barang());
         txtUkuranPemesanan.setText(barangPemesanan.getUkuran_Barang());
 
@@ -2206,6 +3646,10 @@ public class T_Utama extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Isi data dengan benar!");
             return;
         }
+        if(txtJumlahKodiPemesanan.toString().equals("0")){
+            JOptionPane.showMessageDialog(this, "Isi data dengan benar!");
+            return;
+        }
         int stock, stock2 = 0;
         SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMdd");
         String IdPelanggan = (String) cmbPelanggan.getSelectedItem();
@@ -2255,6 +3699,7 @@ public class T_Utama extends javax.swing.JFrame {
                     detailPemesanan.setDetail_jumlah_barang(((int)tblKeranjangPemesanan.getValueAt(i, 3)) * 20);
                     detailPemesanan.setDetail_total_uang((int)tblKeranjangPemesanan.getValueAt(i, 4));
                     controllerPemesanan.simpanDetailPemesanan(detailPemesanan);
+                    controllerBarangPemesanan.updateJumlahBarangDipesan(tblKeranjangPemesanan.getValueAt(i, 3).toString(),tblKeranjangPemesanan.getValueAt(i, 1).toString(),tblKeranjangPemesanan.getValueAt(i, 2).toString());
                 }
 
                 JOptionPane.showMessageDialog(this, "Berhasil menambahkan pesanan..");
@@ -2532,7 +3977,7 @@ public class T_Utama extends javax.swing.JFrame {
         Pembayaran pembayaran = new Pembayaran();
         pembayaran.setPmby_id(ControllerPembayaranPembayaranPelanggan.getLastID());
         pembayaran.setPgn_id(controlTablePembayaranPelanggan.getPelangganId((String)cmbPelanggan1.getSelectedItem()));
-        pembayaran.setKry_id(kry_id);
+        pembayaran.setKry_id(karyawan_login.getKry_id());
         //pembayaran.setKry_id("202006290001");
         pembayaran.setPmby_tgl_transaksi(new Date());
         pembayaran.setPmby_uang_masuk(Integer.valueOf(txtBayar.getText()));
@@ -2561,6 +4006,502 @@ public class T_Utama extends javax.swing.JFrame {
         // TODO add your handling code here:
         show(panelPembayaranPelanggan);
     }//GEN-LAST:event_btnPembayaranPelangganActionPerformed
+
+    private void btnRefreshPemesananActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshPemesananActionPerformed
+        // TODO add your handling code here:
+        //addColumnPemesanan();
+        addDataPemesanan();
+    }//GEN-LAST:event_btnRefreshPemesananActionPerformed
+
+    private void cmbStatusBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbStatusBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        clearBarangKeluar();
+        modelBarangKeluar.getDataVector().removeAllElements();
+
+        modelBarangKeluar.fireTableDataChanged();
+
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
+        ControllerTabelBarangKeluar.addDataBarangKeluar(modelBarangKeluar, (String) cmbStatusBarangKeluar.getSelectedItem(), (String) cmbNamaPelangganBarangKeluar.getSelectedItem());
+        if(!cmbStatusBarangKeluar.getSelectedItem().toString().equals("Disiapkan")){
+            btnTambahkanPengirimanBarangKeluar.setEnabled(false);
+        }else{
+            btnTambahkanPengirimanBarangKeluar.setEnabled(true);
+        }
+    }//GEN-LAST:event_cmbStatusBarangKeluarActionPerformed
+
+    private void tableBarangKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableBarangKeluarMouseClicked
+        // TODO add your handling code here:
+
+        perbaruiDetailBarangKeluar();
+    }//GEN-LAST:event_tableBarangKeluarMouseClicked
+
+    private void tableDetailBarangKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDetailBarangKeluarMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_tableDetailBarangKeluarMouseClicked
+
+    private void btnTambahkanPengirimanBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTambahkanPengirimanBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        //        if (tableDetailBarangKeluar.getSelectedRow() == -1) {
+            //            JOptionPane.showMessageDialog(this, "Tidak ada data terpilih! ");
+            //            return;
+            //        }
+        if(tableBarangKeluar.getValueAt(tableBarangKeluar.getSelectedRow(), 6).toString().equals("0")){
+            JOptionPane.showMessageDialog(this, "Data sudah dimasukkan!");
+            return;
+        }
+        int kode = 64;
+
+        // jika kosong
+        //       masukkan data semua
+        //             jika semua data lebih dari 40
+        //           masukkan 40 saja
+        //                  sisanya masukkan ke karung berikutnya
+        Object[] dataRowKarung = {"", "", "", "", ""};
+        Object[] dataRowDetailKarung = {"", "", "", ""};
+        for(int i = 0; i < tableDetailBarangKeluar.getRowCount(); i ++){
+            //            tableDetailBarangKeluar.setRowSelectionInterval(kode, kode);
+            try {
+                txtBarangBarangKeluar.setText(tableDetailBarangKeluar.getValueAt(i, 1).toString());
+                txtUkuranBarangKeluar.setText(tableDetailBarangKeluar.getValueAt(i, 2).toString());
+                txtJumlahKodiBarangKeluar.setValue(Integer.parseInt((String) tableDetailBarangKeluar.getValueAt(i, 3)));
+            } catch (Exception ex) {
+
+            }
+            if (tableKarungPengirimanBarangKeluar.getRowCount() == 0) {
+                while ((int) txtJumlahKodiBarangKeluar.getValue() > 0) {
+                    if ((int) txtJumlahKodiBarangKeluar.getValue() >= 40) {
+                        Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + (tableKarungPengirimanBarangKeluar.getRowCount() + 1)), "ISI DI SAMPING", "40", ""};
+
+                        //System.out.println(i);
+                        Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), "40"};
+
+                        detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                        detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                        detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                        detailKarungKodiBarangKeluar.add("40");
+
+                        //JOptionPane.showMessageDialog(this, Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                        dataRowDetailKarung = dataDetail;
+                        dataRowKarung = data;
+
+                        txtJumlahKodiBarangKeluar.setValue((int) txtJumlahKodiBarangKeluar.getValue() - 40);
+                    } else {
+                        Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", txtJumlahKodiBarangKeluar.getValue(), ""};
+                        Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), txtJumlahKodiBarangKeluar.getValue()};
+
+                        //JOptionPane.showMessageDialog(this, "Masuk else");
+                        detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                        detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                        detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                        detailKarungKodiBarangKeluar.add(txtJumlahKodiBarangKeluar.getValue().toString());
+
+                        dataRowDetailKarung = dataDetail;
+                        dataRowKarung = data;
+
+                        txtJumlahKodiBarangKeluar.setValue(0);
+
+                    }
+                    modelKarungBarangKeluar.addRow(dataRowKarung);
+                    //modelDetailKarungBarangKeluar.addRow(dataRowDetailKarung);
+                }
+                isiJumlahDetailKarungTransaksiBarangKeluar();
+            } else {
+                // ELSE UNTUK ROW LEBIH DARI 1
+                //  jikasudah ada 1 karung
+                // periksa apakah sudah 40 isinya
+                // jika sudah, buat karung baru
+                //
+                // jika belum , masukkan ke detil karung dan ubah jumlahnya
+                // ubah tulisan jumlah kodi nya, dan masukkan detitlnya sesuai row paling bawah
+                while ((int) txtJumlahKodiBarangKeluar.getValue() > 0) {
+                    if (Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt((tableKarungPengirimanBarangKeluar.getRowCount() - 1), 3).toString()) == 40) {
+                        if ((int) txtJumlahKodiBarangKeluar.getValue() >= 40) {
+                            Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", "40", ""};
+
+                            //System.out.println(i);
+                            Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), "40"};
+
+                            detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                            detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                            detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                            detailKarungKodiBarangKeluar.add("40");
+
+                            //JOptionPane.showMessageDialog(this, Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                            dataRowDetailKarung = dataDetail;
+                            dataRowKarung = data;
+
+                            txtJumlahKodiBarangKeluar.setValue((int) txtJumlahKodiBarangKeluar.getValue() - 40);
+                        } else {
+                            Object[] data = {tableKarungPengirimanBarangKeluar.getRowCount() + 1, txtIDPengirimanBarangKeluar.getText() + (char) (kode + tableKarungPengirimanBarangKeluar.getRowCount() + 1), "ISI DI SAMPING", txtJumlahKodiBarangKeluar.getValue(), ""};
+                            Object[] dataDetail = {"", txtBarangBarangKeluar.getText(), txtUkuranBarangKeluar.getText(), txtJumlahKodiBarangKeluar.getValue()};
+
+                            //    JOptionPane.showMessageDialog(this, "Masuk else");
+                            detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount() + 1));
+                            detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                            detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                            detailKarungKodiBarangKeluar.add(txtJumlahKodiBarangKeluar.getValue().toString());
+
+                            dataRowDetailKarung = dataDetail;
+                            dataRowKarung = data;
+
+                            txtJumlahKodiBarangKeluar.setValue(0);
+
+                        }
+                        modelKarungBarangKeluar.addRow(dataRowKarung);
+                        //modelDetailKarungBarangKeluar.addRow(dataRowDetailKarung);
+
+                    } else {
+                        // jika blm 40
+                        // periksa jumlah kodi nya
+                        // jika lebih dari 40, masukkan hingga karung itu 40 -> tambahkan ke detil
+                        // jika tidak lebih dari 40, masukkan hingga total 40 ->
+                        // jika kurang ya masukkan saja semua ->
+                        int disana = 0;
+                        int jumlahsaya = Integer.parseInt(txtJumlahKodiBarangKeluar.getValue().toString());
+                        int jumlahygada = Integer.parseInt(tableKarungPengirimanBarangKeluar.getValueAt(tableKarungPengirimanBarangKeluar.getRowCount() - 1, 3).toString());
+                        int jumlahketerima = 0;
+                        int daya = 40;
+
+                        int kebutuhan = daya - jumlahygada;
+                        if (kebutuhan > jumlahsaya) {
+                            disana = jumlahygada + jumlahsaya;
+                            jumlahketerima = jumlahsaya;
+                            jumlahsaya = 0;
+                        } else if (jumlahsaya > kebutuhan) {
+                            disana = daya;
+                            jumlahketerima = kebutuhan;
+                            jumlahsaya = jumlahsaya - kebutuhan;
+                        }
+
+                        tableKarungPengirimanBarangKeluar.setValueAt(Integer.toString(disana), tableKarungPengirimanBarangKeluar.getRowCount() - 1, 3);
+
+                        //JOptionPane.showMessageDialog(this, "Masuk sisa itu loh");
+                        detailKarungIndexBarangKeluar.add(Integer.toString(tableKarungPengirimanBarangKeluar.getRowCount()));
+                        detailKarungBarangBarangKeluar.add(txtBarangBarangKeluar.getText());
+                        detailKarungUkuranBarangKeluar.add(txtUkuranBarangKeluar.getText());
+                        detailKarungKodiBarangKeluar.add(Integer.toString(jumlahketerima));
+
+                        txtJumlahKodiBarangKeluar.setValue(jumlahsaya);
+
+                    }
+                }
+                isiJumlahDetailKarungTransaksiBarangKeluar();
+            }
+        }
+
+        //        if (Integer.parseInt(tableDetailBarangKeluar.getValueAt(tableDetailBarangKeluar.getRowCount() - 1, 3).toString()) <= 40) {
+            //            JOptionPane.showMessageDialog(this, "Bawah 40! ");
+            //        }
+        tableBarangKeluar.setValueAt(0, tableBarangKeluar.getSelectedRow(), 6);
+        //tableDetailBarangKeluar.setValueAt(0, tableDetailBarangKeluar.getSelectedRow(), 3);
+        hitungKodiKarungBarangKeluar();
+        //modelDetailBarangKeluar
+    }//GEN-LAST:event_btnTambahkanPengirimanBarangKeluarActionPerformed
+
+    private void cmbNamaPelangganBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNamaPelangganBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        clearBarangKeluar();
+        modelBarangKeluar.getDataVector().removeAllElements();
+
+        modelBarangKeluar.fireTableDataChanged();
+
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
+        ControllerTabelBarangKeluar.addDataBarangKeluar(modelBarangKeluar, (String) cmbStatusBarangKeluar.getSelectedItem(), (String) cmbNamaPelangganBarangKeluar.getSelectedItem());
+    }//GEN-LAST:event_cmbNamaPelangganBarangKeluarActionPerformed
+
+    private void cbPengirimanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbPengirimanActionPerformed
+        // TODO add your handling code here:
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        if (cbPengiriman.isSelected()) {
+            btnTambahkanPengirimanBarangKeluar.setEnabled(true);
+            txtIDPengirimanBarangKeluar.setText(formatter.format(new Date()) + "-" + ControllerPengirimanBarangKeluar.getLastID());
+        } else {
+            btnTambahkanPengirimanBarangKeluar.setEnabled(false);
+            txtIDPengirimanBarangKeluar.setText("[ ID PENGIRIMAN ]");
+        }
+        if(!cmbStatusBarangKeluar.getSelectedItem().toString().equals("Disiapkan")){
+            btnTambahkanPengirimanBarangKeluar.setEnabled(false);
+        }else{
+            btnTambahkanPengirimanBarangKeluar.setEnabled(true);
+        }
+    }//GEN-LAST:event_cbPengirimanActionPerformed
+
+    private void tableKarungPengirimanBarangKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableKarungPengirimanBarangKeluarMouseClicked
+        // TODO add your handling code here:
+        txtNomorKarungBarangKeluar.setText(tableKarungPengirimanBarangKeluar.getValueAt(tableKarungPengirimanBarangKeluar.getSelectedRow(), 0).toString());
+        showDetailKarungBarangKeluar(txtNomorKarungBarangKeluar.getText());
+        txtKeteranganKarungBarangKeluar.setText(tableKarungPengirimanBarangKeluar.getValueAt(tableKarungPengirimanBarangKeluar.getSelectedRow(), 2).toString());
+    }//GEN-LAST:event_tableKarungPengirimanBarangKeluarMouseClicked
+
+    private void tableKarungPengirimanBarangKeluarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tableKarungPengirimanBarangKeluarKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableKarungPengirimanBarangKeluarKeyTyped
+
+    private void txtKeteranganKarungBarangKeluarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKeteranganKarungBarangKeluarKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtKeteranganKarungBarangKeluarKeyPressed
+
+    private void txtKeteranganKarungBarangKeluarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKeteranganKarungBarangKeluarKeyReleased
+        // TODO add your handling code here:
+        txtBatasKeteranganBarangKeluar.setText(Integer.toString(txtKeteranganKarungBarangKeluar.getText().length()));
+    }//GEN-LAST:event_txtKeteranganKarungBarangKeluarKeyReleased
+
+    private void txtKeteranganKarungBarangKeluarKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKeteranganKarungBarangKeluarKeyTyped
+        // TODO add your handling code here:
+        txtBatasKeteranganBarangKeluar.setText(Integer.toString(txtKeteranganKarungBarangKeluar.getText().length()));
+        if (txtKeteranganKarungBarangKeluar.getText().length() == 50) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtKeteranganKarungBarangKeluarKeyTyped
+
+    private void btnTulisKeteranganBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTulisKeteranganBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        try {
+            tableKarungPengirimanBarangKeluar.setValueAt(txtKeteranganKarungBarangKeluar.getText(), tableKarungPengirimanBarangKeluar.getSelectedRow(), 2);
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_btnTulisKeteranganBarangKeluarActionPerformed
+
+    private void tableDetailKarungPengirimanBarangKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableDetailKarungPengirimanBarangKeluarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tableDetailKarungPengirimanBarangKeluarMouseClicked
+
+    private void txtNomorKarungBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomorKarungBarangKeluarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomorKarungBarangKeluarActionPerformed
+
+    private void txtNomorKarungBarangKeluarPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtNomorKarungBarangKeluarPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNomorKarungBarangKeluarPropertyChange
+
+    private void btnBatalkanKarungBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalkanKarungBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        clearBarangKeluar();
+        modelBarangKeluar.getDataVector().removeAllElements();
+
+        modelBarangKeluar.fireTableDataChanged();
+
+        modelDetailBarangKeluar.getDataVector().removeAllElements();
+
+        modelDetailBarangKeluar.fireTableDataChanged();
+        ControllerTabelBarangKeluar.addDataBarangKeluar(modelBarangKeluar, (String) cmbStatusBarangKeluar.getSelectedItem(), (String) cmbNamaPelangganBarangKeluar.getSelectedItem());
+    }//GEN-LAST:event_btnBatalkanKarungBarangKeluarActionPerformed
+
+    private void btnKonfirmasiPemberangkatanBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKonfirmasiPemberangkatanBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        if(tableKarungPengirimanBarangKeluar.getRowCount() == 0){
+            JOptionPane.showMessageDialog(this, "Tidak ada data yang dapat disimpan");
+            return;
+        }
+        if(cmbPengemudiBarangKeluar.getSelectedItem().toString().equals("- Pilih Pengemudi -")){
+            JOptionPane.showMessageDialog(this, "Pilih pengemudi dengan benar");
+            return;
+        }
+        PengirimanBarangKeluar.setPgrm_id(txtIDPengirimanBarangKeluar.getText());
+        int kodi = Integer.parseInt(txtJumlahKodiPengirimanBarang.getText());
+        PengirimanBarangKeluar.setPgrm_jumlah_barang(kodi*20);
+        PengirimanBarangKeluar.setPgrm_jumlah_karung(Integer.parseInt(txtJumlahKarungPengirimanBarang.getText()));
+        PengirimanBarangKeluar.setPgrm_jumlah_kodi(Integer.parseInt(txtJumlahKodiPengirimanBarang.getText()));
+        PengirimanBarangKeluar.setPgrm_tgl_transaksi(new Date());
+        PengirimanBarangKeluar.setStatus("Dikirim");
+        Karyawan kar = new Karyawan();
+        kar = ControllerKaryawan.getDatabyNama(cmbPengemudiBarangKeluar.getSelectedItem().toString());
+        //PengirimanBarangKeluar.setKry_id(kar.getKry_id());
+        PengirimanBarangKeluar.setKry_id(kar.getKry_id());
+        PengirimanBarangKeluar.setPgn_id(ControllerPelangganBarangKeluar.getIDPelanggan(tableBarangKeluar.getValueAt(tableBarangKeluar.getSelectedRow(), 2).toString()));
+        
+        simpanDataPengirimanBarangKeluar(PengirimanBarangKeluar);
+        JOptionPane.showMessageDialog(this, "Pendataan pengiriman barang telah selasi");
+    }//GEN-LAST:event_btnKonfirmasiPemberangkatanBarangKeluarActionPerformed
+
+    private void btnBarangKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBarangKeluarActionPerformed
+        // TODO add your handling code here:
+        show(PanelTransaksiBarangKeluar);
+    }//GEN-LAST:event_btnBarangKeluarActionPerformed
+
+    private void tablePemasokPembayaranPemasokMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePemasokPembayaranPemasokMouseClicked
+        // TODO add your handling code here:
+        ClearPembayaranPemasok();
+        pemasokPembayaranPemasok = ControllerTablePembayaranPemasok.getSelectedRowPemasok(tablePemasokPembayaranPemasok);
+        txtNamaPemasokPembayaranPemasok.setText(pemasokPembayaranPemasok.getPms_nama());
+        txtJumlahTransaksiPemasokPembayaranPemasok.setText(Integer.toString(pemasokPembayaranPemasok.getPms_jumlah_transaksi()));
+        txtHutangPemasokPembayaranPemasok.setText(kursIndonesia.format(pemasokPembayaranPemasok.getPms_total_hutang()));
+        int status = pemasokPembayaranPemasok.getPms_uang_transaksi();
+
+        if ( pemasokPembayaranPemasok.getPms_total_hutang() == 0){
+            lblKeteranganPembayaranPembayaranPemasok.setText("LUNAS");
+            if (lblKeteranganPembayaranPembayaranPemasok.getText().equals("LUNAS"))
+            {
+                btnBayarPembayaranPemasok.setEnabled(false);
+            }
+        }
+        else{
+            lblKeteranganPembayaranPembayaranPemasok.setText("BELUM LUNAS");
+        }
+    }//GEN-LAST:event_tablePemasokPembayaranPemasokMouseClicked
+
+    private void cmbPemasokPembayaranPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPemasokPembayaranPemasokActionPerformed
+        // TODO add your handling code here:
+        modelPemasokPembayaranPemasok.getDataVector().removeAllElements();
+
+        modelPemasokPembayaranPemasok.fireTableDataChanged();
+        ClearPembayaranPemasok();
+        ControllerTablePembayaranPemasok.addDataPemasok(modelPemasokPembayaranPemasok,(String) cmbPemasokPembayaranPemasok.getSelectedItem());
+    }//GEN-LAST:event_cmbPemasokPembayaranPemasokActionPerformed
+
+    private void txtBayarPembayaranPemasokKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBayarPembayaranPemasokKeyReleased
+        // TODO add your handling code here:
+
+        if (txtBayarPembayaranPemasok.getText().equals("")) {
+            txtSisaHutangPembayaranPemasok.setText(txtHutangPemasokPembayaranPemasok.getText());
+            return;
+        }
+
+        try {
+
+            txtSisaHutangPembayaranPemasok.setText(kursIndonesia.format(((long) kursIndonesia.parse(txtHutangPemasokPembayaranPemasok.getText())) - Long.parseLong(txtBayarPembayaranPemasok.getText())));
+            txtKembalianPembayaranPemasok.setText(kursIndonesia.format((Long.parseLong(txtBayarPembayaranPemasok.getText())) - (long) kursIndonesia.parse(txtHutangPemasokPembayaranPemasok.getText())));
+
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_txtBayarPembayaranPemasokKeyReleased
+
+    private void btnBatalPembayaranPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBatalPembayaranPemasokActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnBatalPembayaranPemasokActionPerformed
+
+    private void btnBayarPembayaranPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBayarPembayaranPemasokActionPerformed
+        // TODO add your handling code here:
+        SimpleDateFormat date = new SimpleDateFormat("ddMMyyyy");
+
+        Pembayaran pembayaran = new Pembayaran();
+        pembayaran.setBpmsk_id(ControllerPembayaranPembayaranPemasok.getLastID());
+        pembayaran.setPms_id(ControllerTablePembayaranPemasok.getPemasokId((String)cmbPemasokPembayaranPemasok.getSelectedItem()));
+        pembayaran.setKry_id("202006290001");
+        pembayaran.setBpmsk_tgl_transaksi(new Date());
+        pembayaran.setBpmsk_uang_dibayar(Integer.valueOf(txtBayarPembayaranPemasok.getText()));
+
+        ControllerPembayaranPembayaranPemasok.simpanPembayaranPemasok(pembayaran);
+        try {
+            ControllerPemasokPembayaranPemasok.updateTransaksiPembayaran(Long.parseLong(txtBayarPembayaranPemasok.getText()), Long.parseLong((kursIndonesia.parse(txtSisaHutangPembayaranPemasok.getText())).toString()), pemasokPembayaranPemasok.getPms_id().toString());
+
+            ControllerTablePembayaranPemasok.addDataPemasok(modelPemasokPembayaranPemasok,(String) cmbPemasokPembayaranPemasok.getSelectedItem());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Tidak dapat menyimpan ke pemasok!");
+        }
+
+        JOptionPane.showMessageDialog(this, "Pembayaran berhasil....");
+        addDataPemasok();
+        ClearPembayaranPemasok();
+        cmbPemasokPembayaranPemasok.setSelectedIndex(0);
+        lblKeteranganPembayaranPembayaranPemasok.setText("[Keterangan]");
+    }//GEN-LAST:event_btnBayarPembayaranPemasokActionPerformed
+
+    private void txtKembalianPembayaranPemasokKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtKembalianPembayaranPemasokKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtKembalianPembayaranPemasokKeyReleased
+
+    private void btnPembayaranPemasokActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPembayaranPemasokActionPerformed
+        // TODO add your handling code here:
+        show(panelPembayaranPemasok);
+    }//GEN-LAST:event_btnPembayaranPemasokActionPerformed
+
+    private void tablePengirimanKonfirmasiKeluarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablePengirimanKonfirmasiKeluarMouseClicked
+        // TODO add your handling code here:
+        if(tablePengirimanKonfirmasiKeluar.getValueAt(tablePengirimanKonfirmasiKeluar.getSelectedRow(), 8).toString().equals("Diterima") ||
+            tablePengirimanKonfirmasiKeluar.getValueAt(tablePengirimanKonfirmasiKeluar.getSelectedRow(), 8).toString().equals("Gagal")){
+            btnKonfirmasiKonfirmasiKeluar.setEnabled(false);
+        }else{
+            btnKonfirmasiKonfirmasiKeluar.setEnabled(true);
+        }
+        modelDetailKarungKonfirmasiKeluar.getDataVector().clear();
+        ControllerKonfirmasiKeluar.addKarungKonfirmasiKeluar(modelDetailKarungKonfirmasiKeluar, tablePengirimanKonfirmasiKeluar.getValueAt(tablePengirimanKonfirmasiKeluar.getSelectedRow(), 1).toString());
+        modelDetailKarungKonfirmasiKeluar.fireTableDataChanged();
+
+        txtKodeTransaksiKonfirmasiKeluar.setText(tablePengirimanKonfirmasiKeluar.getValueAt(tablePengirimanKonfirmasiKeluar.getSelectedRow(), 1).toString());
+        txtNamaPelangganKonfirmasiKeluar.setText(tablePengirimanKonfirmasiKeluar.getValueAt(tablePengirimanKonfirmasiKeluar.getSelectedRow(), 2).toString());
+    }//GEN-LAST:event_tablePengirimanKonfirmasiKeluarMouseClicked
+
+    private void rbDiterimaKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbDiterimaKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+        if (rbDiterimaKonfirmasiKeluar.isSelected()) {
+            txtStatusPengirimanKonfirmasiKeluar.setText("Diterima");
+        } else {
+            txtStatusPengirimanKonfirmasiKeluar.setText("Gagal");
+        }
+    }//GEN-LAST:event_rbDiterimaKonfirmasiKeluarActionPerformed
+
+    private void rbGagalKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbGagalKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+        if (rbDiterimaKonfirmasiKeluar.isSelected()) {
+            txtStatusPengirimanKonfirmasiKeluar.setText("Diterima");
+        } else {
+            txtStatusPengirimanKonfirmasiKeluar.setText("Gagal");
+        }
+    }//GEN-LAST:event_rbGagalKonfirmasiKeluarActionPerformed
+
+    private void txtNamaPelangganKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaPelangganKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNamaPelangganKonfirmasiKeluarActionPerformed
+
+    private void txtNamaPelangganKonfirmasiKeluarPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtNamaPelangganKonfirmasiKeluarPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNamaPelangganKonfirmasiKeluarPropertyChange
+
+    private void txtKodeTransaksiKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtKodeTransaksiKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtKodeTransaksiKonfirmasiKeluarActionPerformed
+
+    private void txtKodeTransaksiKonfirmasiKeluarPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtKodeTransaksiKonfirmasiKeluarPropertyChange
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtKodeTransaksiKonfirmasiKeluarPropertyChange
+
+    private void btnKonfirmasiKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKonfirmasiKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+        if (txtKodeTransaksiKonfirmasiKeluar.getText().equals("-")) {
+            JOptionPane.showMessageDialog(this, "Pilih data yang akan dikonfirmasi dari table pengiriman");
+        }
+        String status = txtStatusPengirimanKonfirmasiKeluar.getText();
+        ControllerPengirimanKonfirmasiKeluar.updateStatus(txtKodeTransaksiKonfirmasiKeluar.getText(), status);
+        List<String> pmsn_id = new ArrayList<>();
+        String pelanggan = ControllerPelangganKonfirmasiBarang.getIDPelanggan(tablePengirimanKonfirmasiKeluar.getValueAt(tablePengirimanKonfirmasiKeluar.getSelectedRow(), 2).toString());
+        pmsn_id = ControllerPengirimanKonfirmasiKeluar.getIDPemesananDetail(txtKodeTransaksiKonfirmasiKeluar.getText());
+        for (int i = 0; i < pmsn_id.size(); i++) {
+            ControllerPemesananKonfirmasiKeluar.setStatus(pmsn_id.get(i), status);
+            if (status.equals("Diterima")) {
+                ControllerPelangganKonfirmasiBarang.updateTransaksiKonfirmasiKeluar((ControllerPemesananKonfirmasiKeluar.getPmsn_Total_Uang(pmsn_id.get(i)).toString()), pelanggan );
+            }
+        }
+        JOptionPane.showMessageDialog(this,"Konfirmasi berhasil, Terima Kasih");
+        if(cmbNamaPelangganKonfirmasiKeluar.getSelectedItem().toString().equals("- Pilih Pelanggan -")){
+            addDataKonfirmasiKeluar(0);
+        }else{
+            addDataKonfirmasiKeluar(1);
+        }
+
+    }//GEN-LAST:event_btnKonfirmasiKonfirmasiKeluarActionPerformed
+
+    private void cmbNamaPelangganKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbNamaPelangganKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+        addDataKonfirmasiKeluar(1);
+    }//GEN-LAST:event_cmbNamaPelangganKonfirmasiKeluarActionPerformed
+
+    private void btnSemuaKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSemuaKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+        addDataKonfirmasiKeluar(0);
+    }//GEN-LAST:event_btnSemuaKonfirmasiKeluarActionPerformed
+
+    private void btnKonfirmasiKeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnKonfirmasiKeluarActionPerformed
+        // TODO add your handling code here:
+        show(panelKonfirmasiKeluar);
+    }//GEN-LAST:event_btnKonfirmasiKeluarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2599,6 +4540,7 @@ public class T_Utama extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Logo;
+    private javax.swing.JPanel PanelTransaksiBarangKeluar;
     private javax.swing.JLabel Ukuran;
     private javax.swing.JLabel Ukuran1;
     private javax.swing.JLabel Ukuran2;
@@ -2610,7 +4552,10 @@ public class T_Utama extends javax.swing.JFrame {
     private javax.swing.JButton btnBarangKeluar;
     private javax.swing.JButton btnBarangMasuk;
     private javax.swing.JButton btnBatal;
+    private javax.swing.JButton btnBatalPembayaranPemasok;
+    private javax.swing.JButton btnBatalkanKarungBarangKeluar;
     private javax.swing.JButton btnBayar;
+    private javax.swing.JButton btnBayarPembayaranPemasok;
     private javax.swing.JButton btnGagalBarangMasuk;
     private javax.swing.JButton btnJBarang;
     private javax.swing.JButton btnKaryawan;
@@ -2618,6 +4563,9 @@ public class T_Utama extends javax.swing.JFrame {
     private javax.swing.JButton btnKeranjang;
     private javax.swing.JButton btnKeranjangPemesanan;
     private javax.swing.JButton btnKonfirmasiBarangMasuk;
+    private javax.swing.JButton btnKonfirmasiKeluar;
+    private javax.swing.JButton btnKonfirmasiKonfirmasiKeluar;
+    private javax.swing.JButton btnKonfirmasiPemberangkatanBarangKeluar;
     private javax.swing.JButton btnMenuUtama;
     private javax.swing.JButton btnPelanggan;
     private javax.swing.JButton btnPemasok;
@@ -2627,14 +4575,24 @@ public class T_Utama extends javax.swing.JFrame {
     private javax.swing.JButton btnPemesananPemasok;
     private javax.swing.JButton btnPengolahanData;
     private javax.swing.JButton btnProses;
+    private javax.swing.JButton btnRefreshPemesanan;
+    private javax.swing.JButton btnSemuaKonfirmasiKeluar;
     private javax.swing.JButton btnSimpan;
     private javax.swing.JButton btnSuksesBarangMasuk;
+    private javax.swing.JButton btnTambahkanPengirimanBarangKeluar;
+    private javax.swing.JButton btnTulisKeteranganBarangKeluar;
+    private javax.swing.JCheckBox cbPengiriman;
+    private javax.swing.JComboBox<String> cmbNamaPelangganBarangKeluar;
+    private javax.swing.JComboBox<String> cmbNamaPelangganKonfirmasiKeluar;
     private javax.swing.JComboBox<String> cmbPelanggan;
     private javax.swing.JComboBox<String> cmbPelanggan1;
     private javax.swing.JComboBox<String> cmbPemasok;
+    private javax.swing.JComboBox<String> cmbPemasokPembayaranPemasok;
+    private javax.swing.JComboBox<String> cmbPengemudiBarangKeluar;
+    private javax.swing.JComboBox<String> cmbStatusBarangKeluar;
     private javax.swing.JComboBox<String> cmbStatusBarangMasuk;
+    private javax.swing.JLabel dummy1;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2659,6 +4617,7 @@ public class T_Utama extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
@@ -2673,67 +4632,145 @@ public class T_Utama extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel41;
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel57;
+    private javax.swing.JLabel jLabel58;
+    private javax.swing.JLabel jLabel59;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel60;
+    private javax.swing.JLabel jLabel61;
+    private javax.swing.JLabel jLabel62;
+    private javax.swing.JLabel jLabel63;
+    private javax.swing.JLabel jLabel64;
+    private javax.swing.JLabel jLabel65;
+    private javax.swing.JLabel jLabel66;
+    private javax.swing.JLabel jLabel67;
+    private javax.swing.JLabel jLabel68;
+    private javax.swing.JLabel jLabel69;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel70;
+    private javax.swing.JLabel jLabel71;
+    private javax.swing.JLabel jLabel72;
+    private javax.swing.JLabel jLabel73;
+    private javax.swing.JLabel jLabel74;
+    private javax.swing.JLabel jLabel75;
+    private javax.swing.JLabel jLabel76;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
+    private javax.swing.JScrollPane jScrollPane11;
+    private javax.swing.JScrollPane jScrollPane12;
+    private javax.swing.JScrollPane jScrollPane13;
+    private javax.swing.JScrollPane jScrollPane14;
+    private javax.swing.JScrollPane jScrollPane15;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JLabel karyawan_info;
     private javax.swing.JLabel kiribawahdashboard;
     private javax.swing.JLabel lblKeteranganBarangMasuk;
     private javax.swing.JLabel lblKeteranganPembayaran;
+    private javax.swing.JLabel lblKeteranganPembayaranPembayaranPemasok;
     private javax.swing.JPanel panelAtas;
     private javax.swing.JPanel panelBarangMasuk;
     private javax.swing.JPanel panelDaftarBarangMasuk;
     private javax.swing.JPanel panelDaftarBarangMasuk1;
+    private javax.swing.JPanel panelDaftarBarangMasuk2;
+    private javax.swing.JPanel panelDaftarBarangMasuk3;
     private javax.swing.JPanel panelDashboard;
+    private javax.swing.JPanel panelDataPengirimanBarangBarangKeluar;
     private javax.swing.JPanel panelDeskripsi;
     private javax.swing.JPanel panelDeskripsiBarangMasuk;
     private javax.swing.JPanel panelDeskripsiBarangMasuk1;
+    private javax.swing.JPanel panelDeskripsiBarangMasuk2;
     private javax.swing.JPanel panelDetailBeli;
     private javax.swing.JPanel panelDetailBeli1;
     private javax.swing.JPanel panelKeranjang;
     private javax.swing.JPanel panelKiri;
+    private javax.swing.JPanel panelKonfirmasiKeluar;
     private javax.swing.JPanel panelPemasokkan;
     private javax.swing.JPanel panelPembayaranPelanggan;
+    private javax.swing.JPanel panelPembayaranPemasok;
     private javax.swing.JPanel panelPemesanan;
     private javax.swing.JPanel panelPengolahanData;
     private javax.swing.JPanel pnlDataBarang;
+    private javax.swing.JRadioButton rbDiterimaKonfirmasiKeluar;
+    private javax.swing.JRadioButton rbGagalKonfirmasiKeluar;
     private javax.swing.JTable tableBarang;
+    private javax.swing.JTable tableBarangKeluar;
     private javax.swing.JTable tableBarangMasuk;
+    private javax.swing.JTable tableDetailBarangKeluar;
     private javax.swing.JTable tableDetailBarangMasuk;
+    private javax.swing.JTable tableDetailKarungPengirimanBarangKeluar;
+    private javax.swing.JTable tableKarungKonfirmasiKeluar;
+    private javax.swing.JTable tableKarungPengirimanBarangKeluar;
     private javax.swing.JTable tableKeranjang;
     private javax.swing.JTable tablePelanggan;
+    private javax.swing.JTable tablePemasokPembayaranPemasok;
+    private javax.swing.JTable tablePengirimanKonfirmasiKeluar;
     private javax.swing.JTable tblBarangPemesanan;
     private javax.swing.JTable tblKeranjangPemesanan;
     private javax.swing.JTextField txtBarang;
+    private javax.swing.JTextField txtBarangBarangKeluar;
     private javax.swing.JTextField txtBarangPemesanan;
+    private javax.swing.JLabel txtBatasKeteranganBarangKeluar;
+    private javax.swing.JLabel txtBatasKeteranganBarangKeluar1;
     private javax.swing.JTextField txtBayar;
+    private javax.swing.JTextField txtBayarPembayaranPemasok;
     private javax.swing.JTextField txtHutangBarangMasuk;
     private javax.swing.JTextField txtHutangPelanggan;
+    private javax.swing.JTextField txtHutangPemasokPembayaranPemasok;
+    private javax.swing.JTextField txtIDPengirimanBarangKeluar;
     private javax.swing.JSpinner txtJumlah;
+    private javax.swing.JTextField txtJumlahKarungPengirimanBarang;
+    private javax.swing.JSpinner txtJumlahKodiBarangKeluar;
     private javax.swing.JTextField txtJumlahKodiPemesanan;
+    private javax.swing.JTextField txtJumlahKodiPengirimanBarang;
     private javax.swing.JSpinner txtJumlahPemesanan;
     private javax.swing.JTextField txtJumlahTransaksiBarangMasuk;
     private javax.swing.JTextField txtJumlahTransaksiPelanggan;
+    private javax.swing.JTextField txtJumlahTransaksiPemasokPembayaranPemasok;
     private javax.swing.JTextField txtKembalian;
+    private javax.swing.JTextField txtKembalianPembayaranPemasok;
+    private javax.swing.JTextArea txtKeteranganKarungBarangKeluar;
+    private javax.swing.JTextField txtKodeTransaksiKonfirmasiKeluar;
     private javax.swing.JTextField txtNamaPelanggan;
     private javax.swing.JTextField txtNamaPelanggan1;
+    private javax.swing.JTextField txtNamaPelangganKonfirmasiKeluar;
     private javax.swing.JTextField txtNamaPemasokBarangMasuk;
+    private javax.swing.JTextField txtNamaPemasokPembayaranPemasok;
     private javax.swing.JTextField txtNamaToko;
+    private javax.swing.JTextField txtNomorKarungBarangKeluar;
     private javax.swing.JTextField txtPemasok;
     private javax.swing.JTextField txtSisaHutang;
     private javax.swing.JTextField txtSisaHutangBarangMasuk;
+    private javax.swing.JTextField txtSisaHutangPembayaranPemasok;
+    private javax.swing.JTextField txtStatusPengirimanKonfirmasiKeluar;
     private javax.swing.JTextField txtTagihanBarangMasuk;
     private javax.swing.JTextField txtTanggalPemasokkan;
     private javax.swing.JLabel txtTotalBiaya;
@@ -2743,6 +4780,7 @@ public class T_Utama extends javax.swing.JFrame {
     private javax.swing.JTextField txtUangDibayarBarangMasuk;
     private javax.swing.JTextField txtUangTransaksiBarangMasuk;
     private javax.swing.JTextField txtUkuran;
+    private javax.swing.JTextField txtUkuranBarangKeluar;
     private javax.swing.JTextField txtUkuranPemesanan;
     private javax.swing.JLabel txtinfoTanggal;
     private javax.swing.JTextField txtjumlah_kodi;

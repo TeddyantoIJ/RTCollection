@@ -17,6 +17,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
@@ -152,11 +153,12 @@ public class TransaksiPemesanan extends javax.swing.JFrame {
             .addGroup(pnlDataBarangLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnlDataBarangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+                    .addGroup(pnlDataBarangLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+                        .addContainerGap())
                     .addGroup(pnlDataBarangLayout.createSequentialGroup()
                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         pnlDataBarangLayout.setVerticalGroup(
             pnlDataBarangLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -466,6 +468,7 @@ public class TransaksiPemesanan extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tampilPelangganPemesanan()
@@ -770,6 +773,10 @@ public class TransaksiPemesanan extends javax.swing.JFrame {
         txtBarangPemesanan.setText(barangPemesanan.getNama_Barang());
         txtUkuranPemesanan.setText(barangPemesanan.getUkuran_Barang());
         
+        // from 0 to 9, in 1.0 steps start value 5  
+        SpinnerNumberModel model1 = new SpinnerNumberModel(1, 0, Integer.parseInt(tblBarangPemesanan.getValueAt(tblBarangPemesanan.getSelectedRow(), 5).toString()), 1);  
+        
+        txtJumlahPemesanan.setModel(model1);
         TotalHargaPemesanan = (int) Math.round(barangPemesanan.getHargaKodian_Barang());
         HargaPemesanan = (int) Math.round(barangPemesanan.getHargaKodian_Barang());
         txtTotalHargaPemesanan.setText(kursIndonesia.format((int) Math.round(barangPemesanan.getHargaKodian_Barang())));

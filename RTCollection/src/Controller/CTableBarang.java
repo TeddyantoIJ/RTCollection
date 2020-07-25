@@ -150,6 +150,73 @@ public class CTableBarang {
         }
         return model;
     }
+    public DefaultTableModel addkonfirmasiBarangKeluar(DefaultTableModel model, String nama){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        String a = "";
+        String query = "";
+        if(nama.equals("Semua")){
+            query = "SELECT * FROM konfirmasiBarangKeluar";
+        }else{
+            query = "SELECT * FROM konfirmasiBarangKeluar where pgn_nama = '"+nama+"'";
+        }
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            
+            System.out.println(query);
+            connection.result = connection.stat.executeQuery(query);
+            int i = 1;
+            while (connection.result.next()) {
+                Object[] obj = new Object[9];
+                obj[0] = i;
+                
+                obj[1] = connection.result.getString("pgrm_id");
+                obj[2] = connection.result.getString("pgn_nama");
+                obj[3] = connection.result.getString("pgrm_jumlah_barang");
+                obj[4] = connection.result.getString("pgrm_jumlah_kodi");
+                obj[5] = connection.result.getString("pgrm_jumlah_karung");
+                obj[6] = formatter.format(connection.result.getDate("pgrm_tgl_transaksi"));
+                obj[7] = connection.result.getString("kry_nama");
+                obj[8] = connection.result.getString("status");
+                model.addRow(obj);
+                i++;
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di CTable Barang addkonfirmasiBarangKeluar!\n" + e.toString());
+        }
+        return model;
+    }
+    public DefaultTableModel addKarungKonfirmasiKeluar(DefaultTableModel model, String pgrm_id){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "SELECT * FROM KarungKonfirmasiKeluar where pgrm_id = '"+pgrm_id+"'";
+            System.out.println(query);
+            connection.result = connection.stat.executeQuery(query);
+            int i = 1;
+            while (connection.result.next()) {
+                Object[] obj = new Object[7];
+                obj[0] = i;
+                
+                obj[1] = connection.result.getString("krg_id");
+                obj[2] = connection.result.getString("b_nama");
+                obj[3] = connection.result.getString("b_ukuran");
+                obj[4] = connection.result.getString("detail_jumlah_barang");
+                obj[5] = connection.result.getString("detail_jumlah_kodi");
+                obj[6] = connection.result.getString("keterangan");
+                model.addRow(obj);
+                i++;
+            }
+            connection.stat.close();
+            connection.result.close();
+        } catch (Exception e) {
+            System.out.println("Error di CTable Barang addKarungKonfirmasiKeluar!\n" + e.toString());
+        }
+        return model;
+    }
     public DefaultTableModel addDataDetailBarangMasuk(DefaultTableModel model, String ID){
         try {
             DBConnect connection = new DBConnect();

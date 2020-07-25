@@ -140,4 +140,22 @@ public class CPelanggan {
             System.out.println("Gagal updateTransaksiPembayaran Pelanggan " + e.toString());
         }
     }
+    public void updateTransaksiKonfirmasiKeluar(String uang, String id) {
+        DBConnect connection = new DBConnect();
+        try {
+            String query = "update Pelanggan"
+                    + " set pgn_total_hutang = pgn_total_hutang + ? , pgn_jumlah_transaksi = pgn_jumlah_transaksi+1 "
+                    + "where pgn_id ='" + id + "'";
+
+            System.out.println(query);
+            connection.pstat = connection.conn.prepareStatement(query);
+
+            connection.pstat.setString(1, uang);
+
+            connection.pstat.executeUpdate();
+            connection.pstat.close();
+        } catch (Exception e) {
+            System.out.println("Gagal updateTransaksiKonfirmasiKeluar Pelanggan " + e.toString());
+        }
+    }
 }
