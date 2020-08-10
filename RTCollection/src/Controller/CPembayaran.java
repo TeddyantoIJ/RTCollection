@@ -7,9 +7,9 @@ package Controller;
 
 import RTClass.Pembayaran;
 import connection.DBConnect;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 
 /**
  *
@@ -17,7 +17,7 @@ import java.util.Date;
  */
 public class CPembayaran {
     public void simpanPembayaranPemasok(Pembayaran pmbyrn){
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         String tanggal = formatter.format(new Date());
         DBConnect connection = new DBConnect();
         try {
@@ -25,9 +25,10 @@ public class CPembayaran {
             connection.pstat = connection.conn.prepareStatement(query);
             connection.pstat.setString(1, pmbyrn.getBpmsk_id());
             connection.pstat.setString(2, pmbyrn.getPms_id());
-            connection.pstat.setString(3, pmbyrn.getKry_id());
-            connection.pstat.setString(4, tanggal);
-            connection.pstat.setDouble(5, pmbyrn.getBpmsk_uang_dibayar());
+            connection.pstat.setString(3, tanggal);
+            connection.pstat.setDouble(4, pmbyrn.getBpmsk_uang_dibayar());
+            connection.pstat.setString(5, pmbyrn.getKry_id());
+            
             
             connection.pstat.executeUpdate();
             connection.pstat.close();
@@ -37,7 +38,7 @@ public class CPembayaran {
     }
     
     public void simpanPembayaranPelanggan(Pembayaran pmbyrn){
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         String tanggal = formatter.format(new Date());
         DBConnect connection = new DBConnect();
         try {

@@ -42,9 +42,11 @@ public class CKaryawan {
             connection.pstat.setString(10, kar.getKry_jabatan());
             
             connection.pstat.executeUpdate();
+            
             connection.pstat.close();
         } catch (Exception e) {
             System.out.println("Gagal simpanKaryawan "+e.toString());
+            
         }
     }
     public void updateKaryawan(Karyawan kar){
@@ -54,7 +56,7 @@ public class CKaryawan {
         try {
             String query = "update karyawan"
                     + " set kry_nama = ?, kry_no_hp = ?, kry_email = ?, kry_tgl_lahir = ?, "
-                    + "alamat = ?, kry_username = ?, kry_password = ?, kry_jabatan = ? "
+                    + "alamat = ?, kry_username = ?, kry_jabatan = ? "
                     + "where kry_id ='"+kar.getKry_id()+"'";
             connection.pstat = connection.conn.prepareStatement(query);
             connection.pstat.setString(1, kar.getKry_nama());
@@ -63,8 +65,8 @@ public class CKaryawan {
             connection.pstat.setString(4, tanggal);
             connection.pstat.setString(5, kar.getAlamat());
             connection.pstat.setString(6, kar.getKry_username());
-            connection.pstat.setString(7, kar.getKry_password());
-            connection.pstat.setString(8, kar.getKry_jabatan());
+            
+            connection.pstat.setString(7, kar.getKry_jabatan());
             
             connection.pstat.executeUpdate();
             connection.pstat.close();
@@ -140,5 +142,21 @@ public class CKaryawan {
             System.out.println("Error di getDatabyNamaUkuran !\n" + e.toString());
         }
         return B;
+    }
+    public void addTransaksiKaryawan(String id){
+
+        try {
+            DBConnect connection = new DBConnect();
+            connection.stat = connection.conn.createStatement();
+            String query = "update Karyawan set kry_total_transaksi = kry_total_transaksi+1 where kry_id = '"+id+"'";
+            connection.pstat = connection.conn.prepareStatement(query);
+            
+            connection.pstat.executeUpdate();
+            
+            connection.pstat.close();
+        } catch (Exception e) {
+            System.out.println("Gagal addTransaksiKaryawan "+e.toString());
+            
+        }
     }
 }

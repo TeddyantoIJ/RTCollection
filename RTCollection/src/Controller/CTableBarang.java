@@ -49,10 +49,10 @@ public class CTableBarang {
                 obj[3] = connection.result.getString("b_bahan");
                 obj[4] = connection.result.getString("b_ukuran");
                 obj[5] = connection.result.getString("b_stok");
-                obj[6] = connection.result.getString("b_harga_satuan");
-                obj[7] = connection.result.getString("b_harga_kodian");
-                obj[8] = connection.result.getString("b_harga_jual_satuan");
-                obj[9] = connection.result.getString("b_harga_jual_kodian");
+                obj[6] = kursIndonesia.format(connection.result.getInt("b_harga_satuan"));
+                obj[7] = kursIndonesia.format(connection.result.getInt("b_harga_kodian"));
+                obj[8] = kursIndonesia.format(connection.result.getInt("b_harga_jual_satuan"));
+                obj[9] = kursIndonesia.format(connection.result.getInt("b_harga_jual_kodian"));
                 obj[10] = ControllerPemasok.getPemasokNama(connection.result.getString("pms_id")) ;
                 model.addRow(obj);
             }

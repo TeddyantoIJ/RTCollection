@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ce03b163-0a62-4423-a95d-ea213d283570">
+	<property name="ireport.zoom" value="1.3310000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="ColorRow" backcolor="#009999">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2==0]]></conditionExpression>
+			<style backcolor="#CCCCFF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="New Dataset 1" uuid="13f9459d-609f-4f26-864e-4223a9abcb7e">
+		<queryString language="SQL">
+			<![CDATA[SELECT
+     laporanBarangMasuk."kode" AS laporanBarangMasuk_kode,
+     laporanBarangMasuk."b_nama" AS laporanBarangMasuk_b_nama,
+     laporanBarangMasuk."b_ukuran" AS laporanBarangMasuk_b_ukuran,
+     laporanBarangMasuk."tanggal" AS laporanBarangMasuk_tanggal,
+     laporanBarangMasuk."pemasok" AS laporanBarangMasuk_pemasok,
+     laporanBarangMasuk."jumlah kodi" AS laporanBarangMasuk_jumlah_kodi,
+     laporanBarangMasuk."harga" AS laporanBarangMasuk_harga,
+     laporanBarangMasuk."total kodi" AS laporanBarangMasuk_total_kodi,
+     laporanBarangMasuk."total uang" AS laporanBarangMasuk_total_uang,
+     laporanBarangMasuk."status" AS laporanBarangMasuk_status,
+     laporanBarangMasuk."pelayan" AS laporanBarangMasuk_pelayan
+FROM
+     "dbo"."laporanBarangMasuk" laporanBarangMasuk]]>
+		</queryString>
+		<field name="laporanBarangMasuk_kode" class="java.lang.String"/>
+		<field name="laporanBarangMasuk_b_nama" class="java.lang.String"/>
+		<field name="laporanBarangMasuk_b_ukuran" class="java.lang.String"/>
+		<field name="laporanBarangMasuk_tanggal" class="java.sql.Date"/>
+		<field name="laporanBarangMasuk_pemasok" class="java.lang.String"/>
+		<field name="laporanBarangMasuk_jumlah_kodi" class="java.lang.Integer"/>
+		<field name="laporanBarangMasuk_harga" class="java.math.BigDecimal"/>
+		<field name="laporanBarangMasuk_total_kodi" class="java.lang.Integer"/>
+		<field name="laporanBarangMasuk_total_uang" class="java.math.BigDecimal"/>
+		<field name="laporanBarangMasuk_status" class="java.lang.String"/>
+		<field name="laporanBarangMasuk_pelayan" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="tanggal1" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tanggal2" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     laporanBarangMasuk."kode" AS laporanBarangMasuk_kode,
+     laporanBarangMasuk."b_nama" AS laporanBarangMasuk_b_nama,
+     laporanBarangMasuk."b_ukuran" AS laporanBarangMasuk_b_ukuran,
+     laporanBarangMasuk."tanggal" AS laporanBarangMasuk_tanggal,
+     laporanBarangMasuk."pemasok" AS laporanBarangMasuk_pemasok,
+     laporanBarangMasuk."jumlah kodi" AS laporanBarangMasuk_jumlah_kodi,
+     laporanBarangMasuk."harga" AS laporanBarangMasuk_harga,
+     laporanBarangMasuk."total kodi" AS laporanBarangMasuk_total_kodi,
+     laporanBarangMasuk."total uang" AS laporanBarangMasuk_total_uang,
+     laporanBarangMasuk."status" AS laporanBarangMasuk_status,
+     laporanBarangMasuk."pelayan" AS laporanBarangMasuk_pelayan
+FROM
+     "dbo"."laporanBarangMasuk" laporanBarangMasuk
+WHERE tanggal >= $P{tanggal1} AND tanggal <= $P{tanggal2}]]>
+	</queryString>
+	<field name="laporanBarangMasuk_kode" class="java.lang.String"/>
+	<field name="laporanBarangMasuk_b_nama" class="java.lang.String"/>
+	<field name="laporanBarangMasuk_b_ukuran" class="java.lang.String"/>
+	<field name="laporanBarangMasuk_tanggal" class="java.sql.Date"/>
+	<field name="laporanBarangMasuk_pemasok" class="java.lang.String"/>
+	<field name="laporanBarangMasuk_jumlah_kodi" class="java.lang.Integer"/>
+	<field name="laporanBarangMasuk_harga" class="java.math.BigDecimal"/>
+	<field name="laporanBarangMasuk_total_kodi" class="java.lang.Integer"/>
+	<field name="laporanBarangMasuk_total_uang" class="java.math.BigDecimal"/>
+	<field name="laporanBarangMasuk_status" class="java.lang.String"/>
+	<field name="laporanBarangMasuk_pelayan" class="java.lang.String"/>
+	<variable name="laporanBarangMasuk_total_uang_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{laporanBarangMasuk_total_uang}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="91" splitType="Stretch">
+			<staticText>
+				<reportElement x="247" y="43" width="308" height="33" uuid="734ebea4-aa29-485a-a215-216be5c6eb5a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="11"/>
+				</textElement>
+				<text><![CDATA[Jl. Pemalang Raya No. 24, Pemalang - INDONESIA
+Email : rtcollection@gmail.com | Telp/Fax : 023444545]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="247" y="10" width="308" height="33" uuid="47df8442-45d1-4558-bf8f-afb5c00d9e53"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Times New Roman" size="26"/>
+				</textElement>
+				<text><![CDATA[Laporan Barang Masuk]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="83" width="801" height="1" uuid="4aeee7f6-40c0-4c77-a5a4-f38cbef00a55"/>
+			</line>
+			<image>
+				<reportElement x="59" y="10" width="97" height="50" uuid="09277752-a9dd-4dd0-9cac-efc927ed4416"/>
+				<imageExpression><![CDATA["C:\\Users\\Polman\\Documents\\Teddy-san\\Semester 2\\Tugas\\PRG3\\Project\\Codingan\\RTCollection\\src\\Gambar\\Logo.PNG"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="747" y="0" width="54" height="20" uuid="69041453-15fa-4bd7-b556-3a23546d7487"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tanggal2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="626" y="0" width="50" height="20" uuid="a77fd648-e1a0-4a37-93f1-614e50cfabf7"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Periode : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="732" y="0" width="15" height="20" uuid="18c0abe9-eb2f-43ff-a868-82f3a6fa8191"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="676" y="0" width="56" height="20" uuid="13b2200e-73a5-4164-80ea-a74972b21d17"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{tanggal1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="86" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="13413dfb-748a-40d4-a635-162787be1ce1"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[No Transaksi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="86" y="0" width="99" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="36f5c463-408b-439a-838f-16c3c1e02f95"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tanggal Transaksi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="252" y="0" width="64" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="e125917c-ea73-4605-9394-2625c7eeef93"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Barang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="316" y="0" width="44" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="5e8d8824-cc50-4c98-bf50-1645fad8c28d"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ukuran]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="185" y="0" width="67" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="42d8c5be-6590-4572-86a3-5821b7f4f61b"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pemasok]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="576" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="dbc50553-3b83-4718-88d2-8095228725bb"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Bayar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="360" y="0" width="89" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="307955c5-f2f6-426e-9bb6-95952dad579b"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Harga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="449" y="0" width="70" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="947c2e42-d489-4b84-9fed-6970c924252e"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jumlah Kodi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="519" y="0" width="57" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="59fd9026-c471-4ea0-ae0a-8e83d4bac99e"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Kodi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="676" y="0" width="51" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="cd226ee1-d108-4605-8b3e-bd94eb98e723"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="727" y="0" width="75" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="b58f7313-d1d1-4587-ac58-93f1f7ed4f57"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Karyawan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="0" width="86" height="20" uuid="f0b9853b-3229-451e-ba1b-a371d70c7526"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_kode}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement mode="Opaque" x="86" y="0" width="99" height="20" uuid="eba00650-f077-49a9-af26-2150002205d1"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_tanggal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="252" y="0" width="64" height="20" uuid="df4bd993-5530-4fc2-9855-6bbf22b118c6"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_b_nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="316" y="0" width="44" height="20" uuid="1802a3a5-6bb2-43ef-bad8-fce010bf2fce"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_b_ukuran}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="185" y="0" width="67" height="20" uuid="62feff37-9f7b-45bd-906b-778387b50e36"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_pemasok}]]></textFieldExpression>
+			</textField>
+			<textField pattern="Rp #,##0">
+				<reportElement mode="Opaque" x="576" y="0" width="100" height="20" uuid="b151080b-774d-4095-9484-bf0824a1cfa9"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_total_uang}]]></textFieldExpression>
+			</textField>
+			<textField pattern="Rp #,##0">
+				<reportElement mode="Opaque" x="360" y="0" width="89" height="20" uuid="9a95b325-48a6-4eeb-a9ab-af203c585bcc"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_harga}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="449" y="0" width="70" height="20" uuid="c0adc95b-96bd-4725-8e69-c4b5247fa7e7"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_jumlah_kodi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="519" y="0" width="57" height="20" uuid="1ddf4f4c-5272-4ace-9f7b-391c54827d15"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_total_kodi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="676" y="0" width="51" height="20" uuid="522345a9-9f20-4e6a-9bc3-bb6994d5a958"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_status}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="727" y="0" width="75" height="20" uuid="53eec29e-de7f-41de-9fb5-4a5939260913"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#006666"/>
+					<topPen lineWidth="0.25" lineColor="#006666"/>
+					<leftPen lineWidth="0.25" lineColor="#006666"/>
+					<bottomPen lineWidth="0.25" lineColor="#006666"/>
+					<rightPen lineWidth="0.25" lineColor="#006666"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{laporanBarangMasuk_pelayan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="0" width="211" height="20" forecolor="#000000" uuid="7acc9950-8c05-4936-9516-b0d2153edb25"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="666" y="0" width="120" height="20" forecolor="#000000" uuid="864568fb-efa4-4f9c-aa49-fee6d6560958"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="782" y="0" width="16" height="20" forecolor="#000000" uuid="d6a3f63c-fe70-4fd7-a25a-8ca01d1b6dbc"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField pattern="Rp #,##0">
+				<reportElement mode="Opaque" x="702" y="0" width="100" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="8c732444-1aca-451d-9b92-57364a87b1f8"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+					<paragraph rightIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{laporanBarangMasuk_total_uang_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="702" height="20" forecolor="#FFFFFF" backcolor="#006666" uuid="6ca36586-d12f-4e26-981a-978b697ee524"/>
+				<box>
+					<pen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<topPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<leftPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<bottomPen lineWidth="0.25" lineColor="#FFFFFF"/>
+					<rightPen lineWidth="0.25" lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="11" isBold="true"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<text><![CDATA[Total Pengeluaran]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

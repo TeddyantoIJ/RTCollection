@@ -10,6 +10,8 @@ import RTClass.Pelanggan;
 import RTClass.Pemasok;
 import javax.swing.table.DefaultTableModel;
 import connection.DBConnect;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import javax.swing.JTable;
 /**
@@ -18,8 +20,15 @@ import javax.swing.JTable;
  */
 public class CTable {
     private DefaultTableModel model = new DefaultTableModel();
+    DecimalFormat kursIndonesia = (DecimalFormat) DecimalFormat.getCurrencyInstance();
+    DecimalFormatSymbols formatRp = new DecimalFormatSymbols();
+    
     
     public CTable(){
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
     }
     
     //================================= KARYAWAN ====================================
@@ -32,7 +41,7 @@ public class CTable {
             connection.result = connection.stat.executeQuery(query);
             int i =1;
             while (connection.result.next()) {
-                Object[] obj = new Object[11];
+                Object[] obj = new Object[10];
                 obj[0] = i;
                 obj[1] = connection.result.getString("kry_id");
                 obj[2] = connection.result.getString("kry_nama");
@@ -43,7 +52,7 @@ public class CTable {
                 obj[7] = connection.result.getString("kry_total_transaksi");
                 obj[8] = connection.result.getString("kry_jabatan");
                 obj[9] = connection.result.getString("kry_username");
-                obj[10] = connection.result.getString("kry_password");
+                //obj[10] = connection.result.getString("kry_password");
                 i++;
                 System.out.println(obj[1].toString());
                 model.addRow(obj);
@@ -71,9 +80,9 @@ public class CTable {
             output.setKry_email(in.getValueAt(i, 4).toString());
             output.setKry_tgl_lahir(formatter.parse(in.getValueAt(i, 5).toString()));
             output.setAlamat(in.getValueAt(i, 6).toString());
-            output.setKry_username(in.getValueAt(i, 7).toString());
-            output.setKry_password(in.getValueAt(i, 8).toString());
-            output.setKry_jabatan(in.getValueAt(i, 9).toString());
+            output.setKry_username(in.getValueAt(i, 9).toString());
+            output.setKry_password("");
+            output.setKry_jabatan(in.getValueAt(i, 8).toString());
         }catch(Exception ex){
             System.out.println("Error getSelectedRow : "+ex.toString());
             return null;
@@ -101,8 +110,8 @@ public class CTable {
                 obj[5] = connection.result.getString("pgn_alamat");
                 obj[6] = connection.result.getString("pgn_nama_pasar");
                 obj[7] = connection.result.getInt("pgn_jumlah_transaksi");
-                obj[8] = connection.result.getInt("pgn_uang_transaksi");
-                obj[9] = connection.result.getInt("pgn_total_hutang");
+                obj[8] = kursIndonesia.format(connection.result.getInt("pgn_uang_transaksi"));
+                obj[9] = kursIndonesia.format(connection.result.getInt("pgn_total_hutang"));
                 model.addRow(obj);
                 i++;
             }
@@ -131,8 +140,8 @@ public class CTable {
                 obj[5] = connection.result.getString("pgn_alamat");
                 obj[6] = connection.result.getString("pgn_nama_pasar");
                 obj[7] = connection.result.getInt("pgn_jumlah_transaksi");
-                obj[8] = connection.result.getInt("pgn_uang_transaksi");
-                obj[9] = connection.result.getInt("pgn_total_hutang");
+                obj[8] = kursIndonesia.format(connection.result.getInt("pgn_uang_transaksi"));
+                obj[9] = kursIndonesia.format(connection.result.getInt("pgn_total_hutang"));
                 i++;
                 model.addRow(obj);
             }
@@ -161,8 +170,8 @@ public class CTable {
             output.setPgn_alamat(in.getValueAt(i, 5).toString());
             output.setPgn_nama_pasar(in.getValueAt(i, 6).toString());
             output.setPgn_jumlah_transaksi(Integer.parseInt(in.getValueAt(i, 7).toString()));
-            output.setPgn_uang_transaksi(Integer.parseInt(in.getValueAt(i, 8).toString()));
-            output.setPgn_total_hutang(Integer.parseInt(in.getValueAt(i, 9).toString()));
+            output.setPgn_uang_transaksi(Integer.valueOf((kursIndonesia.parse(in.getValueAt(i, 8).toString())).toString()));
+            output.setPgn_total_hutang(Integer.valueOf((kursIndonesia.parse(in.getValueAt(i, 9).toString())).toString()));
         }catch(Exception ex){
             System.out.println("Error getSelectedRowPelanggan : "+ex.toString());
             return null;
@@ -208,8 +217,8 @@ public class CTable {
                 obj[2] = connection.result.getString("pms_alamat");
                 obj[3] = connection.result.getString("pms_no_hp");
                 obj[4] = connection.result.getInt("pms_jumlah_transaksi");
-                obj[5] = connection.result.getInt("pms_uang_transaksi");
-                obj[6] = connection.result.getInt("pms_total_hutang");
+                obj[5] = kursIndonesia.format(connection.result.getInt("pms_uang_transaksi"));
+                obj[6] = kursIndonesia.format(connection.result.getInt("pms_total_hutang"));
                 i++;
                 model.addRow(obj);
             }
@@ -268,15 +277,15 @@ public class CTable {
             return null;
         }
         int i = in.getSelectedRow();
-        
+        //no\ nama\ alamat \ hp \ transaksi \ pe, \ hut
         try{
             output.setPms_id(controllerPemasok.getIDPemasok(in.getValueAt(i, 1).toString()));
             output.setPms_nama(in.getValueAt(i, 1).toString());
             output.setPms_alamat(in.getValueAt(i, 2).toString());
             output.setPms_no_hp(in.getValueAt(i, 3).toString());
             output.setPms_jumlah_transaksi(Integer.parseInt(in.getValueAt(i, 4).toString()));
-            output.setPms_uang_transaksi(Integer.parseInt(in.getValueAt(i, 5).toString()));
-            output.setPms_total_hutang(Integer.parseInt(in.getValueAt(i, 6).toString()));
+            output.setPms_uang_transaksi(Integer.valueOf(kursIndonesia.parse(in.getValueAt(i, 5).toString()).toString()));
+            output.setPms_total_hutang(Integer.valueOf(kursIndonesia.parse(in.getValueAt(i, 6).toString()).toString()));
         }catch(Exception ex){
             System.out.println("Error getSelectedRowPemasok : "+ex.toString());
             return null;
@@ -298,8 +307,8 @@ public class CTable {
                 obj[2] = connection.result.getString("pms_alamat");
                 obj[3] = connection.result.getString("pms_no_hp");
                 obj[4] = connection.result.getInt("pms_jumlah_transaksi");
-                obj[5] = connection.result.getInt("pms_uang_transaksi");
-                obj[6] = connection.result.getInt("pms_total_hutang");
+                obj[5] = kursIndonesia.format(connection.result.getInt("pms_uang_transaksi"));
+                obj[6] = kursIndonesia.format(connection.result.getInt("pms_total_hutang"));
                 model.addRow(obj);
                 i++;
             }

@@ -80,7 +80,6 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         model.addColumn("Transaksi");
         model.addColumn("Jabatan");
         model.addColumn("Username");
-        model.addColumn("Password");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -91,7 +90,6 @@ public class CRUDKaryawan extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNama = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -116,11 +114,11 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         txtPassword = new javax.swing.JTextField();
         txtLpassword = new javax.swing.JLabel();
         txtLusername = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jLabel1.setText("Karyawan");
 
         jLabel2.setText("Nama");
 
@@ -169,8 +167,10 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(txtAlamat);
 
+        rbKasir.setBackground(new java.awt.Color(0, 204, 204));
         rbKasir.setText("Kasir");
 
+        rbDriver.setBackground(new java.awt.Color(0, 204, 204));
         rbDriver.setText("Driver");
         rbDriver.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -180,7 +180,10 @@ public class CRUDKaryawan extends javax.swing.JFrame {
 
         jLabel7.setText("Jabatan");
 
+        btnKembali.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/kembaliButton.png"))); // NOI18N
         btnKembali.setText("Kembali");
+        btnKembali.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnKembali.setIconTextGap(10);
         btnKembali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnKembaliActionPerformed(evt);
@@ -210,19 +213,27 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tableKaryawan);
 
+        btnSimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/tambahButton.png"))); // NOI18N
         btnSimpan.setText("Tambah");
+        btnSimpan.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnSimpan.setIconTextGap(10);
         btnSimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSimpanActionPerformed(evt);
             }
         });
 
+        btnPerbarui.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Gambar/ubahButton.png"))); // NOI18N
         btnPerbarui.setText("Perbarui");
+        btnPerbarui.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPerbarui.setIconTextGap(10);
         btnPerbarui.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPerbaruiActionPerformed(evt);
             }
         });
+
+        panelDriver.setBackground(new java.awt.Color(0, 153, 153));
 
         txtUsername.setText("maks 25");
         txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -243,8 +254,10 @@ public class CRUDKaryawan extends javax.swing.JFrame {
             }
         });
 
+        txtLpassword.setForeground(new java.awt.Color(255, 255, 255));
         txtLpassword.setText("Password");
 
+        txtLusername.setForeground(new java.awt.Color(255, 255, 255));
         txtLusername.setText("Username");
 
         javax.swing.GroupLayout panelDriverLayout = new javax.swing.GroupLayout(panelDriver);
@@ -265,111 +278,168 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         panelDriverLayout.setVerticalGroup(
             panelDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDriverLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
                 .addGroup(panelDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtLusername))
-                .addGap(12, 12, 12)
                 .addGroup(panelDriverLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelDriverLayout.createSequentialGroup()
                         .addGap(8, 8, 8)
                         .addComponent(txtLpassword))
                     .addGroup(panelDriverLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 13, Short.MAX_VALUE))
         );
+
+        jPanel1.setBackground(new java.awt.Color(0, 204, 204));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel3.setBackground(new java.awt.Color(0, 102, 102));
+
+        jLabel8.setFont(new java.awt.Font("Times New Roman", 3, 30)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("KELOLA KARYAWAN");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(366, 366, 366)
+                .addComponent(jLabel8)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel8)
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1060, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel1))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtHp, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTgl, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 693, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(rbKasir)
-                .addGap(95, 95, 95)
-                .addComponent(rbDriver))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addComponent(panelDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPerbarui, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnSimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(1, 1, 1)))
-                .addGap(613, 613, 613))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(btnKembali))
+                        .addGap(121, 121, 121)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTgl, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(51, 51, 51)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 632, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(265, 265, 265)
+                        .addComponent(rbDriver))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(436, 436, 436)
+                        .addComponent(btnKembali, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(txtHp, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(561, 561, 561)
+                        .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(rbKasir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addComponent(panelDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(686, 686, 686)
+                        .addComponent(btnPerbarui))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(121, 121, 121)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jLabel2)
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel3)
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel4)
-                        .addGap(16, 16, 16)
-                        .addComponent(jLabel5)
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel6))
+                        .addGap(85, 85, 85)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(76, 76, 76)
+                                .addComponent(txtTgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addComponent(rbDriver))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(txtHp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(txtTgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(324, 324, 324)
+                        .addComponent(btnKembali))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
+                        .addGap(117, 117, 117)
+                        .addComponent(txtHp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(157, 157, 157)
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(315, 315, 315)
                         .addComponent(jLabel7))
-                    .addComponent(rbKasir)
-                    .addComponent(rbDriver))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnPerbarui)
-                        .addGap(5, 5, 5)
-                        .addComponent(btnSimpan)))
-                .addGap(44, 44, 44)
-                .addComponent(btnKembali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(6, 6, 6))
+                        .addGap(213, 213, 213)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(89, 89, 89)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(123, 123, 123)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(324, 324, 324)
+                        .addComponent(btnSimpan))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(309, 309, 309)
+                        .addComponent(rbKasir))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(344, 344, 344)
+                        .addComponent(panelDriver, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(187, 187, 187)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(149, 149, 149)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(324, 324, 324)
+                        .addComponent(btnPerbarui))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(226, 226, 226)
+                        .addComponent(jLabel6)))
+                .addContainerGap(29, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -380,15 +450,71 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             if(rbKasir.isSelected()){
-                if(txtAlamat.getText().equals("") || txtEmail.getText().equals("") || txtHp.getText().equals("") || txtNama.getText().equals("") || txtPassword.getText().equals("") || txtTgl.getDate().equals("") || txtUsername.getText().equals("") || !validate(txtEmail.getText()) || rbDriver.isSelected() == false && rbKasir.isSelected() == false){
-                JOptionPane.showMessageDialog(this, "Isi data dengan benar!");
-                return;
+                if(!validate(txtEmail.getText())){
+                    JOptionPane.showMessageDialog(this, "Format email tidak tepat!");
+                    return;
+                }
+                if(txtAlamat.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Alamat tidak boleh kosong!");
+                    return;
+                }
+                if(txtHp.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "No HP tidak boleh kosong!");
+                    return;
+                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
+                }
+                if(txtPassword.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!");
+                    return;
+                }
+                if(txtTgl.getDate().equals("")){
+                    JOptionPane.showMessageDialog(this, "Tanggal lahir tidak benar!");
+                    return;
+                }
+                if(txtUsername.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Username tidak boleh kosong!");
+                    return;
+                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
                 }
             }else{
-                if(txtAlamat.getText().equals("") || txtEmail.getText().equals("") || txtHp.getText().equals("") || txtNama.getText().equals("") || txtTgl.getDate().equals("") || !validate(txtEmail.getText()) || rbDriver.isSelected() == false && rbKasir.isSelected() == false){
-                JOptionPane.showMessageDialog(this, "Isi data dengan benar!");
-                return;
-            }
+                if(!validate(txtEmail.getText())){
+                    JOptionPane.showMessageDialog(this, "Format email tidak tepat!");
+                    return;
+                }
+                if(txtAlamat.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Alamat tidak boleh kosong!");
+                    return;
+                }
+                if(txtHp.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "No HP tidak boleh kosong!");
+                    return;
+                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
+                }
+//                if(txtPassword.getText().equals("")){
+//                    JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!");
+//                    return;
+//                }
+                if(txtTgl.getDate().equals("")){
+                    JOptionPane.showMessageDialog(this, "Tanggal lahir tidak benar!");
+                    return;
+                }
+//                if(txtUsername.getText().equals("")){
+//                    JOptionPane.showMessageDialog(this, "Username tidak boleh kosong!");
+//                    return;
+//                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
+                }
             }
             
         }catch(Exception e){
@@ -477,7 +603,18 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         
         if(karyawan.getKry_jabatan().equals("Kasir")){
             rbKasir.setSelected(true);
-        }else{
+            rbKasir.setEnabled(true);
+            rbDriver.setEnabled(true);
+        }else if(karyawan.getKry_jabatan().equals("Manager")){
+            rbKasir.setSelected(false);
+            rbDriver.setSelected(false);
+            rbKasir.setEnabled(false);
+            rbDriver.setEnabled(false);
+            
+        }
+        else{
+            rbKasir.setEnabled(true);
+            rbDriver.setEnabled(true);
             rbDriver.setSelected(true);
         }
     }//GEN-LAST:event_tableKaryawanMouseClicked
@@ -486,15 +623,71 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             if(rbKasir.isSelected()){
-                if(txtAlamat.getText().equals("") || txtEmail.getText().equals("") || txtHp.getText().equals("") || txtNama.getText().equals("") || txtPassword.getText().equals("") || txtTgl.getDate().equals("") || txtUsername.getText().equals("") || !validate(txtEmail.getText()) || rbDriver.isSelected() == false && rbKasir.isSelected() == false){
-                JOptionPane.showMessageDialog(this, "Isi data dengan benar!");
-                return;
+                if(!validate(txtEmail.getText())){
+                    JOptionPane.showMessageDialog(this, "Format email tidak tepat!");
+                    return;
+                }
+                if(txtAlamat.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Alamat tidak boleh kosong!");
+                    return;
+                }
+                if(txtHp.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "No HP tidak boleh kosong!");
+                    return;
+                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
+                }
+//                if(txtPassword.getText().equals("")){
+//                    JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!");
+//                    return;
+//                }
+                if(txtTgl.getDate().equals("")){
+                    JOptionPane.showMessageDialog(this, "Tanggal lahir tidak benar!");
+                    return;
+                }
+                if(txtUsername.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Username tidak boleh kosong!");
+                    return;
+                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
                 }
             }else{
-                if(txtAlamat.getText().equals("") || txtEmail.getText().equals("") || txtHp.getText().equals("") || txtNama.getText().equals("") || txtTgl.getDate().equals("") || !validate(txtEmail.getText()) || rbDriver.isSelected() == false && rbKasir.isSelected() == false){
-                JOptionPane.showMessageDialog(this, "Isi data dengan benar!");
-                return;
-            }
+                if(!validate(txtEmail.getText())){
+                    JOptionPane.showMessageDialog(this, "Format email tidak tepat!");
+                    return;
+                }
+                if(txtAlamat.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Alamat tidak boleh kosong!");
+                    return;
+                }
+                if(txtHp.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "No HP tidak boleh kosong!");
+                    return;
+                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
+                }
+//                if(txtPassword.getText().equals("")){
+//                    JOptionPane.showMessageDialog(this, "Password tidak boleh kosong!");
+//                    return;
+//                }
+                if(txtTgl.getDate().equals("")){
+                    JOptionPane.showMessageDialog(this, "Tanggal lahir tidak benar!");
+                    return;
+                }
+//                if(txtUsername.getText().equals("")){
+//                    JOptionPane.showMessageDialog(this, "Username tidak boleh kosong!");
+//                    return;
+//                }
+                if(txtNama.getText().equals("")){
+                    JOptionPane.showMessageDialog(this, "Nama tidak boleh kosong!");
+                    return;
+                }
             }
             
         }catch(Exception e){
@@ -506,23 +699,32 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         karyawan.setKry_email(txtEmail.getText());
         
         String jabatan = "";
-        if(rbDriver.isSelected()){
-            jabatan = "Pengemudi";
-            karyawan.setKry_username("-");
-            karyawan.setKry_password("-");
-        }else{
-            jabatan = "Kasir";
+        if(!rbDriver.isEnabled()){
+            jabatan = "Manager";
             karyawan.setKry_username(txtUsername.getText());
             karyawan.setKry_password(txtPassword.getText());
+        }else{
+            if(rbDriver.isSelected()){
+                jabatan = "Pengemudi";
+                karyawan.setKry_username("-");
+                karyawan.setKry_password("-");
+            }
+            else{
+                jabatan = "Kasir";
+                karyawan.setKry_username(txtUsername.getText());
+                karyawan.setKry_password(txtPassword.getText());
+            }
         }
+        
         karyawan.setKry_jabatan(jabatan);
         
         karyawan.setKry_tgl_lahir(txtTgl.getDate());
-        karyawan.setKry_total_transaksi("0");
+        //karyawan.setKry_total_transaksi("0");
         
         karyawan.setAlamat(txtAlamat.getText());
         
         controllerKaryawan.updateKaryawan(karyawan);
+        JOptionPane.showMessageDialog(this, "Berhasil memperbarui");
         addData();
     }//GEN-LAST:event_btnPerbaruiActionPerformed
 
@@ -608,7 +810,8 @@ public class CRUDKaryawan extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.setVisible(false);
     }//GEN-LAST:event_btnKembaliActionPerformed
-
+    
+    //Validasi Email
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
     Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -655,13 +858,15 @@ public class CRUDKaryawan extends javax.swing.JFrame {
     private javax.swing.JButton btnKembali;
     private javax.swing.JButton btnPerbarui;
     private javax.swing.JButton btnSimpan;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPanel panelDriver;

@@ -48,6 +48,11 @@ public class TransaksiPembayaranPelanggan extends javax.swing.JFrame {
         addColumnPembayaranPelanggan();
         addComboBoxPembayaranPelanggan();
         tablePelanggan.setModel(modelPelangganPembayaranPelanggan);
+        
+        formatRp.setCurrencySymbol("Rp. ");
+        formatRp.setMonetaryDecimalSeparator(',');
+        formatRp.setGroupingSeparator('.');
+        kursIndonesia.setDecimalFormatSymbols(formatRp);
     }
     
     private void addComboBoxPembayaranPelanggan(){
